@@ -1,5 +1,5 @@
 /**
- * Las cinco familias de equipo.
+ * Las cuatro familias de equipo.
  *
  * Regla de honestidad de este archivo: las tablas son RANGOS TÍPICOS DE LA
  * CATEGORÍA, no el inventario de BAPSA, y así se rotulan en la página. El
@@ -16,6 +16,8 @@ export type Fila = { concepto: string; valor: string; nota?: string };
 export type Familia = {
   slug: string;
   nombre: string;
+  /** Nombre corto para la pestaña del filtro del catálogo. */
+  etiquetaFiltro: string;
   h1: string;
   titulo: string;
   descripcion: string;
@@ -33,6 +35,7 @@ export type Familia = {
 export const FAMILIAS_DATOS: Familia[] = [
   {
     slug: "brazos-articulados-electricos",
+    etiquetaFiltro: "Brazos articulados",
     nombre: "Brazos articulados eléctricos",
     h1: "Renta de brazos articulados eléctricos en Ramos Arizpe y Saltillo",
     titulo: "Renta de brazos articulados eléctricos",
@@ -45,13 +48,13 @@ export const FAMILIAS_DATOS: Familia[] = [
     cuandoSi: [
       "Mantenimiento de luminarias, ductos o rociadores dentro de una nave en operación.",
       "Trabajo sobre piso terminado, epóxico o pulido, donde una llanta neumática dejaría marca.",
-      "Espacios cerrados o con poca ventilación, donde un motor de combustión no puede entrar.",
+      "Espacios cerrados o con poca ventilación: no emite gases y opera por debajo de 70 dBA.",
       "Alcanzar un punto que está arriba de una máquina, un rack o una banda que no se puede mover.",
     ],
     cuandoNo: [
-      "Terreno irregular, lodo o pendiente: ahí va un 4×4 de combustión.",
+      "Terreno sin compactar, lodo o pendiente fuerte: este equipo está hecho para piso firme.",
       "Jornadas continuas de más de un turno sin acceso a toma de carga.",
-      "Alturas por encima de 20 m, donde la categoría cambia a brazo de combustión.",
+      "Alturas por encima de 16 m: el catálogo llega hasta 15.94 m con el Genie Z-45/25J DC.",
     ],
     medidas: [
       { concepto: "Altura de trabajo", valor: "11 – 20 m", nota: "36 – 66 pies" },
@@ -72,47 +75,8 @@ export const FAMILIAS_DATOS: Familia[] = [
     fotoClave: "FOTO-01",
   },
   {
-    slug: "brazos-articulados-de-combustion",
-    nombre: "Brazos articulados de combustión",
-    h1: "Renta de brazos articulados de combustión 4×4 hasta 120 pies",
-    titulo: "Renta de brazos articulados de combustión 4×4",
-    descripcion:
-      "Brazos articulados diésel 4×2 y 4×4 en renta, hasta 120 pies de altura, para obra a la intemperie y terreno irregular en Coahuila. Flete propio.",
-    definicion:
-      "Un brazo articulado de combustión es una plataforma de pluma articulada con motor diésel y tracción en dos o cuatro ruedas, hecha para llegar por su propio pie a un punto de trabajo en terreno sin nivelar y sostener el alcance a alturas que el equipo eléctrico no cubre.",
-    resumen:
-      "Tracción 4×4 y diésel para terreno irregular a la intemperie. Es la categoría que llega hasta 120 pies.",
-    cuandoSi: [
-      "Obra a la intemperie: terracería, lodo, grava o pendiente donde una máquina eléctrica se queda parada.",
-      "Montaje y mantenimiento de estructura, fachada o techumbre por encima de 20 m.",
-      "Trabajo continuo de varios turnos sin acceso a toma de carga.",
-      "Puntos de trabajo dispersos en un predio grande, donde la máquina tiene que trasladarse sola.",
-    ],
-    cuandoNo: [
-      "Interiores cerrados o mal ventilados: el escape lo impide.",
-      "Piso terminado o epóxico, donde la llanta de tracción deja marca.",
-      "Naves en operación con personal alrededor sin acordonar.",
-    ],
-    medidas: [
-      { concepto: "Altura de trabajo", valor: "15 – 38 m", nota: "50 – 120 pies" },
-      { concepto: "Alcance horizontal", valor: "7 – 18 m" },
-      { concepto: "Capacidad de canastilla", valor: "227 – 300 kg" },
-      { concepto: "Tracción", valor: "4×2 y 4×4", nota: "diésel" },
-      { concepto: "Pendiente superable", valor: "Hasta 45 %", nota: "según modelo y tracción" },
-      { concepto: "Estabilización", valor: "Nivelación automática de chasís" },
-    ],
-    incluye: [
-      "Entrega y recolección con flete propio, con maniobra de descarga incluida.",
-      "Máquina entregada con tanque lleno y bitácora de servicio al día.",
-      "Respaldo por falla mecánica durante el periodo de renta.",
-    ],
-    icono: "brazo-articulado",
-    fotoAlt:
-      "Brazo articulado diésel 4×4 de BAPSA trabajando sobre terracería junto a una nave en construcción en Ramos Arizpe.",
-    fotoClave: "FOTO-02",
-  },
-  {
     slug: "plataformas-de-tijera",
+    etiquetaFiltro: "Tijeras",
     nombre: "Plataformas de tijera",
     h1: "Renta de plataformas de tijera en Ramos Arizpe, Saltillo y Arteaga",
     titulo: "Renta de plataformas de tijera",
@@ -153,6 +117,7 @@ export const FAMILIAS_DATOS: Familia[] = [
   },
   {
     slug: "elevadores-personales",
+    etiquetaFiltro: "Elevadores personales",
     nombre: "Elevadores personales",
     h1: "Renta de elevadores personales para almacén, oficina y comercio",
     titulo: "Renta de elevadores personales",
@@ -192,6 +157,7 @@ export const FAMILIAS_DATOS: Familia[] = [
   },
   {
     slug: "maquinaria-pesada",
+    etiquetaFiltro: "Maquinaria pesada",
     nombre: "Maquinaria pesada",
     h1: "Renta de maquinaria ligera y pesada en Coahuila",
     titulo: "Renta de maquinaria ligera y pesada",

@@ -13,19 +13,13 @@ export const NAV_PRINCIPAL: Entrada[] = [
   { nombre: "Nosotros", ruta: "/nosotros" },
 ];
 
-/** Las cinco familias de equipo. Cada una responde una consulta distinta. */
+/** Las cuatro familias de equipo. Cada una responde una consulta distinta. */
 export const FAMILIAS: Required<Entrada>[] = [
   {
     nombre: "Brazos articulados eléctricos",
     ruta: "/renta/brazos-articulados-electricos",
     resumen:
       "Para trabajo en interior sobre piso terminado: no emiten gases y no marcan el concreto.",
-  },
-  {
-    nombre: "Brazos articulados de combustión",
-    ruta: "/renta/brazos-articulados-de-combustion",
-    resumen:
-      "Tracción 4×4 y diésel para terreno irregular a la intemperie, hasta 120 pies de altura.",
   },
   {
     nombre: "Plataformas de tijera",

@@ -37,6 +37,8 @@ function fuentesDe(ruta: string): string[] {
   if (ruta === "/") return ["src/pages/index.astro", "src/datos/familias.ts"];
   if (ruta.startsWith("/renta/")) return ["src/pages/renta/[slug].astro", "src/datos/familias.ts", "src/datos/faq.ts"];
   if (ruta === "/renta") return ["src/pages/renta.astro", "src/datos/familias.ts"];
+  if (ruta.startsWith("/equipo/")) return ["src/pages/equipo/[slug].astro", "src/datos/maquinas.ts"];
+  if (ruta === "/equipo") return ["src/pages/equipo.astro", "src/datos/maquinas.ts"];
   if (ruta === "/preguntas-frecuentes") return ["src/pages/preguntas-frecuentes.astro", "src/datos/faq.ts"];
   return [`src/pages${ruta}.astro`];
 }

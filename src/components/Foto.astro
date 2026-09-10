@@ -18,16 +18,20 @@ export interface Props {
   alto: number;
   /** La imagen del LCP (la del héroe) va sin lazy y con prioridad de descarga. */
   prioritaria?: boolean;
+  /** Llena el contenedor con object-fit: cover, en vez de respetar su proporción. */
+  cubrir?: boolean;
   pie?: string;
   clave?: string;
   class?: string;
 }
-const { src, alt, ancho, alto, prioritaria = false, pie, clave, class: clase = "" } = Astro.props;
+const {
+  src, alt, ancho, alto, prioritaria = false, pie, clave, cubrir = false, class: clase = "",
+} = Astro.props;
 ---
 
 {
   src ? (
-    <figure class={`foto ${clase}`}>
+    <figure class={`foto ${cubrir ? "foto--cubrir" : ""} ${clase}`}>
       <img
         src={src}
         alt={alt}
@@ -40,7 +44,10 @@ const { src, alt, ancho, alto, prioritaria = false, pie, clave, class: clase = "
       {pie && <figcaption class="pie-foto">{pie}</figcaption>}
     </figure>
   ) : (
-    <figure class={`foto foto--hueco ${clase}`} style={`--proporcion:${ancho} / ${alto}`}>
+    <figure
+      class={`foto foto--hueco ${cubrir ? "foto--cubrir" : ""} ${clase}`}
+      style={`--proporcion:${ancho} / ${alto}`}
+    >
       <div class="hueco">
         <span class="etiqueta">Foto pendiente</span>
         <p class="hueco__alt">{alt}</p>
@@ -57,6 +64,11 @@ const { src, alt, ancho, alto, prioritaria = false, pie, clave, class: clase = "
 <style>
   .foto { margin: 0; }
   .foto img { width: 100%; height: auto; border: 1px solid var(--riel); }
+
+  /* Modo tarjeta: el hueco lo manda el contenedor, no la proporción. */
+  .foto--cubrir { height: 100%; }
+  .foto--cubrir img { height: 100%; object-fit: cover; border: 0; }
+  .foto--cubrir .hueco { aspect-ratio: auto; height: 100%; border-width: 0 0 1px 0; }
 
   .hueco {
     aspect-ratio: var(--proporcion);

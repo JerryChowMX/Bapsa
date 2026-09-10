@@ -2,7 +2,6 @@
 import Base from "../layouts/Base.astro";
 import PlacaDatos from "../components/PlacaDatos.astro";
 import Foto from "../components/Foto.astro";
-import Estado from "../components/Estado.astro";
 import LlamadoAccion from "../components/LlamadoAccion.astro";
 import { SITE } from "../config/seo";
 import { nodoServicio } from "../lib/schema";
@@ -129,9 +128,7 @@ const schema = [
             { etiqueta: "Póliza", valor: "VIGENTE" },
           ]}
         />
-        <p class="ejemplo__pie">
-          <Estado tipo="disponible" dato="ejemplo ilustrativo" />
-        </p>
+        <p class="ejemplo__pie chico">Ejemplo ilustrativo de una bitácora de máquina.</p>
       </div>
     </div>
   </section>
@@ -166,7 +163,7 @@ const schema = [
   .pareja { align-items: start; }
   @media (min-width: 900px) { .pareja { grid-template-columns: 1.3fr 1fr; gap: var(--e8); } }
   .ejemplo { display: grid; gap: var(--e4); }
-  .ejemplo__pie { margin: 0; }
+  .ejemplo__pie { margin: 0; color: var(--acero); }
 
   .marcas { list-style: none; padding: 0; margin: var(--e5) 0 0; display: flex; flex-wrap: wrap; gap: var(--e3); }
   .marcas li {

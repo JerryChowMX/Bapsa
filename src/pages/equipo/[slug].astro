@@ -3,9 +3,8 @@ import Base from "../../layouts/Base.astro";
 import Icono from "../../components/Icono.astro";
 import PlacaDatos from "../../components/PlacaDatos.astro";
 import Foto from "../../components/Foto.astro";
-import Estado from "../../components/Estado.astro";
+import ContactoDirecto from "../../components/ContactoDirecto.astro";
 import FormularioCotizacion from "../../components/FormularioCotizacion.astro";
-import { SITE } from "../../config/seo";
 import { MAQUINAS, maquinasDeFamilia } from "../../datos/maquinas";
 import { porSlug as familiaPorSlug } from "../../datos/familias";
 import { nodoMaquina } from "../../lib/schema";
@@ -60,16 +59,7 @@ const schema = [
         <div class="filete"></div>
         {/* La definición abre la página: es la frase que se extrae y se cita. */}
         <p class="lede">{maquina.definicion}</p>
-        <p class="encabezado__estado">
-          <Estado tipo="disponible" dato="cotización el mismo día hábil" />
-        </p>
-        <div class="apilado">
-          <a class="btn btn--relleno" href="#cotizar">Cotizar esta máquina</a>
-          <a class="btn btn--azul" href={`tel:${SITE.telephone}`}>
-            <Icono nombre="contacto" tam={16} />
-            {SITE.telephoneDisplay}
-          </a>
-        </div>
+        <ContactoDirecto equipo={nombre} />
       </div>
 
       <div class="encabezado__lado">
@@ -217,7 +207,6 @@ const schema = [
   .encabezado { display: grid; gap: var(--e6); align-items: start; }
   @media (min-width: 940px) { .encabezado { grid-template-columns: 1.2fr 1fr; gap: var(--e8); } }
   .encabezado h1 { margin-bottom: var(--e5); }
-  .encabezado__estado { margin: 0 0 var(--e5); }
   .encabezado__lado { display: grid; gap: var(--e5); }
 
   .especificaciones { display: grid; gap: var(--e5); margin-top: var(--e6); }

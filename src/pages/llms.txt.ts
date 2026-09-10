@@ -38,7 +38,7 @@ ${MAQUINAS_POR_ALTURA.map(
 ${FAMILIAS_DATOS.map((f) => `- [${f.nombre}](${u(`/renta/${f.slug}`)}): ${f.resumen}`).join("\n")}
 
 ## Líneas de negocio
-- [Renta de equipo de elevación](${u("/renta")}): cinco familias con entrega de flete propio en Ramos Arizpe, Saltillo y Arteaga.
+- [Renta de equipo de elevación](${u("/renta")}): cuatro familias con entrega de flete propio en Ramos Arizpe, Saltillo y Arteaga. Todo el equipo de elevación es eléctrico; BAPSA no renta equipo de combustión.
 - [Catálogo completo](${u("/equipo")}): las ${MAQUINAS_POR_ALTURA.length} máquinas comparadas por altura, capacidad y ancho.
 - [Venta de equipo](${u("/venta")}): equipo nuevo y seminuevo con taller y refacciones propias detrás.
 - [Servicio y pólizas](${u("/servicio")}): mantenimiento preventivo y correctivo multimarca, con bitácora por máquina.

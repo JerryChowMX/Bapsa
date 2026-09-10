@@ -36,6 +36,9 @@ export type Maquina = {
   capacidad: string;
   ancho: string;
   alimentacion: string;
+  /** Año de la unidad. Opcional: BAPSA todavía no lo entregó, así que no se
+   *  pinta en ninguna tarjeta. Ver DATOS-POR-CONFIRMAR.md. */
+  anio?: string;
 
   especificaciones: GrupoEspec[];
   fuente: string;

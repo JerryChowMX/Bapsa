@@ -1,0 +1,133 @@
+---
+/**
+ * Filtro del catálogo, sin una línea de JavaScript.
+ *
+ * Es un grupo de radios ocultos con etiquetas dibujadas como pestañas: el
+ * `:checked` de cada radio esconde por CSS las tarjetas que no le tocan. Eso
+ * importa por dos razones:
+ *
+ * 1. Las máquinas están SIEMPRE en el HTML, filtradas o no. Un filtro hecho
+ *    con JavaScript que monta las tarjetas al hacer clic deja la página vacía
+ *    para GPTBot, ClaudeBot y PerplexityBot, que no ejecutan JS.
+ * 2. Funciona con la red de una obra y con el teclado, que es donde este sitio
+ *    se va a abrir de verdad.
+ *
+ * Las reglas por categoría se generan desde `categorias`, no se escriben a
+ * mano: cuando entre una familia nueva al catálogo, el filtro la recoge solo.
+ */
+export interface Props {
+  categorias: { id: string; nombre: string; cuenta: number }[];
+  total: number;
+}
+const { categorias, total } = Astro.props;
+const R = "#cat-filtro"; // raíz, para no depender del alcance de Astro
+
+const activa = categorias
+  .concat([{ id: "todo", nombre: "", cuenta: 0 }])
+  .map((c) => `${R} #f-${c.id}:checked ~ .filtro__pestanas label[for="f-${c.id}"]`)
+  .join(",\n");
+
+const activaCuenta = categorias
+  .concat([{ id: "todo", nombre: "", cuenta: 0 }])
+  .map((c) => `${R} #f-${c.id}:checked ~ .filtro__pestanas label[for="f-${c.id}"] .filtro__cuenta`)
+  .join(",\n");
+
+const foco = categorias
+  .concat([{ id: "todo", nombre: "", cuenta: 0 }])
+  .map((c) => `${R} #f-${c.id}:focus-visible ~ .filtro__pestanas label[for="f-${c.id}"]`)
+  .join(",\n");
+
+const oculta = categorias
+  .map(
+    (c) =>
+      `${R} #f-${c.id}:checked ~ .filtro__contenido [data-familia]:not([data-familia="${c.id}"])`
+  )
+  .join(",\n");
+
+const css = `
+/* La pestaña activa: relleno naranja con texto Azul BAPSA (7.08:1). Es el
+   único relleno de esta sección. */
+${activa} {
+  background: var(--canastilla);
+  color: var(--azul);
+  border-color: var(--canastilla);
+}
+${activaCuenta} { color: var(--azul); }
+
+/* Quien navega con teclado tiene que saber dónde está parado. */
+${foco} { outline: 2px solid var(--senal); outline-offset: 3px; }
+
+/* El filtrado. Nada se saca del HTML: solo se esconde. */
+${oculta} { display: none; }
+`.trim();
+---
+
+<fieldset class="filtro" id="cat-filtro">
+  <legend class="solo-lectores">Filtrar el catálogo por tipo de equipo</legend>
+
+  <input class="filtro__radio" type="radio" name="familia" id="f-todo" value="todo" checked />
+  {
+    categorias.map((c) => (
+      <input class="filtro__radio" type="radio" name="familia" id={`f-${c.id}`} value={c.id} />
+    ))
+  }
+
+  <div class="filtro__pestanas">
+    <label class="filtro__pestana" for="f-todo">
+      Todo <span class="filtro__cuenta">{total}</span>
+    </label>
+    {
+      categorias.map((c) => (
+        <label class="filtro__pestana" for={`f-${c.id}`}>
+          {c.nombre} <span class="filtro__cuenta">{c.cuenta}</span>
+        </label>
+      ))
+    }
+  </div>
+
+  <div class="filtro__contenido">
+    <slot />
+  </div>
+</fieldset>
+
+<style is:global set:html={css}></style>
+
+<style>
+  .filtro { border: 0; padding: 0; margin: 0; min-width: 0; }
+  .filtro__radio { position: absolute; opacity: 0; pointer-events: none; width: 1px; height: 1px; }
+
+  .filtro__pestanas {
+    display: flex; justify-content: center; flex-wrap: wrap;
+    gap: 1rem; margin-bottom: var(--e6);
+  }
+
+  .filtro__pestana {
+    display: inline-flex; align-items: center; gap: var(--e2);
+    padding: var(--e3) var(--e5); cursor: pointer; white-space: nowrap;
+    background: transparent; color: var(--acero);
+    border: 2px solid var(--acero); border-radius: var(--radio);
+    font-family: var(--rotulo); font-size: var(--boton); font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  }
+  .filtro__pestana:hover { background: var(--cielo-bajo); color: var(--azul); border-color: var(--azul); }
+
+  .filtro__cuenta {
+    font-family: var(--dato); font-size: 0.6875rem; font-weight: 400;
+    letter-spacing: 0.02em; color: var(--acero);
+  }
+
+  /* En celular las pestañas ruedan en horizontal en vez de apilarse: con más
+     categorías, tres renglones de pestañas empujan el catálogo fuera de la
+     primera pantalla. Se salen del contenedor para que la primera y la última
+     no queden pegadas al canto. */
+  @media (max-width: 700px) {
+    .filtro__pestanas {
+      justify-content: flex-start; flex-wrap: nowrap;
+      overflow-x: auto; scrollbar-width: none;
+      margin-inline: calc(var(--e5) * -1); padding-inline: var(--e5);
+      padding-bottom: var(--e2);
+    }
+    .filtro__pestanas::-webkit-scrollbar { display: none; }
+  }
+</style>

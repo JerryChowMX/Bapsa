@@ -28,7 +28,11 @@
   --senal:      #A85D25; /* 4.52:1 — el mismo naranja, en versión legible */
   --reflejante: #F5D2B4; /* fondo de aviso. El azul encima da 12.54:1 */
 
-  /* ── Estado. No son colores de marca y viven fuera de la paleta. ────── */
+  /* ── Estado. No son colores de marca y viven fuera de la paleta.
+     Hoy no los usa ninguna pantalla: BAPSA pidió quitar la etiqueta de
+     estado por máquina porque no tienen de dónde alimentarla. Se conservan
+     porque son parte de la dirección visual aprobada y porque el día que
+     exista un inventario en vivo, el componente vuelve con estos valores. */
   --ok:     #1D6B3F; /* 5.96:1 — disponible */
   --espera: #8A6A12; /* 4.64:1 — en mantenimiento */
   --alto:   #A32718; /* 6.73:1 — rentada */

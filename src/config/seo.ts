@@ -32,7 +32,7 @@ export const SITE = {
   telephoneDisplay: "844 488 0408",
   telephoneAlt: "+528444308845",
   telephoneAltDisplay: "844 430 8845",
-  whatsapp: "", // POR CONFIRMAR — sin número no se pinta el botón de WhatsApp
+  whatsapp: "" as string, // POR CONFIRMAR — sin número no se pinta el botón de WhatsApp
   email: "bapsa@prodigy.net.mx",
 
   address: {

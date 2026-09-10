@@ -33,10 +33,13 @@ Requiere Node 18+ y Python 3 (las pruebas de SEO usan solo la stdlib).
 
 ## Cómo está armado
 
-**Astro 7, salida estática.** Todo el contenido se genera en build. No hay una
-sola ruta cuyo contenido principal dependa de JavaScript, y el único
-JavaScript del sitio es el `<details>` nativo del menú de celular — es decir,
-ninguno.
+**Astro 7, salida estática.** Todo el contenido se genera en build. **No hay
+una sola ruta cuyo contenido principal dependa de JavaScript.** El menú de
+celular es un `<details>` nativo y el filtro del catálogo son radios con CSS:
+ninguno de los dos ejecuta código. Lo único que se descarga es el script de
+prefetch de Astro, que adelanta la siguiente página al pasar el cursor y no
+pinta nada — si se quita, el sitio funciona idéntico, solo navega más lento
+(`prefetch` en `astro.config.ts`).
 
 Eso no es una preferencia estética. Los crawlers generativos —`GPTBot`,
 `ClaudeBot`, `PerplexityBot`, `OAI-SearchBot`— **no ejecutan JavaScript**:
@@ -61,7 +64,7 @@ src/
     formulario.ts     ← a dónde llegan las solicitudes  (POR CONFIRMAR)
   datos/
     maquinas.ts       ← EL CATÁLOGO REAL: 7 máquinas con su ficha de fabricante
-    familias.ts       ← las cinco familias de equipo y sus rangos
+    familias.ts       ← las cuatro familias de equipo y sus rangos
     faq.ts            ← preguntas frecuentes
   lib/
     schema.ts         ← constructores del grafo JSON-LD
@@ -105,6 +108,9 @@ modelo resolver quién es esta entidad y citarla; una discrepancia la diluye.
 | Bots de entrenamiento de IA | Permitidos | Decisión del cliente. No hay contenido propietario que proteger y conviene que el catálogo quede asociado a la entidad. |
 | Scraping agresivo | Bloqueado | `Bytespider`, `Amazonbot`, `Meta-ExternalAgent`: se llevan el ancho de banda sin devolver nada. |
 | `noindex` | Solo `/gracias` | Declarado en `NOINDEX_ROUTES`. Sale del sitemap automáticamente. |
+| Equipo de combustión | Fuera del sitio | BAPSA confirmó que hoy solo renta equipo eléctrico. El sitio lo usa como argumento en vez de esconderlo. |
+| Etiqueta de estado por máquina | No se usa | BAPSA no tiene de dónde alimentar «disponible / en mantenimiento / rentada», y una etiqueta que nadie actualiza miente a los pocos días. En su lugar va el bloque de contacto directo. |
+| Filtro del catálogo | Radios + CSS, sin JS | Las siete tarjetas están siempre en el HTML. Un filtro con JavaScript deja la página vacía para los crawlers generativos. |
 | Radio de esquina | `0` en todo | La palabra BAPSA está dibujada con esquinas en pico. Redondear la interfaz mientras la marca es angular hace que el logotipo se vea pegado encima de una plantilla. |
 
 ---
@@ -134,6 +140,9 @@ el ojo va directo ahí.
 - Sin sombras. La profundidad se hace con los tres escalones de papel.
 - Iconos con `stroke-linecap: butt` y `stroke-linejoin: miter`, siempre. Si el
   trazo termina en punta redonda, no es de BAPSA.
+- **Sin `box-shadow` en ningún hover.** Una tarjeta que se levanta lo hace
+  subiendo un escalón de superficie y cambiando el borde a Azul BAPSA, no con
+  una sombra.
 - Cifras tabulares en toda tabla de alturas y capacidades.
 
 Las tres voces: **Archivo** titula, **Public Sans** explica, **JetBrains Mono**
@@ -180,7 +189,7 @@ curl -s  https://www.bapsa.com.mx/robots.txt        # que NO diga Disallow: /
 curl -sI https://www.bapsa.com.mx                   # sin X-Robots-Tag: noindex
 curl -s  https://www.bapsa.com.mx | grep -i noindex # vacío
 curl -s  https://www.bapsa.com.mx/sitemap-index.xml # dominio de producción
-curl -s  https://www.bapsa.com.mx/renta | grep -i "cinco familias"
+curl -s  https://www.bapsa.com.mx/renta | grep -i "cuatro familias"
 curl -sI https://bapsa.com.mx                       # 301 al dominio con www
 curl -sI https://www.bapsa.com.mx/brazos-articulados-electricos.html  # 301, un solo salto
 ```

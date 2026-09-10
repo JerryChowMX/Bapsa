@@ -61,10 +61,15 @@ respuestas de IA que la ausencia del campo.
   material nuevo va **más de 20 años**, que es el dato correcto y el que
   sostiene el argumento de la marca. Está en `SITE.aniosOperacion`.
 
-### 2.4 WhatsApp
+### 2.4 WhatsApp — subió de prioridad
 - **Archivo:** `src/config/seo.ts` → `SITE.whatsapp` (hoy `""`)
-- Sin número no se pinta ningún botón de WhatsApp. Si BAPSA tiene una línea de
-  ventas por WhatsApp, es el canal de mayor conversión en este giro.
+- **Por qué importa ahora:** BAPSA pidió que el cliente reciba precio y
+  disponibilidad **directo**, sin intermediarios. El bloque de contacto directo
+  ya está en cada ficha de máquina y en el catálogo, con el teléfono en grande;
+  el botón de WhatsApp está programado y **aparece solo** en cuanto haya número,
+  con el mensaje ya redactado y el modelo de la máquina precargado.
+- Es el canal de mayor conversión en este giro y hoy es lo único que le falta
+  al circuito que el cliente pidió.
 
 ### 2.5 Condiciones comerciales de renta
 - **Dónde aparece hoy:** las páginas dicen "se confirma al cotizar".
@@ -101,22 +106,64 @@ una con su página, su tabla completa y su `Product` en el JSON-LD:
   GS-2646 E-Drive declara 9.96 m en interior. El sitio usa la ficha, que es la
   más detallada. Conviene confirmar cuál variante tiene BAPSA.
 
-### 2.7 Las tres familias que siguen sin ficha
-Estas páginas existen y describen la categoría de forma honesta —dicen con
-esas palabras que los rangos son de la categoría y no de un modelo—, pero no
-tienen ni una sola máquina publicada:
+### 2.7 Las familias que siguen sin ficha
+**Combustión: resuelto y retirado (10 sep 2026).** BAPSA confirmó por escrito
+que «ya no manejamos equipos de combustión por ahora, solo eléctricos». La
+familia entera salió del sitio: la página, la entrada del menú, sus preguntas
+frecuentes y las doce menciones que había repartidas. En su lugar el sitio
+afirma lo contrario y lo usa como argumento: **todo el equipo es eléctrico, y
+por eso entra a una nave en operación**. Hay una pregunta frecuente que lo dice
+sin rodeos, para que nadie pida una máquina que BAPSA no tiene.
 
-- **Brazos articulados de combustión.** *Y aquí hay una alerta:* todas las
-  fichas que entregó BAPSA son de equipo **eléctrico**. La página sostiene
-  «hasta 120 pies» y tracción 4×4 con base en el cuestionario de alcance, no
-  en una ficha. **Antes de publicar hay que confirmar si BAPSA de verdad renta
-  equipo de combustión**; si no, esa página se retira y se ajusta el discurso
-  del sitio, porque hoy es la única afirmación fuerte sin respaldo documental.
-- **Elevadores personales.** Sin ficha. Los rangos son de categoría.
+*Si algún día vuelve la línea de combustión*, la familia se restaura desde el
+historial de git (commit anterior a este) — no hay que volver a escribirla.
+
+**Siguen sin una sola máquina publicada:**
+
+- **Elevadores personales.** Sin ficha de fabricante. La página describe la
+  categoría con rangos y lo dice con esas palabras.
 - **Maquinaria pesada.** Solo sabemos que existe. Es la página más pobre del
   sitio y se queda así hasta que haya datos.
 
-### 2.8 Tarifas
+Con una ficha de cada una, esas dos familias aparecerían como pestañas del
+filtro del catálogo y tendrían su página por máquina, igual que las otras dos.
+
+### 2.8 El brief del grid, punto por punto
+El brief del catálogo filtrable llegó junto con el mensaje del cliente y se
+implementó completo, salvo tres puntos que **contradicen algo que ya sabemos**.
+Ninguno se inventó; quedan aquí para resolverse con BAPSA:
+
+- **«Plataformas de 120 ft» y «Plataformas de 40 ft» como inventario nuevo.**
+  Choca de frente con el mensaje del mismo día: no existe brazo articulado
+  eléctrico de 120 pies, esa altura es forzosamente diésel. Se dejó fuera. Si
+  BAPSA sí va a rentar equipo de 120 ft, vuelve la línea de combustión y hay
+  que rehacer el discurso del sitio.
+- **«Bailarinas» y «Torre de iluminación» como categorías.** Son categorías del
+  sitio de referencia (lugon.com.mx), no de BAPSA. No hay ni una ficha ni una
+  mención de que BAPSA las rente. Se dejaron fuera.
+- **«Tijeras de 26 ft» como inventario nuevo.** Ya está: son la GS-2632 y la
+  GS-2646, ambas de 26 pies de altura de plataforma. Publicadas.
+
+**El campo `Año` de la tarjeta** está implementado y es opcional
+(`anio` en `src/datos/maquinas.ts`), pero hoy no se pinta en ninguna tarjeta
+porque BAPSA no ha dado el año de ninguna unidad. En cuanto lleguen, aparece
+solo.
+
+**Dos cosas del brief se resolvieron distinto, a propósito**, y están anotadas
+en el código: el `hover` de la tarjeta **no** lleva `box-shadow` —este sistema
+no tiene sombras, la profundidad se hace con los tres escalones de papel— y el
+radio es **0**, no «ligeramente redondeado», porque la palabra BAPSA está
+dibujada con esquinas en pico. El efecto de hover se resuelve subiendo un
+escalón de superficie y cambiando el borde a Azul BAPSA.
+
+### 2.9 Refacciones para motor de combustión
+La tabla de `/refacciones` sigue listando «Motor de combustión: filtros,
+bandas, bujías, inyección y componentes de escape». Se dejó a propósito: BAPSA
+da servicio a equipo **multimarca de terceros**, que sí puede ser diésel, y eso
+es una línea distinta de rentar una máquina de combustión. Confirmar de todos
+modos que el área de refacciones sigue surtiendo esas piezas.
+
+### 2.10 Tarifas
 Sigue sin haber una sola cifra de precio en el sitio. Es la pregunta más
 buscada del giro. Aunque sea un rango por día y por familia —«una tijera de 10
 metros va de X a Y pesos por día»—, cada cifra concreta es un fragmento

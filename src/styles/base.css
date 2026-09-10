@@ -153,21 +153,6 @@ a:hover { color: var(--azul); }
 .btn--contorno-claro { background: transparent; color: var(--aire); border-color: var(--aire); }
 .btn--contorno-claro:hover { background: var(--aire); color: var(--azul); }
 
-/* ── Estado de una máquina ────────────────────────────────────────────
-   Punto, palabra y dato, siempre los tres. Quien no distingue el verde del
-   rojo sigue leyendo "Disponible · entrega hoy". El punto es cuadrado:
-   repite el remache de la placa. */
-
-.estado {
-  display: inline-flex; align-items: center; gap: var(--e2);
-  font-family: var(--texto); font-size: var(--cuerpo-chico); font-weight: 600;
-}
-.estado::before { content: ""; width: 9px; height: 9px; flex: none; background: currentColor; }
-.estado--ok { color: var(--ok); }
-.estado--espera { color: var(--espera); }
-.estado--alto { color: var(--alto); }
-.estado__dato { font-family: var(--dato); font-size: 0.8125rem; letter-spacing: 0.02em; color: var(--acero); font-weight: 400; }
-
 /* ── Tarjeta ──────────────────────────────────────────────────────────── */
 
 .tarjeta {

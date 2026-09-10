@@ -2,7 +2,6 @@
 import Base from "../layouts/Base.astro";
 import Icono from "../components/Icono.astro";
 import PlacaDatos from "../components/PlacaDatos.astro";
-import Estado from "../components/Estado.astro";
 import Foto from "../components/Foto.astro";
 import LlamadoAccion from "../components/LlamadoAccion.astro";
 import { SITE } from "../config/seo";
@@ -43,10 +42,11 @@ const schema = [
         </h1>
         <div class="filete"></div>
         <p class="lede">
-          BAPSA renta y vende brazos articulados eléctricos y de combustión, plataformas de
-          tijera, elevadores personales y maquinaria pesada en Ramos Arizpe, Saltillo y Arteaga.
-          Más de {SITE.aniosOperacion} años entregando equipo con flete propio, pólizas de
-          servicio y refacciones multimarca.
+          BAPSA renta y vende brazos articulados eléctricos, plataformas de tijera, elevadores
+          personales y maquinaria en Ramos Arizpe, Saltillo y Arteaga. Todo el equipo es
+          eléctrico: entra a una nave en operación sin gases y sin marcar el piso. Más de
+          {SITE.aniosOperacion} años entregando con flete propio, pólizas de servicio y
+          refacciones multimarca.
         </p>
         <div class="apilado">
           <a class="btn btn--relleno btn--grande" href="/contacto">Pedir cotización</a>
@@ -72,8 +72,9 @@ const schema = [
             { etiqueta: "Servicio", valor: "TALLER PROPIO" },
           ]}
         />
-        <p class="heroe__estado">
-          <Estado tipo="disponible" dato="cotización el mismo día hábil" />
+        <p class="heroe__estado chico">
+          <Icono nombre="cotizacion" tam={16} />
+          Cotización y disponibilidad el mismo día hábil.
         </p>
       </div>
     </div>
@@ -82,7 +83,7 @@ const schema = [
   <section class="seccion banda--neblina">
     <div class="hoja">
       <p class="etiqueta">Equipo en renta</p>
-      <h2 class="titulo-2">Cinco familias, un criterio para elegir</h2>
+      <h2 class="titulo-2">Cuatro familias, un criterio para elegir</h2>
       <div class="filete"></div>
       <p class="medida">
         La tijera sube en vertical y le da superficie; el brazo articulado alcanza en diagonal y
@@ -289,7 +290,7 @@ const schema = [
   .heroe__texto h1 { margin-bottom: var(--e5); }
   .heroe__tel { margin: var(--e5) 0 0; color: var(--acero); }
   .heroe__placa { display: grid; gap: var(--e4); }
-  .heroe__estado { margin: 0; }
+  .heroe__estado { display: flex; align-items: center; gap: var(--e2); margin: 0; color: var(--acero); }
 
   .familias, .servicios { list-style: none; padding: 0; margin: var(--e6) 0 0; }
   .familias h3 a, .servicios h3 a { color: var(--azul); text-decoration: none; }

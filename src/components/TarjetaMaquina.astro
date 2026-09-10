@@ -1,0 +1,127 @@
+---
+/**
+ * Tarjeta de máquina del catálogo.
+ *
+ * Estructura pedida en el brief: imagen arriba de altura fija con
+ * `object-fit: cover`, cuerpo con título y metadatos técnicos, y la tarjeta
+ * entera clicable.
+ *
+ * Dos cosas se resuelven distinto a como venían en el brief, y a propósito:
+ *
+ * · El hover NO lleva `box-shadow`. Este sistema no tiene sombras —la
+ *   profundidad se hace con los tres escalones de papel— y una sombra suelta
+ *   sería la cuarta forma de decir lo mismo. En su lugar la tarjeta sube un
+ *   escalón de superficie, el borde pasa a Azul BAPSA y el título a Señal.
+ *
+ * · El radio es 0, no «ligeramente redondeado». La palabra BAPSA está dibujada
+ *   con esquinas en pico; redondear aquí desalinea la tarjeta de la marca.
+ *
+ * Un solo enlace por tarjeta, estirado sobre toda la superficie con ::after:
+ * así la tarjeta entera es clicable sin anidar enlaces, que es lo que rompe la
+ * navegación por teclado.
+ */
+import Foto from "./Foto.astro";
+import Icono from "./Icono.astro";
+import type { Maquina } from "../datos/maquinas";
+
+const { maquina } = Astro.props as { maquina: Maquina };
+---
+
+<article class="mq">
+  <div class="mq__foto">
+    <Foto alt={maquina.fotoAlt} clave={maquina.fotoClave} ancho={560} alto={400} cubrir />
+  </div>
+
+  <div class="mq__cuerpo">
+    <p class="etiqueta">{maquina.tipo}</p>
+    <h3 class="mq__titulo">
+      <a href={`/equipo/${maquina.slug}`}>
+        {maquina.marca} {maquina.modelo}
+      </a>
+    </h3>
+
+    <dl class="mq__especs">
+      <div>
+        <dt>Marca</dt>
+        <dd>{maquina.marca}</dd>
+      </div>
+      <div>
+        <dt>Modelo</dt>
+        <dd class="dato">{maquina.modelo}</dd>
+      </div>
+      <div>
+        <dt>Altura de trabajo</dt>
+        <dd class="dato">{maquina.alturaTrabajo}</dd>
+      </div>
+      <div>
+        <dt>Capacidad</dt>
+        <dd class="dato">{maquina.capacidad}</dd>
+      </div>
+      <div>
+        <dt>Ancho</dt>
+        <dd class="dato">{maquina.ancho}</dd>
+      </div>
+      {
+        maquina.anio && (
+          <div>
+            <dt>Año</dt>
+            <dd class="dato">{maquina.anio}</dd>
+          </div>
+        )
+      }
+    </dl>
+
+    <p class="mq__pie">
+      Ver ficha y disponibilidad
+      <Icono nombre="flecha" tam={16} />
+    </p>
+  </div>
+</article>
+
+<style>
+  .mq {
+    position: relative;
+    display: flex; flex-direction: column;
+    background: var(--placa); border: 1px solid var(--riel); border-radius: var(--radio);
+    transition: background-color 160ms ease, border-color 160ms ease;
+  }
+  .mq:hover { background: var(--aire); border-color: var(--azul); }
+  /* El foco vive en el enlace, pero se dibuja alrededor de la tarjeta entera. */
+  .mq:focus-within { outline: 2px solid var(--senal); outline-offset: 2px; }
+
+  .mq__foto { height: 200px; overflow: hidden; border-bottom: 1px solid var(--riel); }
+  .mq__foto :global(.foto) { height: 100%; }
+
+  .mq__cuerpo { display: flex; flex-direction: column; gap: var(--e3); padding: var(--e5); flex: 1; }
+  .mq__cuerpo .etiqueta { margin: 0; min-height: 2.4em; }
+
+  .mq__titulo {
+    font-family: var(--rotulo); font-size: 1.25rem; font-weight: 700; line-height: 1.2;
+    color: var(--azul); margin: 0;
+  }
+  .mq__titulo a { color: inherit; text-decoration: none; }
+  .mq__titulo a:focus-visible { outline: none; }
+  /* Enlace estirado: la tarjeta entera es clicable, sin anidar enlaces. */
+  .mq__titulo a::after { content: ""; position: absolute; inset: 0; }
+  .mq:hover .mq__titulo { color: var(--senal); }
+
+  .mq__especs { display: grid; gap: var(--e2); margin: 0; }
+  .mq__especs div { display: flex; justify-content: space-between; gap: var(--e3); align-items: baseline; }
+  .mq__especs dt {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+  }
+  .mq__especs dd {
+    margin: 0; font-size: var(--cuerpo-chico); color: var(--azul); font-weight: 700;
+    text-align: right; white-space: nowrap;
+  }
+
+  .mq__pie {
+    display: flex; align-items: center; gap: var(--e2);
+    margin: auto 0 0; padding-top: var(--e3);
+    font-family: var(--rotulo); font-size: var(--boton); font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--senal);
+  }
+  .mq:hover .mq__pie :global(.icono) { transform: translateX(3px); }
+  .mq__pie :global(.icono) { transition: transform 160ms ease; }
+</style>

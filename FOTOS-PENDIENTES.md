@@ -1,6 +1,6 @@
 # Fotos pendientes
 
-El sitio tiene **dieciséis huecos de foto**: nueve de sección y siete de máquina. Cada uno se pinta como un recuadro
+El sitio tiene **quince huecos de foto**: ocho de sección y siete de máquina. Cada uno se pinta como un recuadro
 rotulado con la clave, la medida y el texto alternativo que le corresponde, así
 que es imposible publicar sin darse cuenta de cuál falta.
 
@@ -37,12 +37,11 @@ campo `foto` si decide centralizarlo; en las páginas sueltas:
   JPG es un hueco negro para cualquier crawler: no lo lee nadie.
 - Recorte a la proporción indicada antes de subir; no confíe en el CSS.
 
-## Los nueve huecos
+## Los ocho huecos de sección
 
 | Clave | Dónde | Medida | Qué debe mostrar |
 |---|---|---|---|
 | FOTO-01 | `/renta/brazos-articulados-electricos` (héroe) | 800×600 | Brazo articulado **eléctrico** con la canastilla elevada dentro de una nave, sobre piso terminado. |
-| FOTO-02 | `/renta/brazos-articulados-de-combustion` (héroe) | 800×600 | Brazo articulado **diésel 4×4** sobre terracería, junto a obra a la intemperie. |
 | FOTO-03 | `/renta/plataformas-de-tijera` (héroe) | 800×600 | Plataforma de tijera elevada en pasillo de nave, con operadores trabajando. |
 | FOTO-04 | `/renta/elevadores-personales` (héroe) | 800×600 | Elevador personal en almacén, un operador sobre el nivel alto de un rack. |
 | FOTO-05 | `/renta/maquinaria-pesada` (héroe) | 800×600 | Patio de maniobras de BAPSA con maquinaria lista para entrega. |

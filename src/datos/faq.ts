@@ -39,9 +39,14 @@ export const FAQ_GENERAL: ParFaq[] = [
       "Hasta 545 kg con la plataforma de tijera Genie GS-2046, que es la de mayor capacidad del catálogo. Le siguen la GS-2646 con 454 kg y la GS-3246 con 318 kg. Los brazos articulados van de 227 a 230 kg, porque su ventaja es el alcance, no la carga. Ese número incluye a las personas, la herramienta y el material.",
   },
   {
-    pregunta: "¿Eléctrico o de combustión?",
+    pregunta: "¿Se puede meter una plataforma a una nave en operación?",
     respuesta:
-      "Eléctrico para interior y piso terminado; de combustión para intemperie y terreno irregular. El eléctrico no emite gases y su llanta no marca el concreto, así que puede entrar a una nave en operación. El de combustión tiene tracción 4×4 y llega hasta 120 pies, pero no puede trabajar en un espacio cerrado.",
+      "Sí. Todo el equipo de BAPSA es eléctrico y con neumáticos que no dejan marcas: no emite gases de escape, opera por debajo de 70 dBA y no marca el concreto pulido ni el piso epóxico. Por eso puede trabajar dentro de una planta sin parar la producción alrededor.",
+  },
+  {
+    pregunta: "¿BAPSA renta equipo de combustión o diésel?",
+    respuesta:
+      "No. Por ahora BAPSA renta únicamente equipo de elevación eléctrico. Si su obra es a la intemperie sobre terreno firme y nivelado, el equipo eléctrico funciona; si el terreno está sin compactar o tiene pendiente fuerte, llame al 844 488 0408 y le decimos con franqueza si le podemos servir.",
   },
   {
     pregunta: "¿Entregan el equipo en obra?",
@@ -86,19 +91,7 @@ export const FAQ_POR_FAMILIA: Record<string, ParFaq[]> = {
     {
       pregunta: "¿Cuánto dura la carga de un brazo articulado eléctrico?",
       respuesta:
-        "Un turno completo de trabajo con la batería cargada al inicio. Si la obra corre dos o tres turnos seguidos sin pausa para recargar, conviene una máquina de combustión o programar el cambio de equipo.",
-    },
-  ],
-  "brazos-articulados-de-combustion": [
-    {
-      pregunta: "¿Hasta qué altura llega un brazo articulado de combustión?",
-      respuesta:
-        "Hasta 120 pies, alrededor de 38 metros de altura de trabajo, en la configuración más alta que renta BAPSA. Por debajo de eso hay escalones intermedios desde los 50 pies, y la selección depende también del alcance horizontal que necesite librar.",
-    },
-    {
-      pregunta: "¿Qué diferencia hay entre 4×2 y 4×4?",
-      respuesta:
-        "El 4×2 mueve dos ruedas y sirve en terreno compactado y con poca pendiente; el 4×4 mueve las cuatro y sube pendiente y terreno suelto. Si la obra está en terracería, en lodo o con desnivel, la máquina que necesita es la 4×4.",
+        "Un turno completo de trabajo con la batería cargada al inicio. Si la obra corre dos o tres turnos seguidos sin pausa para recargar, hay que programar la recarga entre turnos o el cambio de equipo.",
     },
   ],
   "plataformas-de-tijera": [

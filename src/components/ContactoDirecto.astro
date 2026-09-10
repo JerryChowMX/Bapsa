@@ -1,0 +1,94 @@
+---
+/**
+ * Precio y disponibilidad, sin intermediarios.
+ *
+ * Sustituye a la etiqueta de estado que traía la dirección visual. BAPSA pidió
+ * quitarla —no tienen de dónde alimentar «disponible / en mantenimiento /
+ * rentada», y una etiqueta que nadie actualiza miente a los pocos días— y en su
+ * lugar poner lo que el cliente de verdad viene buscando: precio y
+ * disponibilidad, preguntados directo a BAPSA.
+ *
+ * El botón de WhatsApp solo se pinta cuando hay número en la configuración.
+ */
+import { SITE } from "../config/seo";
+import Icono from "./Icono.astro";
+
+export interface Props {
+  /** Se precarga en el mensaje de WhatsApp y en el asunto del correo. */
+  equipo?: string;
+  /** `compacto` para la ficha, `banda` para el catálogo. */
+  variante?: "compacto" | "banda";
+}
+const { equipo = "", variante = "compacto" } = Astro.props;
+
+const asunto = equipo
+  ? `Disponibilidad y precio de ${equipo}`
+  : "Disponibilidad y precio de equipo de elevación";
+const mensaje = equipo
+  ? `Hola, quiero saber disponibilidad y precio de renta de ${equipo}.`
+  : "Hola, quiero saber disponibilidad y precio de renta de equipo de elevación.";
+const whatsapp = SITE.whatsapp
+  ? `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(mensaje)}`
+  : "";
+---
+
+<div class={`directo directo--${variante}`}>
+  <p class="etiqueta">Precio y disponibilidad</p>
+  <p class="directo__texto">
+    La disponibilidad cambia todos los días, así que no la publicamos: se la damos en el momento.
+    Marque y le confirmamos si la máquina está libre para su fecha y cuánto cuesta.
+  </p>
+
+  <a class="directo__tel" href={`tel:${SITE.telephone}`}>
+    <Icono nombre="contacto" tam={28} />
+    <span>
+      <span class="directo__rotulo">Llame ahora</span>
+      <span class="dato dato--fuerte directo__numero">{SITE.telephoneDisplay}</span>
+    </span>
+  </a>
+
+  <div class="apilado">
+    {
+      whatsapp && (
+        <a class="btn btn--relleno" href={whatsapp} rel="noopener" target="_blank">
+          Preguntar por WhatsApp
+        </a>
+      )
+    }
+    <a class={`btn ${whatsapp ? "btn--azul" : "btn--relleno"}`} href="#cotizar">
+      Solicitar cotización
+    </a>
+    <a class="btn btn--azul" href={`mailto:${SITE.email}?subject=${encodeURIComponent(asunto)}`}>
+      Escribir por correo
+    </a>
+  </div>
+
+  <p class="directo__horario chico">
+    <Icono nombre="horario" tam={16} />
+    {SITE.openingHoursDisplay} · Segundo número {SITE.telephoneAltDisplay}
+  </p>
+</div>
+
+<style>
+  .directo { background: var(--reflejante); color: var(--azul); padding: var(--e5); }
+  .directo--banda { padding: clamp(var(--e5), 4vw, var(--e7)); }
+  .directo .etiqueta { color: var(--senal); }
+  .directo__texto { font-size: var(--cuerpo-chico); line-height: 1.6; margin: 0 0 var(--e4); max-width: 52ch; }
+
+  .directo__tel {
+    display: inline-flex; align-items: center; gap: var(--e3);
+    text-decoration: none; color: var(--azul); margin-bottom: var(--e4);
+  }
+  .directo__tel span { display: grid; gap: 2px; }
+  .directo__rotulo {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--senal);
+  }
+  .directo__numero { font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem); line-height: 1.1; }
+  .directo__tel:hover .directo__numero { text-decoration: underline; }
+
+  .directo__horario {
+    display: flex; align-items: center; gap: var(--e2);
+    margin: var(--e4) 0 0; color: var(--azul);
+  }
+</style>

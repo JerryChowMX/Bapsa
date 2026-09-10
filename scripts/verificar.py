@@ -175,6 +175,17 @@ def main():
         if len(re.sub(r"\s+", " ", texto).strip()) < 600:
             errores.append(f"{rel}: menos de 600 caracteres de texto en el HTML crudo")
 
+    # 7. Sitemap: toda URL indexable tiene que traer lastmod real. Una ruta sin
+    #    lastmod suele significar que el mapa de rutas a archivos fuente se
+    #    quedó atrás cuando se agregó una sección.
+    mapa_sitemap = os.path.join(RAIZ, "sitemap-0.xml")
+    if os.path.isfile(mapa_sitemap):
+        xml = open(mapa_sitemap, encoding="utf-8").read()
+        for bloque in re.findall(r"<url>(.*?)</url>", xml, re.S):
+            loc = re.search(r"<loc>(.*?)</loc>", bloque)
+            if loc and "<lastmod>" not in bloque:
+                errores.append(f"sitemap: {loc.group(1)} sin lastmod")
+
     for id_, donde in ids_referenciados.items():
         if id_ not in ids_definidos:
             errores.append(f"{donde}: @id referenciado que no existe en ningún grafo -> {id_}")
