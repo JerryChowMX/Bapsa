@@ -1,0 +1,65 @@
+---
+import Base from "../layouts/Base.astro";
+import Faq from "../components/Faq.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { FAQ_GENERAL, FAQ_POR_FAMILIA } from "../datos/faq";
+import { FAMILIAS_DATOS } from "../datos/familias";
+import { nodoFaq } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Preguntas frecuentes", ruta: "/preguntas-frecuentes" },
+];
+
+// Todas las preguntas de la página van al FAQPage: se marca lo que se ve.
+const todas = [
+  ...FAQ_GENERAL,
+  ...FAMILIAS_DATOS.flatMap((f) => FAQ_POR_FAMILIA[f.slug] ?? []),
+];
+const schema = [nodoFaq(todas, "/preguntas-frecuentes")];
+---
+
+<Base
+  titulo="Preguntas frecuentes sobre renta de plataformas"
+  descripcion="Qué altura necesita, si va tijera o brazo articulado, si eléctrico o de combustión, qué exige la NOM-009-STPS y cómo se entrega el equipo en obra."
+  ruta="/preguntas-frecuentes"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja">
+      <p class="etiqueta">Preguntas frecuentes</p>
+      <h1 class="titulo-2">Lo que se pregunta antes de rentar</h1>
+      <div class="filete"></div>
+      <p class="lede">
+        Las respuestas de esta página resuelven la mayoría de las llamadas que entran a BAPSA:
+        qué altura necesita, qué tipo de máquina le corresponde al trabajo, qué exige la norma y
+        cómo se entrega el equipo. Si su caso no está aquí, marque al 844 488 0408.
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <Faq pares={FAQ_GENERAL} titulo="Generales" />
+    </div>
+  </section>
+
+  {
+    FAMILIAS_DATOS.filter((f) => (FAQ_POR_FAMILIA[f.slug] ?? []).length > 0).map((f, i) => (
+      <section class={`seccion ${i % 2 === 0 ? "banda--neblina" : ""}`}>
+        <div class="hoja">
+          <Faq pares={FAQ_POR_FAMILIA[f.slug]} titulo={f.nombre} />
+          <p class="chico">
+            <a href={`/renta/${f.slug}`}>Ver la ficha de {f.nombre.toLowerCase()}</a>
+          </p>
+        </div>
+      </section>
+    ))
+  }
+
+  <LlamadoAccion
+    titulo="¿Su caso no está aquí?"
+    texto="Marque con la altura del punto de trabajo y le decimos en la llamada qué máquina le corresponde."
+  />
+</Base>

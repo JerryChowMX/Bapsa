@@ -1,0 +1,69 @@
+/* ============================================================================
+   BAPSA · Tokens del sistema
+   Traducción literal de la dirección visual (Sarape, septiembre 2026).
+
+   Dos colores salidos del logotipo y diez escalones de esos dos y del papel.
+   Ningún color se inventó. Ningún blanco puro, ningún negro puro, ningún gris.
+   Cada ratio de contraste de los comentarios está medido, no estimado.
+   ========================================================================= */
+
+:root {
+  color-scheme: light only;
+
+  /* ── Superficies. Del más hondo al más elevado. ─────────────────────── */
+  --neblina:    #E4EAF4; /* bandas anchas y filas alternas de tabla */
+  --aire:       #F2F5FC; /* el papel del sitio. Trae azul adentro */
+  --placa:      #FAFBFE; /* superficie de tarjeta: 2% de luz, no un borde */
+  --cielo-bajo: #DCE2F5; /* lo seleccionado: pestaña activa, fila, hover */
+
+  /* ── Tintas ─────────────────────────────────────────────────────────── */
+  --chasis: #0B0A24; /* 17.77:1 sobre aire — cuerpo de texto, AAA */
+  --azul:   #05025E; /* 16.35:1 — titulares, cifras y texto sobre naranja */
+  --cielo:  #262474; /* 12.13:1 — hover de superficies azules */
+  --acero:  #545C7A; /*  6.03:1 — texto secundario y BORDE de todo control */
+  --riel:   #CBD3E4; /*  1.38:1 — filete de 1px. Ni texto ni borde de control */
+
+  /* ── Acento ─────────────────────────────────────────────────────────── */
+  --canastilla: #F38735; /* 2.31:1 — SOLO relleno. Nunca texto */
+  --senal:      #A85D25; /* 4.52:1 — el mismo naranja, en versión legible */
+  --reflejante: #F5D2B4; /* fondo de aviso. El azul encima da 12.54:1 */
+
+  /* ── Estado. No son colores de marca y viven fuera de la paleta. ────── */
+  --ok:     #1D6B3F; /* 5.96:1 — disponible */
+  --espera: #8A6A12; /* 4.64:1 — en mantenimiento */
+  --alto:   #A32718; /* 6.73:1 — rentada */
+
+  /* ── Las tres voces ─────────────────────────────────────────────────── */
+  --rotulo: "Archivo", "Helvetica Neue", Arial, sans-serif;      /* titula y manda */
+  --texto:  "Public Sans", system-ui, -apple-system, sans-serif; /* explica */
+  --dato:   "JetBrains Mono", ui-monospace, "SF Mono", monospace;/* el dato de máquina */
+
+  /* ── Radio ───────────────────────────────────────────────────────────
+     Cero en todo el sistema. La palabra BAPSA está dibujada con esquinas en
+     pico y la torre del brazo es una sucesión de secciones rectangulares.
+     Redondear la interfaz mientras la marca es angular hace que el logotipo
+     se vea pegado encima de una plantilla en vez de formar parte del sitio. */
+  --radio: 0px;
+
+  /* ── Ritmo vertical ─────────────────────────────────────────────────── */
+  --e1: 4px;  --e2: 8px;  --e3: 12px; --e4: 16px;
+  --e5: 24px; --e6: 32px; --e7: 48px; --e8: 64px; --e9: 96px;
+
+  --ancho-hoja: 1160px;
+  --ancho-lectura: 68ch;
+  --barra: 68px;
+}
+
+/* ── La escala tipográfica completa, tal como se aprobó ────────────────── */
+:root {
+  --display:      clamp(2.25rem, 1.4rem + 3.6vw, 3.375rem); /* 54px, Archivo 800 caja alta */
+  --titulo-2:     clamp(1.6rem, 1.2rem + 1.7vw, 2.125rem);  /* 34px, Archivo 800 caja alta */
+  --titulo-3:     1.375rem;  /* 22px, Archivo 700 */
+  --lede:         1.1875rem; /* 19px / 1.65, Public Sans 400 */
+  --cuerpo:       1.0625rem; /* 17px / 1.70 */
+  --cuerpo-chico: 0.9375rem; /* 15px / 1.65 */
+  --pie-foto:     0.84375rem;/* 13.5px / 1.60, en Acero */
+  --etiqueta:     0.6875rem; /* 11px / 1.20, tracking .16em, Archivo 700 caja alta */
+  --boton:        0.8125rem; /* 13px / 1.00, tracking .08em, Archivo 700 caja alta */
+  --dato-tam:     0.9375rem; /* 15px / 1.40, tracking .02em, tabular */
+}

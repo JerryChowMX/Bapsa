@@ -1,0 +1,34 @@
+---
+/** Confirmación. Sale con `noindex, follow` y queda fuera del sitemap
+ *  (ver NOINDEX_ROUTES en src/config/seo.ts). */
+import Base from "../layouts/Base.astro";
+import { SITE } from "../config/seo";
+---
+
+<Base
+  titulo="Solicitud recibida"
+  tituloCompleto="Solicitud recibida | BAPSA Equipo de Elevación"
+  descripcion="Su solicitud de cotización llegó a BAPSA. Le respondemos el mismo día hábil con precio y disponibilidad del equipo de elevación que necesita."
+  ruta="/gracias"
+>
+  <section class="seccion">
+    <div class="hoja gracias">
+      <p class="etiqueta">Solicitud recibida</p>
+      <h1 class="titulo-2">Gracias. Ya tenemos su solicitud</h1>
+      <div class="filete"></div>
+      <p class="lede">
+        Le respondemos el mismo día hábil con precio y disponibilidad. Si el trabajo es urgente,
+        marque al <a class="dato" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a> y
+        adelantamos la cotización por teléfono.
+      </p>
+      <div class="apilado">
+        <a class="btn btn--azul" href="/renta">Ver el equipo</a>
+        <a class="btn btn--acero" href="/">Volver al inicio</a>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .gracias { max-width: var(--ancho-lectura); }
+</style>

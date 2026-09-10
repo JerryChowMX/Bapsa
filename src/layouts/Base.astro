@@ -1,0 +1,116 @@
+---
+/**
+ * Layout raíz. Ninguna página escribe metadatos a mano: todas pasan por aquí.
+ *
+ * Todo el contenido de este sitio se genera en build (SSG). No hay una sola
+ * ruta cuyo contenido principal dependa de JavaScript, porque los crawlers
+ * generativos —GPTBot, ClaudeBot, PerplexityBot, OAI-SearchBot— reciben el
+ * HTML crudo y ahí termina: si no está en la red, no existe.
+ */
+import { SITE, urlAbsoluta, NOINDEX_ROUTES } from "../config/seo";
+import { construirGrafo, nodoMigas, type Miga } from "../lib/schema";
+import Encabezado from "../components/Encabezado.astro";
+import PiePagina from "../components/PiePagina.astro";
+import Migas from "../components/Migas.astro";
+import "../styles/tokens.css";
+import "../styles/base.css";
+
+export interface Props {
+  /** 30–60 caracteres. Sin la marca: la plantilla la añade. */
+  titulo: string;
+  /** 120–160 caracteres, única por ruta. */
+  descripcion: string;
+  /** Ruta canónica, sin dominio y sin barra final. "/" para el home. */
+  ruta: string;
+  /** Si se omite, el título de la pestaña usa el patrón `titulo | BAPSA`. */
+  tituloCompleto?: string;
+  imagen?: string;
+  imagenAlt?: string;
+  tipoOg?: "website" | "article";
+  /** Nodos JSON-LD propios de la ruta. El grafo base siempre va. */
+  schema?: Record<string, unknown>[];
+  /** Migas visibles. Si van, se emite también el BreadcrumbList. */
+  migas?: Miga[];
+}
+
+const {
+  titulo,
+  descripcion,
+  ruta,
+  tituloCompleto,
+  imagen = SITE.ogImage,
+  imagenAlt = SITE.ogImageAlt,
+  tipoOg = "website",
+  schema = [],
+  migas = [],
+} = Astro.props;
+
+const canonica = urlAbsoluta(ruta);
+const tituloPestana = tituloCompleto ?? `${titulo} | ${SITE.shortName}`;
+const imagenAbs = urlAbsoluta(imagen);
+const sinIndexar = NOINDEX_ROUTES.some((r) => ruta === r);
+
+const nodos = [...schema];
+if (migas.length > 1) nodos.push(nodoMigas(migas, ruta));
+const grafo = construirGrafo(...nodos);
+---
+
+<!doctype html>
+<html lang={SITE.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light only" />
+    <meta name="theme-color" content="#05025E" />
+
+    <title>{tituloPestana}</title>
+    <meta name="description" content={descripcion} />
+    <link rel="canonical" href={canonica} />
+    {sinIndexar && <meta name="robots" content="noindex, follow" />}
+
+    <meta property="og:title" content={titulo} />
+    <meta property="og:description" content={descripcion} />
+    <meta property="og:image" content={imagenAbs} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imagenAlt} />
+    <meta property="og:url" content={canonica} />
+    <meta property="og:type" content={tipoOg} />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content={SITE.locale} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titulo} />
+    <meta name="twitter:description" content={descripcion} />
+    <meta name="twitter:image" content={imagenAbs} />
+
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/brand/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    {/* Diez pesos en una sola petición, con swap: el texto se ve antes de que
+        baje la tipografía, que importa con la señal que hay en obra. */}
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Public+Sans:wght@400;600;700&display=swap"
+    />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=JetBrains+Mono:wght@400;700&family=Public+Sans:wght@400;600;700&display=swap"
+    />
+
+    <script type="application/ld+json" set:html={JSON.stringify(grafo)} is:inline />
+  </head>
+
+  <body>
+    <a class="salto-contenido" href="#contenido">Saltar al contenido</a>
+    <Encabezado rutaActual={ruta} />
+    <main id="contenido">
+      {migas.length > 1 && <Migas migas={migas} />}
+      <slot />
+    </main>
+    <PiePagina />
+  </body>
+</html>

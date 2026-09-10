@@ -1,0 +1,75 @@
+---
+/**
+ * Envoltura de imagen.
+ *
+ * Obliga a `alt`, `width` y `height` en toda foto: sin dimensiones explícitas
+ * el layout salta al cargar y el CLS se dispara, y sin `alt` la imagen no
+ * existe para nadie que no la vea.
+ *
+ * Si `src` viene vacío, no emite un <img> roto: pinta un hueco rotulado con
+ * la foto que falta. Es deliberado —el material fotográfico del cliente aún
+ * no está en el repositorio— y hace imposible publicar sin darse cuenta.
+ * Ver FOTOS-PENDIENTES.md.
+ */
+export interface Props {
+  src?: string;
+  alt: string;
+  ancho: number;
+  alto: number;
+  /** La imagen del LCP (la del héroe) va sin lazy y con prioridad de descarga. */
+  prioritaria?: boolean;
+  pie?: string;
+  clave?: string;
+  class?: string;
+}
+const { src, alt, ancho, alto, prioritaria = false, pie, clave, class: clase = "" } = Astro.props;
+---
+
+{
+  src ? (
+    <figure class={`foto ${clase}`}>
+      <img
+        src={src}
+        alt={alt}
+        width={ancho}
+        height={alto}
+        loading={prioritaria ? "eager" : "lazy"}
+        decoding={prioritaria ? "sync" : "async"}
+        fetchpriority={prioritaria ? "high" : "auto"}
+      />
+      {pie && <figcaption class="pie-foto">{pie}</figcaption>}
+    </figure>
+  ) : (
+    <figure class={`foto foto--hueco ${clase}`} style={`--proporcion:${ancho} / ${alto}`}>
+      <div class="hueco">
+        <span class="etiqueta">Foto pendiente</span>
+        <p class="hueco__alt">{alt}</p>
+        {clave && <p class="dato hueco__clave">{clave}</p>}
+        <p class="dato hueco__medida">
+          {ancho}&nbsp;×&nbsp;{alto}
+        </p>
+      </div>
+      {pie && <figcaption class="pie-foto">{pie}</figcaption>}
+    </figure>
+  )
+}
+
+<style>
+  .foto { margin: 0; }
+  .foto img { width: 100%; height: auto; border: 1px solid var(--riel); }
+
+  .hueco {
+    aspect-ratio: var(--proporcion);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: var(--e2); padding: var(--e5); text-align: center;
+    background: var(--neblina);
+    border: 2px dashed var(--acero);
+  }
+  .hueco .etiqueta { margin: 0; color: var(--senal); }
+  .hueco__alt {
+    margin: 0; max-width: 42ch; font-size: var(--cuerpo-chico);
+    line-height: 1.5; color: var(--chasis);
+  }
+  .hueco__clave { margin: 0; font-size: 0.75rem; color: var(--azul); font-weight: 700; }
+  .hueco__medida { margin: 0; font-size: 0.6875rem; color: var(--acero); }
+</style>

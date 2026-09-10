@@ -1,0 +1,50 @@
+---
+import Base from "../layouts/Base.astro";
+import { NAV_PIE } from "../config/navegacion";
+import { SITE } from "../config/seo";
+---
+
+<Base
+  titulo="Página no encontrada"
+  tituloCompleto="Página no encontrada | BAPSA Equipo de Elevación"
+  descripcion="La página que buscaba no existe o cambió de dirección. Aquí están las secciones del sitio: equipo en renta, venta, servicio, refacciones y contacto."
+  ruta="/404"
+>
+  <section class="seccion">
+    <div class="hoja">
+      <p class="etiqueta">Error 404</p>
+      <h1 class="titulo-2">Esta página no existe</h1>
+      <div class="filete"></div>
+      <p class="lede">
+        La dirección que abrió no corresponde a ninguna página del sitio. Puede que haya cambiado
+        o que el enlace venga incompleto. Abajo están las secciones principales.
+      </p>
+      <p>
+        Si buscaba algo concreto, marque al{" "}
+        <a class="dato" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>.
+      </p>
+
+      <div class="rejilla rejilla--3 mapa">
+        {
+          NAV_PIE.map((grupo) => (
+            <nav aria-label={grupo.titulo}>
+              <p class="etiqueta">{grupo.titulo}</p>
+              <ul>
+                {grupo.entradas.map((e) => (
+                  <li>
+                    <a href={e.ruta}>{e.nombre}</a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .mapa { margin-top: var(--e7); }
+  .mapa ul { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--e3); }
+</style>

@@ -1,0 +1,150 @@
+---
+/**
+ * Barra. El bloque de marca va en azul sólido con el brazo en naranja: es la
+ * única parte de la barra donde el logotipo manda. La pestaña activa se marca
+ * con un filete naranja abajo Y con el texto en azul, nunca solo con color.
+ * "Cotizar" es el único relleno de toda la barra.
+ *
+ * El menú de celular es un <details>: sin una línea de JavaScript, así que
+ * funciona igual para un crawler que para alguien con la red de una obra.
+ */
+import { SITE } from "../config/seo";
+import { NAV_PRINCIPAL } from "../config/navegacion";
+import Icono from "./Icono.astro";
+
+const { rutaActual } = Astro.props as { rutaActual: string };
+const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ruta + "/");
+---
+
+<header class="barra">
+  <div class="barra__interior hoja">
+    <a href="/" class="marca" aria-label={`${SITE.name} — inicio`}>
+      <span class="marca__bloque" aria-hidden="true">
+        <Icono nombre="brazo-articulado" tam={20} />
+      </span>
+      <span class="marca__texto">
+        <span class="marca__palabra">BAPSA</span>
+        <span class="marca__lema">Equipo de elevación</span>
+      </span>
+    </a>
+
+    <nav class="nav-escritorio" aria-label="Principal">
+      {
+        NAV_PRINCIPAL.map((e) => (
+          <a href={e.ruta} aria-current={activa(e.ruta) ? "page" : undefined}>
+            {e.nombre}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="barra__acciones">
+      <a class="barra__tel dato" href={`tel:${SITE.telephone}`}>
+        <Icono nombre="contacto" tam={16} />
+        {SITE.telephoneDisplay}
+      </a>
+      <a class="btn btn--relleno btn--chico" href="/contacto">Cotizar</a>
+    </div>
+
+    <details class="menu-movil">
+      <summary aria-label="Abrir menú">
+        <span class="hamburguesa" aria-hidden="true"></span>
+        <span class="solo-lectores">Menú</span>
+      </summary>
+      <div class="menu-movil__panel">
+        {
+          NAV_PRINCIPAL.map((e) => (
+            <a href={e.ruta} aria-current={activa(e.ruta) ? "page" : undefined}>
+              {e.nombre}
+            </a>
+          ))
+        }
+        <a href="/contacto">Contacto y cotización</a>
+        <p class="dato">
+          <a href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a> ·{" "}
+          <a href={`tel:${SITE.telephoneAlt}`}>{SITE.telephoneAltDisplay}</a>
+        </p>
+        <p class="menu-movil__horario">{SITE.openingHoursDisplay}</p>
+      </div>
+    </details>
+  </div>
+</header>
+
+<style>
+  .barra {
+    position: sticky; top: 0; z-index: 60;
+    background: var(--aire); border-bottom: 1px solid var(--riel);
+  }
+  .barra__interior {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: var(--e5); min-height: var(--barra);
+  }
+
+  /* ── Marca ── */
+  .marca { display: flex; align-items: center; gap: var(--e3); text-decoration: none; flex: none; }
+  .marca__bloque {
+    display: grid; place-items: center; width: 38px; height: 38px; flex: none;
+    background: var(--azul); color: var(--canastilla); /* 7.08:1 */
+  }
+  .marca__texto { display: flex; flex-direction: column; gap: 1px; }
+  .marca__palabra {
+    font-family: var(--rotulo); font-weight: 800; font-size: 1.25rem; line-height: 1;
+    letter-spacing: -0.01em; color: var(--azul);
+  }
+  .marca__lema {
+    font-family: var(--rotulo); font-weight: 600; font-size: 0.5625rem; line-height: 1;
+    letter-spacing: 0.17em; text-transform: uppercase; color: var(--acero);
+  }
+
+  /* ── Navegación ── */
+  .nav-escritorio { display: none; gap: var(--e5); }
+  .nav-escritorio a {
+    font-family: var(--rotulo); font-weight: 700; font-size: 0.6875rem;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+    text-decoration: none; padding: var(--e2) 0; border-bottom: 3px solid transparent;
+    white-space: nowrap;
+  }
+  .nav-escritorio a:hover { color: var(--azul); }
+  .nav-escritorio a[aria-current="page"] { color: var(--azul); border-bottom-color: var(--canastilla); }
+
+  .barra__acciones { display: none; align-items: center; gap: var(--e4); }
+  .barra__tel {
+    display: inline-flex; align-items: center; gap: var(--e2);
+    color: var(--senal); text-decoration: none; font-size: 0.875rem; white-space: nowrap;
+  }
+  .barra__tel:hover { color: var(--azul); }
+
+  /* ── Menú de celular, sin JavaScript ── */
+  .menu-movil { position: relative; }
+  .menu-movil summary {
+    display: grid; place-items: center; width: 42px; height: 42px;
+    border: 1px solid var(--acero); cursor: pointer; list-style: none;
+  }
+  .menu-movil summary::-webkit-details-marker { display: none; }
+  .hamburguesa, .hamburguesa::before, .hamburguesa::after {
+    display: block; width: 18px; height: 2px; background: var(--azul); content: "";
+  }
+  .hamburguesa { position: relative; }
+  .hamburguesa::before { position: absolute; top: -6px; }
+  .hamburguesa::after { position: absolute; top: 6px; }
+  .menu-movil[open] summary { background: var(--cielo-bajo); }
+
+  .menu-movil__panel {
+    position: absolute; right: 0; top: calc(100% + var(--e3)); z-index: 61;
+    width: min(84vw, 320px); background: var(--placa);
+    border: 1px solid var(--acero); padding: var(--e4) var(--e5) var(--e5);
+  }
+  .menu-movil__panel a {
+    display: block; padding: var(--e3) 0; border-bottom: 1px solid var(--riel);
+    font-family: var(--rotulo); font-weight: 700; font-size: 0.8125rem;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--azul); text-decoration: none;
+  }
+  .menu-movil__panel a[aria-current="page"] { color: var(--senal); }
+  .menu-movil__panel p { margin: var(--e4) 0 0; font-size: 0.8125rem; }
+  .menu-movil__horario { color: var(--acero); font-family: var(--texto); }
+
+  @media (min-width: 900px) {
+    .nav-escritorio, .barra__acciones { display: flex; }
+    .menu-movil { display: none; }
+  }
+</style>

@@ -1,0 +1,240 @@
+---
+import Base from "../layouts/Base.astro";
+import Icono from "../components/Icono.astro";
+import PlacaDatos from "../components/PlacaDatos.astro";
+import Estado from "../components/Estado.astro";
+import Foto from "../components/Foto.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { SITE } from "../config/seo";
+import { FAMILIAS_DATOS } from "../datos/familias";
+import { nodoServicio } from "../lib/schema";
+
+const schema = [
+  nodoServicio({
+    nombre: "Renta de equipo de elevación",
+    descripcion: SITE.description,
+    ruta: "/renta",
+    tipo: "Renta de plataformas aéreas y brazos articulados",
+  }),
+];
+---
+
+<Base
+  titulo="Renta de plataformas aéreas en Ramos Arizpe"
+  tituloCompleto="BAPSA — Renta de plataformas aéreas en Ramos Arizpe"
+  descripcion={SITE.description}
+  ruta="/"
+  schema={schema}
+>
+  <section class="heroe">
+    <div class="hoja heroe__interior">
+      <div class="heroe__texto">
+        <p class="etiqueta">Ramos Arizpe · Saltillo · Arteaga</p>
+        <h1 class="display">
+          Renta de plataformas y brazos articulados en Coahuila
+        </h1>
+        <div class="filete"></div>
+        <p class="lede">
+          BAPSA renta y vende brazos articulados eléctricos y de combustión, plataformas de
+          tijera, elevadores personales y maquinaria pesada en Ramos Arizpe, Saltillo y Arteaga.
+          Más de {SITE.aniosOperacion} años entregando equipo con flete propio, pólizas de
+          servicio y refacciones multimarca.
+        </p>
+        <div class="apilado">
+          <a class="btn btn--relleno btn--grande" href="/contacto">Pedir cotización</a>
+          <a class="btn btn--azul btn--grande" href="/renta">Ver el equipo</a>
+        </div>
+        <p class="heroe__tel chico">
+          O marque al <a class="dato" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>.{" "}
+          {SITE.openingHoursDisplay}.
+        </p>
+      </div>
+
+      <div class="heroe__placa">
+        <PlacaDatos
+          banda="BAPSA"
+          registro="RAMOS ARIZPE, COAH."
+          titulo="Datos de la empresa"
+          renglones={[
+            { etiqueta: "Experiencia", valor: `+${SITE.aniosOperacion} AÑOS` },
+            { etiqueta: "Altura máxima", valor: "120 FT" },
+            { etiqueta: "Flete", valor: "PROPIO" },
+            { etiqueta: "Servicio", valor: "TALLER PROPIO" },
+            { etiqueta: "Refacciones", valor: "MULTIMARCA" },
+          ]}
+        />
+        <p class="heroe__estado">
+          <Estado tipo="disponible" dato="cotización el mismo día hábil" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <p class="etiqueta">Equipo en renta</p>
+      <h2 class="titulo-2">Cinco familias, un criterio para elegir</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        La tijera sube en vertical y le da superficie; el brazo articulado alcanza en diagonal y
+        libra obstáculos. Con esa sola diferencia se resuelve la mayoría de las decisiones de
+        equipo. Si su punto de trabajo está tapado por una máquina, un rack o una banda, necesita
+        un brazo.
+      </p>
+
+      <ul class="familias rejilla rejilla--3">
+        {
+          FAMILIAS_DATOS.map((f) => (
+            <li class="tarjeta">
+              <Icono nombre={f.icono} tam={28} />
+              <h3 class="titulo-3">
+                <a href={`/renta/${f.slug}`}>{f.nombre}</a>
+              </h3>
+              <p class="chico">{f.resumen}</p>
+              {f.medidas.length > 0 && (
+                <p class="dato familias__medida">
+                  {f.medidas[0].concepto}: {f.medidas[0].valor}
+                </p>
+              )}
+              <p class="tarjeta__pie">
+                <a class="btn btn--azul btn--chico" href={`/renta/${f.slug}`}>
+                  Ver detalle
+                  <Icono nombre="flecha" tam={16} />
+                </a>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja rejilla rejilla--2 pareja">
+      <div>
+        <p class="etiqueta">Por qué BAPSA</p>
+        <h2 class="titulo-2">Lo que cambia cuando el proveedor tiene taller</h2>
+        <div class="filete"></div>
+        <p>
+          BAPSA opera desde Ramos Arizpe, sobre el corredor industrial entre Saltillo y
+          Monterrey, con flete propio y taller propio. Las dos cosas resuelven el mismo problema:
+          que la fecha de entrega y la reparación de una falla no dependan de la agenda de un
+          tercero.
+        </p>
+        <ul class="lista-marcada">
+          <li>
+            <strong>Más de {SITE.aniosOperacion} años</strong> rentando equipo de elevación en
+            Coahuila, no un catálogo recién abierto.
+          </li>
+          <li>
+            <strong>Flete propio.</strong> La entrega en obra la programa BAPSA, no un
+            transportista externo.
+          </li>
+          <li>
+            <strong>Taller y refacciones multimarca</strong> para {SITE.marcas.join(", ")}: la
+            falla se atiende sin esperar a un centro de servicio de otra ciudad.
+          </li>
+          <li>
+            <strong>Pólizas de servicio</strong> para flotas propias, con mantenimiento
+            preventivo programado.
+          </li>
+        </ul>
+        <a class="btn btn--azul" href="/nosotros">Conocer la empresa</a>
+      </div>
+      <Foto
+        alt="Taller de servicio de BAPSA en Ramos Arizpe, con un técnico dando mantenimiento a un brazo articulado."
+        clave="FOTO-06"
+        ancho={800}
+        alto={600}
+      />
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <p class="etiqueta">Además de la renta</p>
+      <h2 class="titulo-2">Venta, servicio y refacciones</h2>
+      <div class="filete"></div>
+      <ul class="rejilla rejilla--3 servicios">
+        <li class="tarjeta">
+          <Icono nombre="cotizacion" tam={28} />
+          <h3 class="titulo-3"><a href="/venta">Venta de equipo</a></h3>
+          <p class="chico">
+            Cuando la máquina se va a usar todo el año, comprarla sale más barato que rentarla.
+            BAPSA vende equipo nuevo y seminuevo con respaldo de servicio.
+          </p>
+        </li>
+        <li class="tarjeta">
+          <Icono nombre="mantenimiento" tam={28} />
+          <h3 class="titulo-3"><a href="/servicio">Servicio y pólizas</a></h3>
+          <p class="chico">
+            Mantenimiento preventivo y correctivo para equipo propio o rentado a otro proveedor,
+            con póliza programada y bitácora por máquina.
+          </p>
+        </li>
+        <li class="tarjeta">
+          <Icono nombre="refacciones" tam={28} />
+          <h3 class="titulo-3"><a href="/refacciones">Refacciones multimarca</a></h3>
+          <p class="chico">
+            Refacciones para {SITE.marcas.join(", ")}. Cotización con número de parte o con el
+            número de serie de la máquina.
+          </p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja rejilla rejilla--2 pareja">
+      <div>
+        <p class="etiqueta">Cobertura</p>
+        <h2 class="titulo-2">Dónde entrega BAPSA</h2>
+        <div class="filete"></div>
+        <p>
+          BAPSA entrega con flete propio en <strong>Ramos Arizpe</strong>,
+          <strong>Saltillo</strong> y <strong>Arteaga</strong>, que es el corredor donde está
+          concentrada la industria de la región: los parques industriales de Ramos Arizpe, la
+          zona automotriz y la obra civil de la zona metropolitana de Saltillo. Para obras fuera
+          de esa zona se cotiza el traslado.
+        </p>
+        <p>
+          <a href="/cobertura">Ver la zona de cobertura y los tiempos de entrega</a>.
+        </p>
+      </div>
+      <div>
+        <PlacaDatos
+          banda="ENTREGA"
+          registro="FLETE PROPIO"
+          titulo="Cobertura y horario"
+          renglones={[
+            { etiqueta: "Ramos Arizpe", valor: "MISMO DÍA" },
+            { etiqueta: "Saltillo", valor: "MISMO DÍA" },
+            { etiqueta: "Arteaga", valor: "MISMO DÍA" },
+            { etiqueta: "Fuera de zona", valor: "SE COTIZA" },
+            { etiqueta: "Horario", valor: "L-V 8:30-18:00" },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <LlamadoAccion />
+</Base>
+
+<style>
+  .heroe { padding-block: clamp(var(--e7), 6vw, var(--e9)); }
+  .heroe__interior { display: grid; gap: var(--e7); align-items: start; }
+  @media (min-width: 980px) { .heroe__interior { grid-template-columns: 1.6fr 1fr; gap: var(--e8); } }
+  .heroe__texto h1 { margin-bottom: var(--e5); }
+  .heroe__tel { margin: var(--e5) 0 0; color: var(--acero); }
+  .heroe__placa { display: grid; gap: var(--e4); }
+  .heroe__estado { margin: 0; }
+
+  .familias, .servicios { list-style: none; padding: 0; margin: var(--e6) 0 0; }
+  .familias h3 a, .servicios h3 a { color: var(--azul); text-decoration: none; }
+  .familias h3 a:hover, .servicios h3 a:hover { color: var(--senal); text-decoration: underline; }
+  .familias__medida { color: var(--acero); font-size: 0.8125rem; margin: 0; }
+
+  .pareja { align-items: center; }
+  @media (min-width: 900px) { .pareja { grid-template-columns: 1.15fr 1fr; gap: var(--e8); } }
+</style>

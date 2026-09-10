@@ -1,0 +1,181 @@
+---
+import Base from "../layouts/Base.astro";
+import PlacaDatos from "../components/PlacaDatos.astro";
+import Icono from "../components/Icono.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { SITE } from "../config/seo";
+import { nodoServicio, nodoFaq } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Refacciones", ruta: "/refacciones" },
+];
+
+const faq = [
+  {
+    pregunta: "¿Qué datos necesito para cotizar una refacción?",
+    respuesta:
+      "El número de parte, o en su defecto el número de serie de la máquina y la descripción de la pieza. Con el número de serie se identifica el modelo y el año exactos, que es lo que distingue dos piezas que se ven iguales y no lo son.",
+  },
+  {
+    pregunta: "¿Venden refacciones si no rentamos ni compramos ahí?",
+    respuesta:
+      "Sí. El área de refacciones atiende a cualquier cliente con equipo de elevación, sea propio, comprado a otro distribuidor o rentado a otro proveedor.",
+  },
+];
+
+const schema = [
+  nodoServicio({
+    nombre: "Refacciones para equipo de elevación",
+    descripcion:
+      "Refacciones multimarca para plataformas aéreas y brazos articulados Genie, JLG, Haulotte, Skyjack, Snorkel, Toyota y Caterpillar en Coahuila.",
+    ruta: "/refacciones",
+    tipo: "Venta de refacciones para maquinaria de elevación",
+  }),
+  nodoFaq(faq, "/refacciones"),
+];
+---
+
+<Base
+  titulo="Refacciones multimarca para equipo de elevación"
+  descripcion="Refacciones para plataformas y brazos articulados Genie, JLG, Haulotte, Skyjack, Snorkel, Toyota y Caterpillar. Cotización con número de parte o de serie."
+  ruta="/refacciones"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja">
+      <p class="etiqueta">Refacciones</p>
+      <h1 class="titulo-2">Refacciones multimarca para equipo de elevación</h1>
+      <div class="filete"></div>
+      <p class="lede">
+        BAPSA surte refacciones para plataformas aéreas y brazos articulados de las marcas que
+        se usan en la región: {SITE.marcas.join(", ")}. La cotización se hace con el número de
+        parte o, si no lo tiene, con el número de serie de la máquina.
+      </p>
+      <div class="apilado">
+        <a class="btn btn--relleno" href="/contacto">Cotizar una refacción</a>
+        <a class="btn btn--azul" href={`tel:${SITE.telephone}`}>
+          <Icono nombre="contacto" tam={16} />
+          {SITE.telephoneDisplay}
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja rejilla rejilla--2 pareja">
+      <div>
+        <h2 class="titulo-2">Cómo pedir una refacción sin equivocarse</h2>
+        <div class="filete"></div>
+        <p>
+          Dos máquinas del mismo modelo y distinto año llevan piezas distintas. Por eso la
+          cotización arranca del número de serie, no del nombre del modelo: es el dato que
+          identifica la configuración exacta de su equipo.
+        </p>
+        <p>
+          El número de serie está en la placa remachada del chasís, la misma que trae el número
+          económico y los datos de capacidad. Tome una foto de esa placa y mándela: con eso basta.
+        </p>
+        <ul class="lista-marcada">
+          <li><strong>Número de parte</strong>, si lo tiene del manual o del despiece.</li>
+          <li><strong>Número de serie</strong> de la máquina, de la placa del chasís.</li>
+          <li><strong>Descripción de la falla</strong>, para confirmar que la pieza es la correcta.</li>
+          <li><strong>Urgencia</strong>: si la máquina está parada, se cotiza y se busca primero.</li>
+        </ul>
+      </div>
+      <PlacaDatos
+        banda="DÓNDE ESTÁ EL DATO"
+        registro="PLACA DEL CHASÍS"
+        titulo="Datos que trae la placa de una máquina"
+        renglones={[
+          { etiqueta: "Modelo", valor: "Z-45/25J RT" },
+          { etiqueta: "Núm. de serie", valor: "EL DATO CLAVE" },
+          { etiqueta: "Año", valor: "AAAA" },
+          { etiqueta: "Capacidad", valor: "227 KG" },
+          { etiqueta: "Altura de trabajo", valor: "15.85 M" },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <h2 class="titulo-2">Qué se surte con más frecuencia</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        Estas son las familias de refacción que más salen en equipo de elevación. Si su pieza no
+        está en la lista, cotícela igual: el catálogo es más amplio que este resumen.
+      </p>
+      <div class="tabla-envoltura">
+        <table>
+          <caption>Familias de refacción para plataformas y brazos articulados.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Sistema</th>
+              <th scope="col">Piezas más solicitadas</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Hidráulico</th>
+              <td>Mangueras, cilindros, sellos, bombas, válvulas y filtros.</td>
+            </tr>
+            <tr>
+              <th scope="row">Eléctrico</th>
+              <td>Baterías, cargadores, contactores, tarjetas de control y arneses.</td>
+            </tr>
+            <tr>
+              <th scope="row">Tracción y frenos</th>
+              <td>Motores de rueda, frenos, llantas y mazas.</td>
+            </tr>
+            <tr>
+              <th scope="row">Estructura y seguridad</th>
+              <td>Bujes, pernos, sensores de nivel, celdas de carga y paros de emergencia.</td>
+            </tr>
+            <tr>
+              <th scope="row">Motor de combustión</th>
+              <td>Filtros, bandas, bujías, inyección y componentes de escape.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="chico">
+        Los tiempos de entrega y las existencias se confirman al cotizar: dependen de la marca y
+        de si la pieza está en piso o se pide al fabricante.
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Preguntas sobre refacciones</h2>
+      <div class="filete"></div>
+      <dl class="faq">
+        {
+          faq.map((p) => (
+            <div>
+              <dt class="titulo-3">{p.pregunta}</dt>
+              <dd>{p.respuesta}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="chico"><a href="/preguntas-frecuentes">Ver todas las preguntas frecuentes</a></p>
+    </div>
+  </section>
+
+  <LlamadoAccion
+    titulo="Mande la foto de la placa y le cotizamos"
+    texto="Con el número de serie identificamos el modelo y el año exactos de su máquina. Es la forma más rápida de no pedir la pieza equivocada."
+  />
+</Base>
+
+<style>
+  .pareja { align-items: start; }
+  @media (min-width: 900px) { .pareja { grid-template-columns: 1.3fr 1fr; gap: var(--e8); } }
+  .faq { display: grid; gap: var(--e5); margin: var(--e6) 0 var(--e5); }
+  .faq > div { border-top: 1px solid var(--riel); padding-top: var(--e4); }
+  .faq dt { margin-bottom: var(--e2); }
+  .faq dd { margin: 0; max-width: var(--ancho-lectura); }
+</style>

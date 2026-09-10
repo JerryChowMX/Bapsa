@@ -1,0 +1,41 @@
+---
+/**
+ * Preguntas frecuentes.
+ *
+ * Van redactadas en el lenguaje del usuario, no en el de la marca: nadie
+ * busca "soluciones integrales de elevación", buscan "cuánto cuesta rentar
+ * una plataforma en Saltillo". Cada respuesta abre con la respuesta —cifra,
+ * plazo o condición— y explica después, para que el fragmento se entienda
+ * sacado de contexto.
+ *
+ * Sin <details>: el contenido va siempre visible en el HTML. El schema
+ * FAQPage solo se emite porque esto se ve en la página.
+ */
+import type { ParFaq } from "../lib/schema";
+const { titulo = "Preguntas frecuentes", pares } = Astro.props as {
+  titulo?: string;
+  pares: ParFaq[];
+};
+---
+
+<section class="faq">
+  <h2 class="titulo-2">{titulo}</h2>
+  <div class="filete"></div>
+  <dl>
+    {
+      pares.map((p) => (
+        <div class="faq__par">
+          <dt class="titulo-3">{p.pregunta}</dt>
+          <dd>{p.respuesta}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<style>
+  dl { margin: 0; display: grid; gap: var(--e6); }
+  .faq__par { border-top: 1px solid var(--riel); padding-top: var(--e5); }
+  dt { margin-bottom: var(--e3); }
+  dd { margin: 0; max-width: var(--ancho-lectura); }
+</style>

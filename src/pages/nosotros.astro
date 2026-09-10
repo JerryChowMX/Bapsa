@@ -1,0 +1,177 @@
+---
+import Base from "../layouts/Base.astro";
+import PlacaDatos from "../components/PlacaDatos.astro";
+import Foto from "../components/Foto.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { SITE, direccionUnaLinea } from "../config/seo";
+import { ID_ORG } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Nosotros", ruta: "/nosotros" },
+];
+
+const schema = [
+  {
+    "@type": "AboutPage",
+    "@id": `${SITE.url}/nosotros#aboutpage`,
+    url: `${SITE.url}/nosotros`,
+    name: `Sobre ${SITE.name}`,
+    mainEntity: { "@id": ID_ORG },
+  },
+];
+---
+
+<Base
+  titulo="Sobre BAPSA, equipo de elevación en Coahuila"
+  descripcion={`Más de ${SITE.aniosOperacion} años rentando y vendiendo equipo de elevación desde Ramos Arizpe, con flete propio, taller propio y refacciones multimarca.`}
+  ruta="/nosotros"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja encabezado">
+      <div>
+        <p class="etiqueta">Nosotros</p>
+        <h1 class="titulo-2">Más de {SITE.aniosOperacion} años subiendo gente a trabajar</h1>
+        <div class="filete"></div>
+        <p class="lede">
+          BAPSA es una empresa de Ramos Arizpe dedicada a la renta, la venta y el servicio de
+          equipo de elevación. Lleva más de {SITE.aniosOperacion} años operando sobre el corredor
+          industrial entre Saltillo y Monterrey, que es donde está concentrada la industria a la
+          que sirve.
+        </p>
+        <p>
+          El negocio se sostiene en tres cosas que no se subcontratan: el flete es propio, el
+          taller es propio y las refacciones son multimarca. Las tres resuelven el mismo problema
+          —que la fecha de entrega o la reparación de una falla no dependan de la agenda de un
+          tercero—, y son la razón por la que una obra puede programar el trabajo en altura con
+          una llamada.
+        </p>
+      </div>
+      <Foto
+        alt="Instalaciones de BAPSA sobre el Boulevard Miguel Ramos Arizpe, con equipo de elevación en el patio."
+        clave="FOTO-09"
+        ancho={800}
+        alto={600}
+        prioritaria
+      />
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja rejilla rejilla--2 pareja">
+      <div>
+        <h2 class="titulo-2">A quién sirve BAPSA</h2>
+        <div class="filete"></div>
+        <p>
+          A la industria y a la construcción de la zona metropolitana de Saltillo: plantas
+          automotrices y de autopartes de los parques industriales de Ramos Arizpe, contratistas
+          de obra civil e industrial, empresas de mantenimiento, montaje electromecánico,
+          señalización y rotulación, centros comerciales y almacenes.
+        </p>
+        <p>
+          El punto en común entre todos es el mismo: alguien tiene que trabajar arriba y hacerlo
+          de forma segura, y la máquina tiene que estar en obra el día que se programó, no dos
+          días después.
+        </p>
+        <h3 class="titulo-3">Lo que sí decimos y lo que no</h3>
+        <p>
+          En este sitio no hay tarifas publicadas porque el precio depende del equipo, del plazo
+          y del lugar, y una cifra suelta engaña más de lo que informa. Lo que sí hay es el
+          criterio para elegir máquina y el compromiso de cotizar el mismo día hábil.
+        </p>
+      </div>
+      <div class="datos">
+        <PlacaDatos
+          banda="BAPSA"
+          registro="RAMOS ARIZPE, COAH."
+          titulo="Datos de la empresa"
+          renglones={[
+            { etiqueta: "Experiencia", valor: `+${SITE.aniosOperacion} AÑOS` },
+            { etiqueta: "Altura máxima", valor: "120 FT" },
+            { etiqueta: "Cobertura", valor: "SALTILLO · RAMOS · ARTEAGA" },
+            { etiqueta: "Flete", valor: "PROPIO" },
+            { etiqueta: "Taller", valor: "PROPIO" },
+            { etiqueta: "Refacciones", valor: "MULTIMARCA" },
+          ]}
+        />
+        <PlacaDatos
+          banda="CONTACTO"
+          titulo="Datos de contacto"
+          renglones={[
+            { etiqueta: "Teléfono", valor: SITE.telephoneDisplay },
+            { etiqueta: "Segundo", valor: SITE.telephoneAltDisplay },
+            { etiqueta: "C.P.", valor: SITE.address.postalCode },
+            { etiqueta: "Horario", valor: "L-V 8:30-18:00" },
+            { etiqueta: "Sábado", valor: "8:30-13:00" },
+          ]}
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <h2 class="titulo-2">Las cuatro líneas del negocio</h2>
+      <div class="filete"></div>
+      <div class="rejilla rejilla--4 lineas">
+        <div class="tarjeta">
+          <h3 class="titulo-3"><a href="/renta">Renta</a></h3>
+          <p class="chico">
+            Cinco familias de equipo de elevación, con entrega y recolección de flete propio.
+          </p>
+        </div>
+        <div class="tarjeta">
+          <h3 class="titulo-3"><a href="/venta">Venta</a></h3>
+          <p class="chico">
+            Equipo nuevo y seminuevo, con el mismo taller y las mismas refacciones detrás.
+          </p>
+        </div>
+        <div class="tarjeta">
+          <h3 class="titulo-3"><a href="/servicio">Servicio</a></h3>
+          <p class="chico">
+            Mantenimiento preventivo y correctivo multimarca, con póliza y bitácora por máquina.
+          </p>
+        </div>
+        <div class="tarjeta">
+          <h3 class="titulo-3"><a href="/refacciones">Refacciones</a></h3>
+          <p class="chico">
+            Piezas para {SITE.marcas.length} marcas, cotizadas con número de parte o de serie.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Dónde estamos</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        <address>{direccionUnaLinea}</address>
+      </p>
+      <p class="medida">
+        Sobre el Boulevard Miguel Ramos Arizpe, la vialidad que conecta Ramos Arizpe con Saltillo
+        y con la carretera a Monterrey. Desde ahí se entrega el mismo día en los tres municipios
+        de la zona de cobertura.
+      </p>
+      <p><a href="/cobertura">Ver la zona de cobertura</a> · <a href="/contacto">Contacto y horarios</a></p>
+    </div>
+  </section>
+
+  <LlamadoAccion />
+</Base>
+
+<style>
+  .encabezado { display: grid; gap: var(--e6); align-items: center; }
+  @media (min-width: 900px) { .encabezado { grid-template-columns: 1.15fr 1fr; gap: var(--e8); } }
+  .encabezado h1 { margin-bottom: var(--e5); }
+  .pareja { align-items: start; }
+  @media (min-width: 900px) { .pareja { grid-template-columns: 1.3fr 1fr; gap: var(--e8); } }
+  .datos { display: grid; gap: var(--e5); }
+  .lineas { margin-top: var(--e6); }
+  .lineas h3 a { color: var(--azul); text-decoration: none; }
+  .lineas h3 a:hover { color: var(--senal); text-decoration: underline; }
+  address { font-style: normal; font-family: var(--dato); font-size: var(--dato-tam); color: var(--azul); }
+</style>

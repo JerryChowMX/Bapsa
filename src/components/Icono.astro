@@ -1,0 +1,75 @@
+---
+/**
+ * Set de iconos de BAPSA.
+ *
+ * Retícula 24×24, `fill: none`, `stroke: currentColor`, y —lo que define el
+ * set— `stroke-linecap: butt` y `stroke-linejoin: miter`. Punta cortada a
+ * escuadra y esquina en ángulo, nunca redondeadas: si el trazo termina en
+ * punta redonda, no es de BAPSA.
+ *
+ * Los tres primeros están dibujados a mano porque ninguna librería los tiene:
+ * el brazo articulado (lo más cercano que existe es una grúa de construcción,
+ * que es otra máquina y confunde), la plataforma de tijera, y la placa de
+ * datos, que es el componente firma del sistema reducido a 24 píxeles.
+ *
+ * El grosor sube al achicar para que el peso óptico no se caiga: 2.10 a 16px,
+ * 1.80 a 20px, 1.60 a 28px. Eso vive en `.icono` en base.css.
+ */
+
+export type NombreIcono = keyof typeof TRAZOS;
+
+export interface Props {
+  nombre: NombreIcono;
+  tam?: 16 | 20 | 28;
+  /** Si el icono comunica algo por sí solo, dale título; si adorna, déjalo fuera. */
+  titulo?: string;
+  class?: string;
+}
+
+const TRAZOS = {
+  // ── Los tres propios ──────────────────────────────────────────────────
+  "brazo-articulado":
+    '<path d="M2.5 13.5h9v4.5h-9z"/><circle cx="5" cy="20" r="1.6"/><circle cx="9" cy="20" r="1.6"/><path d="M6.5 13.5V10.5L12 7.5"/><path d="M12 3.5v4h5.5v-4"/>',
+  "plataforma-tijera":
+    '<path d="M4.5 4.5V2h15v2.5"/><path d="M2.5 4.5h19"/><path d="M6.5 5.2l11 5.8M17.5 5.2l-11 5.8M6.5 11l11 5.8M17.5 11l-11 5.8"/><path d="M2.5 17.4h19"/><circle cx="7.5" cy="19.6" r="1.6"/><circle cx="16.5" cy="19.6" r="1.6"/>',
+  "placa-datos":
+    '<path d="M3 3.5h18v17H3z"/><path d="M3 8.6h18"/><path d="M5 5h1.7v1.7H5zM17.3 5H19v1.7h-1.7zM5 17.3h1.7V19H5zM17.3 17.3H19V19h-1.7z"/><path d="M6.6 12h10.8M6.6 15.2h6.6"/>',
+
+  // ── Los prestados, con los cuatro atributos del sistema ───────────────
+  altura:
+    '<path d="M12 3.5v17"/><path d="M8.6 6.9L12 3.5l3.4 3.4"/><path d="M8.6 17.1L12 20.5l3.4-3.4"/><path d="M3.5 3.5h4M3.5 20.5h4"/>',
+  seguridad: '<path d="M12 2.5l8 3.2v5.6L12 21.5 4 11.3V5.7z"/><path d="M9.4 11.6l1.9 1.9 3.9-3.9"/>',
+  mantenimiento:
+    '<path d="M21.40 10.05L21.40 13.95L19.07 14.18L18.54 15.46L20.02 17.27L17.27 20.02L15.46 18.54L14.18 19.07L13.95 21.40L10.05 21.40L9.82 19.07L8.54 18.54L6.73 20.02L3.98 17.27L5.46 15.46L4.93 14.18L2.60 13.95L2.60 10.05L4.93 9.82L5.46 8.54L3.98 6.73L6.73 3.98L8.54 5.46L9.82 4.93L10.05 2.60L13.95 2.60L14.18 4.93L15.46 5.46L17.27 3.98L20.02 6.73L18.54 8.54L19.07 9.82Z"/><path d="M9 9h6v6H9z"/>',
+  flete:
+    '<path d="M1.5 5.5h13v11h-13z"/><path d="M14.5 9h4l3 3.2v4.3h-7z"/><circle cx="6" cy="18.6" r="1.7"/><circle cx="17" cy="18.6" r="1.7"/>',
+  dias: '<path d="M3 5.5h18v15.5H3z"/><path d="M3 10.2h18"/><path d="M7.8 3v4.6M16.2 3v4.6"/><path d="M7 13.6h3v3H7z"/>',
+  contacto:
+    '<path d="M8.2 3.5H4.6L3 6.4c0 8 5.6 13.6 13.6 13.6l2.9-1.6v-3.6l-4.3-1.5-2 2.2a15 15 0 01-5.3-5.3l2.2-2z"/>',
+  correo: '<path d="M2.5 5h19v14h-19z"/><path d="M2.5 5l9.5 7.4L21.5 5"/>',
+  cobertura: '<path d="M12 2.5l7.5 7.5L12 21.5 4.5 10z"/><path d="M9.6 9.6h4.8v4.8H9.6z"/>',
+  refacciones:
+    '<path d="M19.27 16.20L12.00 20.40L4.73 16.20L4.73 7.80L12.00 3.60L19.27 7.80Z"/><path d="M9.2 9.2h5.6v5.6H9.2z"/>',
+  cotizacion:
+    '<path d="M4.5 2.5h10l5 5v14h-15z"/><path d="M14.5 2.5v5h5"/><path d="M7.8 12.4h8.4M7.8 15.6h8.4M7.8 18.2h5"/>',
+  horario: '<path d="M3.5 3.5h17v17h-17z"/><path d="M12 7.2V12l3.4 2.4"/>',
+  check: '<path d="M4 12.6l5.2 5.2L20 6.4"/>',
+  flecha: '<path d="M4 12h15"/><path d="M13.4 5.6L19.8 12l-6.4 6.4"/>',
+  telefono: '<path d="M7.5 2.5h9v19h-9z"/><path d="M7.5 6.4h9M7.5 17.6h9"/>',
+} as const;
+
+const { nombre, tam = 20, titulo, class: clase = "" } = Astro.props;
+const clases = ["icono", tam === 16 ? "icono--16" : tam === 28 ? "icono--28" : "", clase]
+  .filter(Boolean)
+  .join(" ");
+---
+
+<svg
+  viewBox="0 0 24 24"
+  class={clases}
+  role={titulo ? "img" : undefined}
+  aria-label={titulo}
+  aria-hidden={titulo ? undefined : "true"}
+  focusable="false"
+  set:html={TRAZOS[nombre]}
+/>

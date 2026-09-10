@@ -1,0 +1,220 @@
+---
+import Base from "../../layouts/Base.astro";
+import Icono from "../../components/Icono.astro";
+import PlacaDatos from "../../components/PlacaDatos.astro";
+import Foto from "../../components/Foto.astro";
+import Faq from "../../components/Faq.astro";
+import FormularioCotizacion from "../../components/FormularioCotizacion.astro";
+import { SITE } from "../../config/seo";
+import { FAMILIAS_DATOS } from "../../datos/familias";
+import { FAQ_POR_FAMILIA } from "../../datos/faq";
+import { nodoServicio, nodoMaquina, nodoFaq } from "../../lib/schema";
+
+export function getStaticPaths() {
+  return FAMILIAS_DATOS.map((familia) => ({ params: { slug: familia.slug }, props: { familia } }));
+}
+
+const { familia } = Astro.props;
+const ruta = `/renta/${familia.slug}`;
+const faq = FAQ_POR_FAMILIA[familia.slug] ?? [];
+const otras = FAMILIAS_DATOS.filter((f) => f.slug !== familia.slug);
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Renta", ruta: "/renta" },
+  { nombre: familia.nombre, ruta },
+];
+
+const schema: Record<string, unknown>[] = [
+  nodoServicio({
+    nombre: `Renta de ${familia.nombre.toLowerCase()}`,
+    descripcion: familia.descripcion,
+    ruta,
+    tipo: familia.nombre,
+  }),
+];
+if (familia.medidas.length > 0) {
+  schema.push(
+    nodoMaquina({
+      nombre: familia.nombre,
+      descripcion: familia.definicion,
+      ruta,
+      propiedades: familia.medidas.map((m) => ({ nombre: m.concepto, valor: m.valor })),
+    })
+  );
+}
+if (faq.length > 0) schema.push(nodoFaq(faq, ruta));
+---
+
+<Base
+  titulo={familia.titulo}
+  descripcion={familia.descripcion}
+  ruta={ruta}
+  migas={migas}
+  schema={schema}
+  imagenAlt={familia.fotoAlt}
+>
+  <section class="seccion">
+    <div class="hoja encabezado">
+      <div>
+        <p class="etiqueta">Renta · {SITE.ciudades.join(" · ")}</p>
+        <h1 class="titulo-2">{familia.h1}</h1>
+        <div class="filete"></div>
+        {/* La definición abre la página: es la frase que se extrae y se cita. */}
+        <p class="lede">{familia.definicion}</p>
+        <div class="apilado">
+          <a class="btn btn--relleno" href="#cotizar">Cotizar este equipo</a>
+          <a class="btn btn--azul" href={`tel:${SITE.telephone}`}>
+            <Icono nombre="contacto" tam={16} />
+            {SITE.telephoneDisplay}
+          </a>
+        </div>
+      </div>
+      <Foto alt={familia.fotoAlt} clave={familia.fotoClave} ancho={800} alto={600} prioritaria />
+    </div>
+  </section>
+
+  {
+    familia.medidas.length > 0 && (
+      <section class="seccion banda--neblina">
+        <div class="hoja">
+          <h2 class="titulo-2">Medidas de la categoría</h2>
+          <div class="filete"></div>
+          <p class="medida">
+            Estos son los rangos con los que trabaja la categoría, no un modelo en particular. La
+            máquina exacta —modelo, número económico y altura— se confirma al cotizar, según lo
+            que esté libre en la fecha que usted necesita.
+          </p>
+          <div class="rejilla medidas">
+            <div class="tabla-envoltura">
+              <table>
+                <caption>Rangos típicos de {familia.nombre.toLowerCase()} en renta.</caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Concepto</th>
+                    <th scope="col" class="cifra">Rango</th>
+                    <th scope="col">Nota</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {familia.medidas.map((m) => (
+                    <tr>
+                      <th scope="row">{m.concepto}</th>
+                      <td class="cifra">{m.valor}</td>
+                      <td>{m.nota ?? "—"}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <PlacaDatos
+              banda="EJEMPLO DE FICHA"
+              registro="DATO VERIFICADO"
+              titulo={`Ficha de referencia de ${familia.nombre}`}
+              renglones={[
+                { etiqueta: "Familia", valor: familia.nombre.toUpperCase() },
+                ...familia.medidas.slice(0, 4).map((m) => ({
+                  etiqueta: m.concepto,
+                  valor: m.valor.toUpperCase(),
+                })),
+              ]}
+            />
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="seccion">
+    <div class="hoja rejilla rejilla--2 criterio">
+      <div>
+        <h2 class="titulo-2">Cuándo es la máquina correcta</h2>
+        <div class="filete"></div>
+        <ul class="lista-marcada">
+          {familia.cuandoSi.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+      <div>
+        <h2 class="titulo-2">Cuándo conviene otra</h2>
+        <div class="filete filete--acero"></div>
+        <ul class="lista-marcada lista-marcada--acero">
+          {familia.cuandoNo.map((c) => <li>{c}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Qué incluye la renta</h2>
+      <div class="filete"></div>
+      <ul class="lista-marcada">
+        {familia.incluye.map((c) => <li>{c}</li>)}
+      </ul>
+      <p class="medida chico">
+        El plazo mínimo, el depósito y las condiciones de seguro se confirman al cotizar. Para
+        equipo que se va a usar todo el año, revise también la{" "}
+        <a href="/venta">venta de equipo</a>: a partir de cierto número de meses sale más barato
+        que rentar.
+      </p>
+    </div>
+  </section>
+
+  {
+    faq.length > 0 && (
+      <section class="seccion">
+        <div class="hoja">
+          <Faq pares={faq} titulo={`Preguntas sobre ${familia.nombre.toLowerCase()}`} />
+          <p class="chico">
+            <a href="/preguntas-frecuentes">Ver todas las preguntas frecuentes</a>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Otras familias de equipo</h2>
+      <div class="filete"></div>
+      <ul class="otras rejilla rejilla--4">
+        {
+          otras.map((f) => (
+            <li class="tarjeta">
+              <Icono nombre={f.icono} tam={20} />
+              <h3 class="titulo-3">
+                <a href={`/renta/${f.slug}`}>{f.nombre}</a>
+              </h3>
+              <p class="chico">{f.resumen}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <FormularioCotizacion equipoPreseleccionado={familia.nombre} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .encabezado { display: grid; gap: var(--e6); align-items: center; }
+  @media (min-width: 900px) { .encabezado { grid-template-columns: 1.15fr 1fr; gap: var(--e8); } }
+  .encabezado h1 { margin-bottom: var(--e5); }
+
+  .medidas { margin-top: var(--e6); align-items: start; }
+  @media (min-width: 900px) { .medidas { grid-template-columns: 1.5fr 1fr; gap: var(--e6); } }
+
+  .criterio { align-items: start; }
+  /* El contorno acero no lleva color de marca: no compite con lo que sí importa. */
+  .filete--acero { background: var(--acero); }
+  .lista-marcada--acero li::before { background: var(--acero); }
+
+  .otras { list-style: none; padding: 0; margin: var(--e6) 0 0; }
+  .otras h3 { font-size: 1.0625rem; }
+  .otras h3 a { color: var(--azul); text-decoration: none; }
+  .otras h3 a:hover { color: var(--senal); text-decoration: underline; }
+</style>

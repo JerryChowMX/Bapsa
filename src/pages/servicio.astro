@@ -1,0 +1,176 @@
+---
+import Base from "../layouts/Base.astro";
+import PlacaDatos from "../components/PlacaDatos.astro";
+import Foto from "../components/Foto.astro";
+import Estado from "../components/Estado.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { SITE } from "../config/seo";
+import { nodoServicio } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Servicio", ruta: "/servicio" },
+];
+const schema = [
+  nodoServicio({
+    nombre: "Servicio y mantenimiento de equipo de elevación",
+    descripcion:
+      "Mantenimiento preventivo y correctivo para plataformas aéreas y brazos articulados multimarca, con pólizas programadas y taller propio en Ramos Arizpe.",
+    ruta: "/servicio",
+    tipo: "Mantenimiento de maquinaria de elevación",
+  }),
+];
+---
+
+<Base
+  titulo="Servicio y pólizas para equipo de elevación"
+  descripcion="Mantenimiento preventivo y correctivo para plataformas y brazos articulados multimarca. Taller propio en Ramos Arizpe y pólizas con visitas programadas."
+  ruta="/servicio"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja encabezado">
+      <div>
+        <p class="etiqueta">Servicio</p>
+        <h1 class="titulo-2">Servicio y pólizas de mantenimiento</h1>
+        <div class="filete"></div>
+        <p class="lede">
+          BAPSA da mantenimiento preventivo y correctivo a equipo de elevación multimarca, sea
+          propiedad del cliente o rentado a otro proveedor. El taller está en Ramos Arizpe, sobre
+          el corredor industrial: no hay que mandar la máquina a otra ciudad ni esperar a que
+          llegue un técnico de fuera.
+        </p>
+        <div class="apilado">
+          <a class="btn btn--relleno" href="/contacto">Solicitar servicio</a>
+          <a class="btn btn--azul" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>
+        </div>
+      </div>
+      <Foto
+        alt="Técnico de BAPSA revisando el sistema hidráulico de un brazo articulado dentro del taller de servicio."
+        clave="FOTO-08"
+        ancho={800}
+        alto={600}
+        prioritaria
+      />
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">¿Qué incluye una póliza de mantenimiento?</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        Una póliza de mantenimiento es un programa de visitas con fecha fija en el que BAPSA
+        revisa, ajusta y documenta cada máquina de su flota antes de que falle. Es lo contrario
+        de llamar cuando ya se paró: el objetivo es que la máquina no salga de servicio en medio
+        de un turno.
+      </p>
+      <div class="rejilla rejilla--2 incluye">
+        <div>
+          <h3 class="titulo-3">Preventivo programado</h3>
+          <ul class="lista-marcada">
+            <li>Revisión de sistema hidráulico, mangueras y fugas.</li>
+            <li>Revisión de sistema eléctrico, baterías y cargador.</li>
+            <li>Inspección estructural de pluma, canastilla y puntos de anclaje.</li>
+            <li>Revisión de frenos, dirección, llantas y nivelación.</li>
+            <li>Prueba funcional de controles y de paro de emergencia.</li>
+            <li>Bitácora firmada por máquina, con número económico y fecha.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="titulo-3">Correctivo</h3>
+          <ul class="lista-marcada">
+            <li>Diagnóstico en taller o en sitio, según la falla.</li>
+            <li>Reparación hidráulica, eléctrica y estructural.</li>
+            <li>Refacciones multimarca cotizadas con número de parte.</li>
+            <li>Equipo de renta disponible mientras su máquina está en el taller.</li>
+          </ul>
+          <p class="chico">
+            La cobertura exacta, la frecuencia de visita y el tiempo de respuesta se definen en
+            la póliza, según el tamaño de la flota y el tipo de operación.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja rejilla rejilla--2 pareja">
+      <div>
+        <h2 class="titulo-2">La bitácora por máquina</h2>
+        <div class="filete"></div>
+        <p>
+          Cada máquina bajo póliza lleva su propia bitácora: número económico, fecha del último
+          servicio, trabajos realizados y estado de la póliza. Es el documento que le piden en una
+          auditoría de seguridad y el que le dice, sin discusión, cuándo toca el siguiente
+          servicio.
+        </p>
+        <p>
+          La <strong>NOM-009-STPS-2011</strong> obliga al patrón a verificar el equipo antes de
+          cada uso y a mantener registro del mantenimiento de los sistemas de trabajo en altura.
+          La bitácora es la forma práctica de cumplir esa parte.
+        </p>
+        <p>
+          <a href="/refacciones">Ver refacciones multimarca</a> ·{" "}
+          <a href="/preguntas-frecuentes">Preguntas frecuentes</a>
+        </p>
+      </div>
+      <div class="ejemplo">
+        <PlacaDatos
+          banda="BAPSA"
+          registro="BITÁCORA"
+          titulo="Ejemplo de bitácora de máquina bajo póliza"
+          renglones={[
+            { etiqueta: "Núm. económico", valor: "BAP-0417" },
+            { etiqueta: "Familia", valor: "BRAZO ARTICULADO" },
+            { etiqueta: "Último servicio", valor: "02 SEP 2026" },
+            { etiqueta: "Próximo servicio", valor: "02 DIC 2026" },
+            { etiqueta: "Póliza", valor: "VIGENTE" },
+          ]}
+        />
+        <p class="ejemplo__pie">
+          <Estado tipo="disponible" dato="ejemplo ilustrativo" />
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">¿A qué marcas da servicio BAPSA?</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        A equipo de elevación multimarca: {SITE.marcas.join(", ")}. No hace falta que la máquina
+        se haya comprado o rentado aquí. Si su marca no está en la lista, llame de todos modos:
+        buena parte de los sistemas hidráulicos y eléctricos son comunes entre fabricantes.
+      </p>
+      <ul class="marcas">
+        {SITE.marcas.map((m) => <li class="dato">{m}</li>)}
+      </ul>
+    </div>
+  </section>
+
+  <LlamadoAccion
+    titulo="¿Tiene una máquina parada?"
+    texto="Repórtela por teléfono con el número económico y la falla. Le decimos si se resuelve en sitio o si conviene traerla al taller."
+  />
+</Base>
+
+<style>
+  .encabezado { display: grid; gap: var(--e6); align-items: center; }
+  @media (min-width: 900px) { .encabezado { grid-template-columns: 1.15fr 1fr; gap: var(--e8); } }
+  .encabezado h1 { margin-bottom: var(--e5); }
+  .incluye { margin-top: var(--e6); align-items: start; }
+  .incluye h3 { margin-bottom: var(--e4); }
+  .pareja { align-items: start; }
+  @media (min-width: 900px) { .pareja { grid-template-columns: 1.3fr 1fr; gap: var(--e8); } }
+  .ejemplo { display: grid; gap: var(--e4); }
+  .ejemplo__pie { margin: 0; }
+
+  .marcas { list-style: none; padding: 0; margin: var(--e5) 0 0; display: flex; flex-wrap: wrap; gap: var(--e3); }
+  .marcas li {
+    border: 1px solid var(--acero); padding: var(--e2) var(--e4);
+    font-size: 0.8125rem; color: var(--azul); background: var(--placa);
+  }
+</style>

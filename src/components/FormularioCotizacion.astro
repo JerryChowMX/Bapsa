@@ -1,0 +1,153 @@
+---
+/**
+ * Formulario de cotización.
+ *
+ * Las etiquetas van ARRIBA del campo y en caja alta chica, no adentro: un
+ * campo con la etiqueta adentro se queda mudo en cuanto el usuario empieza a
+ * escribir. El borde de los campos es Acero (6.03:1), no Riel, porque un
+ * borde que se puede tocar tiene que verse.
+ *
+ * Un solo relleno: "Enviar solicitud". "Prefiero que me llamen" va de
+ * contorno azul, porque revisar no es actuar.
+ */
+import { SITE } from "../config/seo";
+import { FORMULARIO } from "../config/formulario";
+import { FAMILIAS } from "../config/navegacion";
+import Icono from "./Icono.astro";
+
+const { equipoPreseleccionado = "" } = Astro.props as { equipoPreseleccionado?: string };
+const activo = FORMULARIO.ACCION !== "";
+---
+
+<div class="cotizador">
+  <h2 class="titulo-2" id="cotizar">Pida su cotización</h2>
+  <div class="filete"></div>
+  <p class="medida">
+    Conteste cuatro datos y le regresamos precio y disponibilidad el mismo día hábil. Si
+    prefiere resolverlo por teléfono, marque al{" "}
+    <a class="dato" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a> en horario de{" "}
+    {SITE.openingHoursDisplay.toLowerCase()}.
+  </p>
+
+  {
+    !activo && (
+      <div class="banda--aviso aviso">
+        <Icono nombre="seguridad" tam={20} />
+        <p>
+          <strong>Este formulario todavía no está conectado.</strong> Falta definir a dónde
+          llegan las solicitudes (ver <code>src/config/formulario.ts</code>). Mientras tanto, el
+          teléfono y el correo de arriba sí funcionan.
+        </p>
+      </div>
+    )
+  }
+
+  <form
+    class="formulario"
+    method="post"
+    action={activo ? FORMULARIO.ACCION : undefined}
+    name="cotizacion"
+    data-netlify={FORMULARIO.METODO_NETLIFY ? "true" : undefined}
+  >
+    {FORMULARIO.METODO_NETLIFY && <input type="hidden" name="form-name" value="cotizacion" />}
+    <input type="hidden" name="_redirect" value={FORMULARIO.rutaGracias} />
+    {/* Trampa para robots. Nadie que vea la página la llena. */}
+    <p class="solo-lectores" aria-hidden="true">
+      <label>No llenar este campo <input name="_gotcha" tabindex="-1" autocomplete="off" /></label>
+    </p>
+
+    <div class="campo">
+      <label for="equipo">Equipo que necesita</label>
+      <select id="equipo" name="equipo" required>
+        <option value="">Seleccione una opción</option>
+        {
+          FAMILIAS.map((f) => (
+            <option value={f.nombre} selected={f.nombre === equipoPreseleccionado}>
+              {f.nombre}
+            </option>
+          ))
+        }
+        <option value="Todavía no lo sé">Todavía no lo sé</option>
+      </select>
+    </div>
+
+    <div class="campo-doble">
+      <div class="campo">
+        <label for="altura">Altura de trabajo requerida (m)</label>
+        <input id="altura" name="altura" type="number" min="1" max="40" step="0.5" inputmode="decimal" />
+      </div>
+      <div class="campo">
+        <label for="dias">Días de renta</label>
+        <input id="dias" name="dias" type="number" min="1" step="1" inputmode="numeric" />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="lugar">Dónde se va a usar</label>
+      <input id="lugar" name="lugar" type="text" autocomplete="address-level2"
+        placeholder="Parque industrial, municipio" />
+    </div>
+
+    <div class="campo-doble">
+      <div class="campo">
+        <label for="nombre">Nombre y empresa</label>
+        <input id="nombre" name="nombre" type="text" autocomplete="organization" required />
+      </div>
+      <div class="campo">
+        <label for="telefono">Teléfono</label>
+        <input id="telefono" name="telefono" type="tel" autocomplete="tel" required />
+      </div>
+    </div>
+
+    <div class="campo">
+      <label for="correo">Correo</label>
+      <input id="correo" name="correo" type="email" autocomplete="email" required />
+    </div>
+
+    <div class="campo">
+      <label for="detalle">Qué trabajo va a hacer <span class="opcional">(opcional)</span></label>
+      <textarea id="detalle" name="detalle" rows="3"
+        placeholder="Mantenimiento de luminarias en nave de 12 m, piso terminado"></textarea>
+    </div>
+
+    <div class="apilado formulario__acciones">
+      <button class="btn btn--relleno" type="submit" disabled={!activo}>Enviar solicitud</button>
+      <a class="btn btn--azul" href={`tel:${SITE.telephone}`}>Prefiero que me llamen</a>
+    </div>
+    <p class="chico formulario__nota">
+      Sus datos se usan para cotizar y para dar seguimiento a esa cotización. No se comparten
+      con terceros.
+    </p>
+  </form>
+</div>
+
+<style>
+  .cotizador { background: var(--placa); border: 1px solid var(--riel); padding: clamp(var(--e5), 4vw, var(--e7)); }
+  .aviso { display: flex; gap: var(--e3); padding: var(--e4); margin-bottom: var(--e5); align-items: flex-start; }
+  .aviso p { margin: 0; font-size: var(--cuerpo-chico); }
+  .aviso code { font-family: var(--dato); font-size: 0.8125rem; }
+
+  .formulario { display: grid; gap: var(--e5); margin-top: var(--e5); }
+  .campo-doble { display: grid; gap: var(--e5); }
+  @media (min-width: 620px) { .campo-doble { grid-template-columns: 1fr 1fr; } }
+
+  .campo { display: grid; gap: var(--e2); }
+  label {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--azul);
+  }
+  .opcional { color: var(--acero); font-weight: 500; letter-spacing: 0.1em; }
+
+  input, select, textarea {
+    font-family: var(--texto); font-size: var(--cuerpo); line-height: 1.5;
+    color: var(--chasis); background: var(--aire);
+    border: 1px solid var(--acero); border-radius: var(--radio);
+    padding: var(--e3) var(--e4); min-height: 46px; width: 100%;
+  }
+  textarea { min-height: 96px; resize: vertical; }
+  input::placeholder, textarea::placeholder { color: var(--acero); opacity: 1; }
+  input:hover, select:hover, textarea:hover { border-color: var(--azul); }
+
+  .formulario__acciones { margin-top: var(--e2); }
+  .formulario__nota { color: var(--acero); margin: 0; }
+</style>

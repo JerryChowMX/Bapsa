@@ -1,0 +1,88 @@
+---
+/**
+ * Placa de datos — el componente firma del sistema.
+ *
+ * Está copiada de la placa remachada que trae toda máquina en el chasís:
+ * banda de identificación arriba, renglones de dato abajo, cuatro remaches en
+ * las esquinas. Hace dos trabajos a la vez: le da al sitio una imagen que
+ * nadie más en el giro está usando, y convierte la ficha técnica en algo que
+ * se ve verificado, no redactado por marketing.
+ *
+ * Es una <table> real, no una rejilla de <div>: los datos de una ficha se
+ * comparan en columna y un crawler tiene que poder extraerlos.
+ */
+export interface Props {
+  banda: string;
+  registro?: string;
+  renglones: { etiqueta: string; valor: string }[];
+  titulo?: string;
+}
+const { banda, registro, renglones, titulo } = Astro.props;
+---
+
+<div class="placa">
+  <span class="remache remache--si" aria-hidden="true"></span>
+  <span class="remache remache--sd" aria-hidden="true"></span>
+  <span class="remache remache--ii" aria-hidden="true"></span>
+  <span class="remache remache--id" aria-hidden="true"></span>
+
+  <div class="placa__banda">
+    <span class="placa__marca">{banda}</span>
+    {registro && <span class="placa__registro dato">{registro}</span>}
+  </div>
+
+  <table class="placa__tabla">
+    {titulo && <caption class="solo-lectores">{titulo}</caption>}
+    <tbody>
+      {
+        renglones.map((r) => (
+          <tr>
+            <th scope="row">{r.etiqueta}</th>
+            <td class="dato">{r.valor}</td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .placa {
+    position: relative; background: var(--placa); border: 2px solid var(--azul);
+    border-radius: var(--radio); padding: var(--e2);
+  }
+
+  /* Los cuatro remaches. El punto cuadrado del estado repite esta forma. */
+  .remache { position: absolute; width: 7px; height: 7px; background: var(--azul); }
+  .remache--si { top: 5px; left: 5px; }
+  .remache--sd { top: 5px; right: 5px; }
+  .remache--ii { bottom: 5px; left: 5px; }
+  .remache--id { bottom: 5px; right: 5px; }
+
+  .placa__banda {
+    display: flex; align-items: baseline; justify-content: space-between; gap: var(--e4);
+    background: var(--azul); color: var(--aire);
+    padding: var(--e3) var(--e5); margin-bottom: var(--e1);
+  }
+  .placa__marca {
+    font-family: var(--rotulo); font-weight: 800; font-size: 0.9375rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .placa__registro { font-size: 0.6875rem; color: var(--canastilla); letter-spacing: 0.08em; }
+
+  .placa__tabla { width: 100%; border-collapse: collapse; }
+  .placa__tabla th,
+  .placa__tabla td {
+    padding: var(--e3) var(--e5); border-bottom: 1px solid var(--riel); vertical-align: baseline;
+  }
+  .placa__tabla tr:last-child th,
+  .placa__tabla tr:last-child td { border-bottom: 0; }
+  .placa__tabla th {
+    font-family: var(--rotulo); font-weight: 700; font-size: var(--etiqueta);
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+    text-align: left; white-space: nowrap;
+  }
+  /* Cifras a la derecha y con ancho fijo: así se comparan de un vistazo
+     entre dos placas sin tener que leer renglón por renglón. */
+  .placa__tabla td { text-align: right; color: var(--azul); font-weight: 700; white-space: nowrap; }
+</style>

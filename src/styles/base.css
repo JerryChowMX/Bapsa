@@ -1,0 +1,232 @@
+/* ============================================================================
+   BAPSA · Base y componentes
+   Reglas que gobiernan la hoja entera:
+     · El naranja relleno actúa, el contorno azul revisa, el contorno acero
+       sale y el contorno rojo destruye. Un solo relleno por pantalla.
+     · No hay sombras. La profundidad se hace con los tres escalones de papel:
+       Neblina abajo, Aire en medio, Placa arriba.
+     · El foco es visible siempre: 2px en Señal, separado 2px.
+   ========================================================================= */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--barra) + var(--e5));
+  -webkit-text-size-adjust: 100%;
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--aire);
+  color: var(--chasis);
+  font-family: var(--texto);
+  font-size: var(--cuerpo);
+  line-height: 1.7;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg, video { max-width: 100%; height: auto; display: block; }
+img { background: var(--neblina); }
+
+:where(a):focus-visible,
+:where(button, [role="button"]):focus-visible,
+:where(input, select, textarea, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--senal);
+  outline-offset: 2px;
+}
+
+/* ── Tipografía ───────────────────────────────────────────────────────── */
+
+h1, h2, h3, h4 { margin: 0; font-family: var(--rotulo); color: var(--azul); text-wrap: balance; }
+
+.display {
+  font-size: var(--display); font-weight: 800; line-height: 1.05;
+  letter-spacing: -0.02em; text-transform: uppercase;
+}
+.titulo-2 {
+  font-size: var(--titulo-2); font-weight: 800; line-height: 1.12;
+  letter-spacing: -0.01em; text-transform: uppercase;
+}
+.titulo-3 { font-size: var(--titulo-3); font-weight: 700; line-height: 1.25; }
+
+/* Archivo nunca en párrafos y nunca por debajo de 15px en caja baja:
+   abajo de ese tamaño las letras se pegan y "BAPSA" se lee "BAPSΛ". */
+
+.lede {
+  font-size: var(--lede); line-height: 1.65; color: var(--chasis);
+  max-width: var(--ancho-lectura); margin: 0 0 var(--e5);
+}
+p { margin: 0 0 var(--e4); max-width: var(--ancho-lectura); }
+.chico { font-size: var(--cuerpo-chico); line-height: 1.65; }
+.pie-foto { font-size: var(--pie-foto); line-height: 1.6; color: var(--acero); margin: var(--e2) 0 0; }
+
+.etiqueta {
+  font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+  line-height: 1.2; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--senal); margin: 0 0 var(--e3); display: block;
+}
+
+/* La voz de dato: solo modelo, altura, capacidad, peso, plazo, folio,
+   teléfono. Una línea a la vez, nunca párrafos, nunca en naranja. */
+.dato {
+  font-family: var(--dato); font-size: var(--dato-tam); line-height: 1.4;
+  letter-spacing: 0.02em; font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+.dato--fuerte { font-weight: 700; }
+
+a { color: var(--senal); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a:hover { color: var(--azul); }
+/* Señal sobre Neblina se queda en 4.08:1 y no llega al mínimo de lectura:
+   dentro de una banda gris-azul los enlaces se pintan de azul, no de naranja. */
+.banda--neblina a { color: var(--azul); }
+.banda--azul a { color: var(--reflejante); }
+
+/* ── Estructura ───────────────────────────────────────────────────────── */
+
+.hoja { width: min(100% - 2 * var(--e5), var(--ancho-hoja)); margin-inline: auto; }
+.seccion { padding-block: clamp(var(--e7), 6vw, var(--e9)); }
+.banda--neblina { background: var(--neblina); }
+.banda--azul { background: var(--azul); color: var(--aire); }
+.banda--azul h1, .banda--azul h2, .banda--azul h3 { color: var(--aire); }
+.banda--azul .etiqueta { color: var(--canastilla); } /* 7.08:1 sobre azul */
+.banda--aviso { background: var(--reflejante); color: var(--azul); } /* 12.54:1 */
+
+.rejilla { display: grid; gap: var(--e5); }
+@media (min-width: 720px)  { .rejilla--2 { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 980px)  { .rejilla--3 { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 980px)  { .rejilla--4 { grid-template-columns: repeat(4, 1fr); } }
+
+/* Filete naranja bajo el titular: una de las dos o tres apariciones del
+   acento por página. */
+.filete { width: 56px; height: 5px; background: var(--canastilla); margin: 0 0 var(--e4); }
+
+/* ── Los cuatro botones ───────────────────────────────────────────────
+   Nunca hay dos rellenos en la misma pantalla: entonces ninguno importa. */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--e2);
+  min-height: 46px; padding: var(--e3) var(--e5);
+  font-family: var(--rotulo); font-size: var(--boton); font-weight: 700;
+  line-height: 1; letter-spacing: 0.08em; text-transform: uppercase;
+  border-radius: var(--radio); border: 2px solid transparent;
+  text-decoration: none; cursor: pointer;
+  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+}
+
+/* Actuar. Una por pantalla. El texto encima siempre es Azul BAPSA (7.08:1),
+   jamás claro. En hover pasa a Señal con texto claro: un naranja más oscuro
+   lee como "lo estoy oprimiendo". */
+.btn--relleno { background: var(--canastilla); color: var(--azul); border-color: var(--canastilla); }
+.btn--relleno:hover { background: var(--senal); color: var(--aire); border-color: var(--senal); }
+
+/* Revisar: abrir ficha, comparar, descargar PDF. Se ilumina, no se enciende. */
+.btn--azul { background: transparent; color: var(--azul); border-color: var(--azul); }
+.btn--azul:hover { background: var(--cielo-bajo); color: var(--azul); }
+
+/* Salir sin hacer nada. Nunca lleva color de marca. */
+.btn--acero { background: transparent; color: var(--acero); border-color: var(--acero); }
+.btn--acero:hover { background: var(--cielo-bajo); color: var(--chasis); }
+
+/* Solo lo que no se puede deshacer, y solo en el panel interno. */
+.btn--rojo { background: transparent; color: var(--alto); border-color: var(--alto); }
+.btn--rojo:hover { background: var(--alto); color: var(--aire); }
+
+.btn--chico { min-height: 38px; padding: var(--e2) var(--e4); font-size: 0.75rem; }
+.btn--grande { min-height: 54px; padding: var(--e4) var(--e6); font-size: 0.875rem; }
+/* Deshabilitado: opacidad al 38%, no un gris. Este sistema no tiene grises,
+   y un gris suelto delataría que el color se eligió sobre la marcha. */
+.btn[disabled], .btn[aria-disabled="true"] { opacity: 0.38; pointer-events: none; }
+
+.btn--sobre-azul { background: var(--canastilla); color: var(--azul); border-color: var(--canastilla); }
+.btn--sobre-azul:hover { background: var(--reflejante); color: var(--azul); border-color: var(--reflejante); }
+.btn--contorno-claro { background: transparent; color: var(--aire); border-color: var(--aire); }
+.btn--contorno-claro:hover { background: var(--aire); color: var(--azul); }
+
+/* ── Estado de una máquina ────────────────────────────────────────────
+   Punto, palabra y dato, siempre los tres. Quien no distingue el verde del
+   rojo sigue leyendo "Disponible · entrega hoy". El punto es cuadrado:
+   repite el remache de la placa. */
+
+.estado {
+  display: inline-flex; align-items: center; gap: var(--e2);
+  font-family: var(--texto); font-size: var(--cuerpo-chico); font-weight: 600;
+}
+.estado::before { content: ""; width: 9px; height: 9px; flex: none; background: currentColor; }
+.estado--ok { color: var(--ok); }
+.estado--espera { color: var(--espera); }
+.estado--alto { color: var(--alto); }
+.estado__dato { font-family: var(--dato); font-size: 0.8125rem; letter-spacing: 0.02em; color: var(--acero); font-weight: 400; }
+
+/* ── Tarjeta ──────────────────────────────────────────────────────────── */
+
+.tarjeta {
+  background: var(--placa); border: 1px solid var(--riel); border-radius: var(--radio);
+  padding: var(--e5); display: flex; flex-direction: column; gap: var(--e3);
+}
+.tarjeta h3 { margin-bottom: var(--e1); }
+.tarjeta p { margin-bottom: 0; }
+.tarjeta__pie { margin-top: auto; padding-top: var(--e3); }
+
+/* ── Tablas: cifras tabulares obligatorias ────────────────────────────
+   Sin esto una columna de "12.5 m / 8.0 m / 43.0 m" se ve chueca, y una
+   tabla chueca resta confianza en un giro donde el número es el producto. */
+
+.tabla-envoltura { overflow-x: auto; margin: 0 0 var(--e5); }
+table { width: 100%; border-collapse: collapse; font-size: var(--cuerpo-chico); }
+caption { text-align: left; font-size: var(--pie-foto); color: var(--acero); padding-bottom: var(--e3); }
+th, td { padding: var(--e3) var(--e4); text-align: left; border-bottom: 1px solid var(--riel); vertical-align: top; }
+thead th {
+  font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase; color: var(--azul);
+  border-bottom: 2px solid var(--azul); white-space: nowrap;
+}
+tbody tr:nth-child(even) { background: var(--neblina); }
+td.cifra, th.cifra {
+  text-align: right; font-weight: 600;
+  font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; white-space: nowrap;
+}
+
+/* ── Listas ───────────────────────────────────────────────────────────── */
+.lista-marcada { list-style: none; padding: 0; margin: 0 0 var(--e5); max-width: var(--ancho-lectura); }
+.lista-marcada li { position: relative; padding-left: var(--e5); margin-bottom: var(--e3); }
+.lista-marcada li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 9px; height: 9px; background: var(--canastilla); }
+
+/* ── Iconos ───────────────────────────────────────────────────────────
+   Punta cortada a escuadra y esquina en ángulo, nunca redondeadas. Lucide
+   viene con `round` por omisión: se sobrescribe en todos, sin excepción.
+   Si el trazo termina en punta redonda, no es de BAPSA. */
+
+.icono {
+  width: 20px; height: 20px; flex: none;
+  fill: none; stroke: currentColor; stroke-width: 1.8;
+  stroke-linecap: butt; stroke-linejoin: miter;
+}
+.icono--16 { width: 16px; height: 16px; stroke-width: 2.1; }
+.icono--28 { width: 28px; height: 28px; stroke-width: 1.6; }
+.banda--azul .icono { color: var(--canastilla); } /* 7.08:1: el único sitio donde el naranja lee como línea */
+
+/* ── Utilidades ───────────────────────────────────────────────────────── */
+.solo-lectores {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0;
+}
+.salto-contenido {
+  position: absolute; left: var(--e4); top: -100px; z-index: 100;
+  background: var(--canastilla); color: var(--azul); padding: var(--e3) var(--e5);
+  font-family: var(--rotulo); font-size: var(--boton); font-weight: 700;
+  letter-spacing: 0.08em; text-transform: uppercase; text-decoration: none;
+}
+.salto-contenido:focus { top: var(--e3); }
+.apilado { display: flex; flex-wrap: wrap; gap: var(--e3); align-items: center; }
+.medida { max-width: var(--ancho-lectura); }

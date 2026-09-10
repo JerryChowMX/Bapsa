@@ -1,0 +1,158 @@
+---
+import Base from "../layouts/Base.astro";
+import Icono from "../components/Icono.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { SITE } from "../config/seo";
+import { FAMILIAS_DATOS } from "../datos/familias";
+import { nodoServicio } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Renta", ruta: "/renta" },
+];
+
+const schema = [
+  nodoServicio({
+    nombre: "Renta de equipo de elevación",
+    descripcion:
+      "Renta de brazos articulados, plataformas de tijera, elevadores personales y maquinaria pesada con entrega en Ramos Arizpe, Saltillo y Arteaga.",
+    ruta: "/renta",
+    tipo: "Renta de plataformas aéreas y brazos articulados",
+  }),
+  {
+    "@type": "ItemList",
+    "@id": `${SITE.url}/renta#familias`,
+    name: "Equipo de elevación en renta",
+    itemListElement: FAMILIAS_DATOS.map((f, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: f.nombre,
+      url: `${SITE.url}/renta/${f.slug}`,
+    })),
+  },
+];
+---
+
+<Base
+  titulo="Renta de equipo de elevación en Ramos Arizpe"
+  descripcion="Brazos articulados, plataformas de tijera, elevadores personales y maquinaria pesada en renta. Entrega con flete propio en Ramos Arizpe, Saltillo y Arteaga."
+  ruta="/renta"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja">
+      <p class="etiqueta">Renta</p>
+      <h1 class="display">Equipo de elevación en renta</h1>
+      <div class="filete"></div>
+      <p class="lede">
+        BAPSA renta cinco familias de equipo de elevación en Ramos Arizpe, Saltillo y Arteaga:
+        brazos articulados eléctricos, brazos articulados de combustión hasta 120 pies,
+        plataformas de tijera, elevadores personales y maquinaria pesada. Todas se entregan con
+        flete propio y con revisión de puesta en marcha en sitio.
+      </p>
+      <div class="apilado">
+        <a class="btn btn--relleno" href="/contacto">Pedir cotización</a>
+        <a class="btn btn--azul" href="/preguntas-frecuentes">Cómo elegir la máquina</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Cómo se elige la máquina, en tres datos</h2>
+      <div class="filete"></div>
+      <div class="rejilla rejilla--3 criterios">
+        <div class="tarjeta">
+          <Icono nombre="altura" tam={28} />
+          <h3 class="titulo-3">La altura</h3>
+          <p class="chico">
+            Reste 2 metros a la altura del punto de trabajo: la altura de trabajo que declara el
+            fabricante ya incluye a una persona de pie en la canastilla. Para un punto a 12
+            metros necesita una máquina de 12 metros de altura de trabajo.
+          </p>
+        </div>
+        <div class="tarjeta">
+          <Icono nombre="brazo-articulado" tam={28} />
+          <h3 class="titulo-3">El obstáculo</h3>
+          <p class="chico">
+            Si el punto está directamente arriba y libre, va una tijera, que da más superficie.
+            Si está tapado por una máquina, un rack o una banda que no se puede mover, va un
+            brazo articulado, que alcanza en diagonal.
+          </p>
+        </div>
+        <div class="tarjeta">
+          <Icono nombre="seguridad" tam={28} />
+          <h3 class="titulo-3">El piso</h3>
+          <p class="chico">
+            Piso terminado y espacio cerrado piden equipo eléctrico con llanta no marcante.
+            Terracería, lodo o pendiente piden tracción 4×4 de combustión. Es lo que más
+            solicitudes cambia de máquina a última hora.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <h2 class="titulo-2">Las cinco familias</h2>
+      <div class="filete"></div>
+      <ul class="familias">
+        {
+          FAMILIAS_DATOS.map((f) => (
+            <li class="familia">
+              <div class="familia__marca" aria-hidden="true">
+                <Icono nombre={f.icono} tam={28} />
+              </div>
+              <div class="familia__cuerpo">
+                <h3 class="titulo-3">
+                  <a href={`/renta/${f.slug}`}>{f.nombre}</a>
+                </h3>
+                <p>{f.definicion}</p>
+                {f.medidas.length > 0 && (
+                  <dl class="familia__datos">
+                    {f.medidas.slice(0, 3).map((m) => (
+                      <div>
+                        <dt>{m.concepto}</dt>
+                        <dd class="dato">{m.valor}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                <a class="btn btn--azul btn--chico" href={`/renta/${f.slug}`}>
+                  Ficha completa
+                  <Icono nombre="flecha" tam={16} />
+                </a>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <LlamadoAccion />
+</Base>
+
+<style>
+  .criterios { margin-top: var(--e6); }
+  .familias { list-style: none; padding: 0; margin: var(--e6) 0 0; display: grid; gap: var(--e5); }
+  .familia {
+    display: grid; gap: var(--e5); align-items: start;
+    background: var(--placa); border: 1px solid var(--riel); padding: var(--e5);
+  }
+  @media (min-width: 720px) { .familia { grid-template-columns: 64px 1fr; } }
+  .familia__marca { display: grid; place-items: center; width: 56px; height: 56px; background: var(--azul); color: var(--canastilla); }
+  .familia h3 { margin-bottom: var(--e3); }
+  .familia h3 a { color: var(--azul); text-decoration: none; }
+  .familia h3 a:hover { color: var(--senal); text-decoration: underline; }
+
+  .familia__datos { display: flex; flex-wrap: wrap; gap: var(--e5); margin: 0 0 var(--e5); }
+  .familia__datos div { border-left: 3px solid var(--canastilla); padding-left: var(--e3); }
+  .familia__datos dt {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+  }
+  .familia__datos dd { margin: var(--e1) 0 0; color: var(--azul); font-weight: 700; }
+</style>

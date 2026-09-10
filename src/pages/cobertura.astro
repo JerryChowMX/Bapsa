@@ -1,0 +1,184 @@
+---
+import Base from "../layouts/Base.astro";
+import Icono from "../components/Icono.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { SITE, direccionUnaLinea } from "../config/seo";
+import { nodoServicio, nodoFaq } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Cobertura", ruta: "/cobertura" },
+];
+
+const zonas = [
+  {
+    ciudad: "Ramos Arizpe",
+    detalle:
+      "Los parques industriales de Ramos Arizpe y el corredor sobre la carretera 57. Es la base de BAPSA: la máquina sale del patio y llega a la obra el mismo día.",
+    puntos: ["Parques industriales", "Zona automotriz", "Corredor carretera 57"],
+  },
+  {
+    ciudad: "Saltillo",
+    detalle:
+      "La zona metropolitana completa: obra civil, naves industriales, centros comerciales, almacenes y edificios de la capital del estado.",
+    puntos: ["Obra civil e industrial", "Comercio y almacén", "Mantenimiento de edificio"],
+  },
+  {
+    ciudad: "Arteaga",
+    detalle:
+      "Arteaga y la zona serrana. Trabajo en altura sobre terreno con pendiente, donde la tracción 4×4 de combustión es casi siempre la respuesta.",
+    puntos: ["Terreno con pendiente", "Obra en zona serrana", "Instalación en exterior"],
+  },
+];
+
+const faq = [
+  {
+    pregunta: "¿BAPSA entrega fuera de Saltillo, Ramos Arizpe y Arteaga?",
+    respuesta:
+      "Sí, cotizando el traslado por separado. Dentro de los tres municipios el flete propio está incluido en las condiciones de renta; fuera de esa zona se calcula según la distancia y el tipo de máquina, porque un brazo de 120 pies no viaja igual que un elevador personal.",
+  },
+  {
+    pregunta: "¿En cuánto tiempo llega la máquina a la obra?",
+    respuesta:
+      "Dentro de la zona de cobertura, el mismo día hábil cuando hay equipo disponible y la solicitud entra en horario. El horario de atención es de lunes a viernes de 8:30 a 18:00 y sábado de 8:30 a 13:00.",
+  },
+];
+
+const schema = [
+  nodoServicio({
+    nombre: "Entrega de equipo de elevación con flete propio",
+    descripcion:
+      "Entrega y recolección de plataformas aéreas y brazos articulados con flete propio en Ramos Arizpe, Saltillo y Arteaga, Coahuila.",
+    ruta: "/cobertura",
+    tipo: "Entrega de maquinaria de elevación",
+  }),
+  nodoFaq(faq, "/cobertura"),
+];
+---
+
+<Base
+  titulo="Zona de cobertura y entrega en obra"
+  descripcion="BAPSA entrega equipo de elevación con flete propio en Ramos Arizpe, Saltillo y Arteaga. Fuera de esa zona se cotiza el traslado. Horarios y tiempos de entrega."
+  ruta="/cobertura"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja">
+      <p class="etiqueta">Cobertura</p>
+      <h1 class="titulo-2">Dónde entrega BAPSA</h1>
+      <div class="filete"></div>
+      <p class="lede">
+        BAPSA entrega y recoge con flete propio en <strong>Ramos Arizpe</strong>,
+        <strong>Saltillo</strong> y <strong>Arteaga</strong>, los tres municipios del corredor
+        industrial de Coahuila. Para obras fuera de esa zona se cotiza el traslado por separado.
+      </p>
+      <p class="medida">
+        Que el flete sea propio cambia una cosa concreta: la fecha de entrega la programa BAPSA y
+        no depende de la agenda de un transportista externo. En un trabajo en altura eso suele ser
+        la diferencia entre empezar el lunes o empezar el miércoles.
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Los tres municipios</h2>
+      <div class="filete"></div>
+      <ul class="zonas rejilla rejilla--3">
+        {
+          zonas.map((z) => (
+            <li class="tarjeta">
+              <Icono nombre="cobertura" tam={28} />
+              <h3 class="titulo-3">{z.ciudad}</h3>
+              <p class="chico">{z.detalle}</p>
+              <ul class="zonas__puntos">
+                {z.puntos.map((p) => (
+                  <li class="dato">{p}</li>
+                ))}
+              </ul>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <h2 class="titulo-2">Tiempos y condiciones de entrega</h2>
+      <div class="filete"></div>
+      <div class="tabla-envoltura">
+        <table>
+          <caption>Entrega dentro y fuera de la zona de cobertura.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Destino</th>
+              <th scope="col">Entrega</th>
+              <th scope="col">Flete</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Ramos Arizpe</th>
+              <td>Mismo día hábil</td>
+              <td>Propio, dentro de las condiciones de renta</td>
+            </tr>
+            <tr>
+              <th scope="row">Saltillo</th>
+              <td>Mismo día hábil</td>
+              <td>Propio, dentro de las condiciones de renta</td>
+            </tr>
+            <tr>
+              <th scope="row">Arteaga</th>
+              <td>Mismo día hábil</td>
+              <td>Propio, dentro de las condiciones de renta</td>
+            </tr>
+            <tr>
+              <th scope="row">Resto de Coahuila y otros estados</th>
+              <td>Según distancia</td>
+              <td>Se cotiza por separado</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="chico medida">
+        La entrega el mismo día está sujeta a disponibilidad del equipo y a que la solicitud entre
+        en horario: {SITE.openingHoursDisplay.toLowerCase()}.
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Preguntas sobre cobertura</h2>
+      <div class="filete"></div>
+      <dl class="faq">
+        {
+          faq.map((p) => (
+            <div>
+              <dt class="titulo-3">{p.pregunta}</dt>
+              <dd>{p.respuesta}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="chico">
+        BAPSA está en <address>{direccionUnaLinea}</address>
+      </p>
+    </div>
+  </section>
+
+  <LlamadoAccion />
+</Base>
+
+<style>
+  .zonas { list-style: none; padding: 0; margin: var(--e6) 0 0; }
+  .zonas__puntos { list-style: none; padding: 0; margin: var(--e2) 0 0; display: grid; gap: var(--e2); }
+  .zonas__puntos li { font-size: 0.8125rem; color: var(--acero); border-left: 3px solid var(--riel); padding-left: var(--e3); }
+  .faq { display: grid; gap: var(--e5); margin: var(--e6) 0 var(--e5); }
+  .faq > div { border-top: 1px solid var(--riel); padding-top: var(--e4); }
+  .faq dt { margin-bottom: var(--e2); }
+  .faq dd { margin: 0; max-width: var(--ancho-lectura); }
+  address { font-style: normal; display: inline; font-family: var(--dato); font-size: 0.875rem; color: var(--azul); }
+</style>

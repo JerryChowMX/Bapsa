@@ -1,0 +1,212 @@
+---
+import Base from "../layouts/Base.astro";
+import PlacaDatos from "../components/PlacaDatos.astro";
+import Foto from "../components/Foto.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { SITE } from "../config/seo";
+import { nodoServicio } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Venta", ruta: "/venta" },
+];
+const schema = [
+  nodoServicio({
+    nombre: "Venta de equipo de elevación",
+    descripcion:
+      "Venta de plataformas aéreas, brazos articulados y equipo de elevación nuevo y seminuevo con respaldo de servicio y refacciones en Coahuila.",
+    ruta: "/venta",
+    tipo: "Venta de maquinaria de elevación",
+  }),
+];
+---
+
+<Base
+  titulo="Venta de plataformas y equipo de elevación"
+  descripcion="Venta de brazos articulados, plataformas de tijera y elevadores nuevos y seminuevos, con taller propio y refacciones multimarca detrás. Cotización el mismo día."
+  ruta="/venta"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja encabezado">
+      <div>
+        <p class="etiqueta">Venta</p>
+        <h1 class="titulo-2">Venta de plataformas aéreas y equipo de elevación</h1>
+        <div class="filete"></div>
+        <p class="lede">
+          BAPSA vende equipo de elevación nuevo y seminuevo con el mismo taller y las mismas
+          refacciones que respaldan su flota de renta. Comprar conviene cuando la máquina se va a
+          usar de forma continua: a partir de cierto número de meses al año, el costo de la renta
+          alcanza al de la compra.
+        </p>
+        <div class="apilado">
+          <a class="btn btn--relleno" href="/contacto">Pedir cotización de venta</a>
+          <a class="btn btn--azul" href="/renta">Comparar con renta</a>
+        </div>
+      </div>
+      <Foto
+        alt="Brazos articulados y plataformas de tijera formados en el patio de BAPSA en Ramos Arizpe, listos para entrega."
+        clave="FOTO-07"
+        ancho={800}
+        alto={600}
+        prioritaria
+      />
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">¿Conviene rentar o comprar?</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        Depende de cuántos meses al año va a estar arriba la máquina y de quién le va a dar
+        mantenimiento. La renta traslada el mantenimiento, el seguro y la obsolescencia al
+        proveedor; la compra los deja del lado de usted a cambio de un costo por mes más bajo
+        cuando el uso es continuo.
+      </p>
+      <div class="tabla-envoltura">
+        <table>
+          <caption>Cuándo inclinarse por cada opción.</caption>
+          <thead>
+            <tr>
+              <th scope="col">Situación</th>
+              <th scope="col">Conviene</th>
+              <th scope="col">Por qué</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Un proyecto con fecha de inicio y de fin</th>
+              <td>Renta</td>
+              <td>No queda un activo parado cuando termina la obra.</td>
+            </tr>
+            <tr>
+              <th scope="row">Uso continuo todo el año en planta</th>
+              <td>Compra</td>
+              <td>El costo por mes baja y la máquina siempre está disponible.</td>
+            </tr>
+            <tr>
+              <th scope="row">Picos de trabajo en temporada</th>
+              <td>Compra + renta</td>
+              <td>Una máquina propia de base y equipo rentado para el pico.</td>
+            </tr>
+            <tr>
+              <th scope="row">Sin personal de mantenimiento propio</th>
+              <td>Renta o compra con póliza</td>
+              <td>El mantenimiento programado queda del lado de BAPSA.</td>
+            </tr>
+            <tr>
+              <th scope="row">Necesita el equipo esta semana</th>
+              <td>Renta</td>
+              <td>La entrega es inmediata; una compra requiere disponibilidad y trámite.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja rejilla rejilla--2 pareja">
+      <div>
+        <h2 class="titulo-2">Qué respalda la compra</h2>
+        <div class="filete"></div>
+        <ul class="lista-marcada">
+          <li>
+            <strong>Taller propio en Ramos Arizpe.</strong> El servicio de la máquina que compró
+            no depende de un centro de otra ciudad.
+          </li>
+          <li>
+            <strong>Refacciones multimarca</strong> para {SITE.marcas.join(", ")}, cotizadas con
+            número de parte o con el número de serie.
+          </li>
+          <li>
+            <strong>Póliza de mantenimiento preventivo</strong> opcional, con visitas programadas
+            y bitácora por máquina.
+          </li>
+          <li>
+            <strong>Equipo de renta disponible</strong> mientras su máquina está en servicio, para
+            que la operación no se detenga.
+          </li>
+        </ul>
+        <p class="chico">
+          Las condiciones comerciales —modelos disponibles, plazos de entrega, financiamiento y
+          garantía— se confirman al cotizar.
+        </p>
+      </div>
+      <PlacaDatos
+        banda="VENTA"
+        registro="RESPALDO BAPSA"
+        titulo="Lo que incluye la venta"
+        renglones={[
+          { etiqueta: "Equipo", valor: "NUEVO Y SEMINUEVO" },
+          { etiqueta: "Taller", valor: "PROPIO" },
+          { etiqueta: "Refacciones", valor: "MULTIMARCA" },
+          { etiqueta: "Póliza", valor: "OPCIONAL" },
+          { etiqueta: "Cotización", valor: "MISMO DÍA HÁBIL" },
+        ]}
+      />
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Cómo pedir una cotización de venta</h2>
+      <div class="filete"></div>
+      <ol class="pasos">
+        <li>
+          <span class="pasos__num dato">01</span>
+          <p>
+            Diga <strong>qué trabajo va a hacer y a qué altura</strong>. Con eso se define la
+            familia de equipo, que es la decisión que más cambia el precio.
+          </p>
+        </li>
+        <li>
+          <span class="pasos__num dato">02</span>
+          <p>
+            Diga <strong>dónde va a operar</strong>: interior con piso terminado o intemperie con
+            terreno irregular. Define si el equipo es eléctrico o de combustión.
+          </p>
+        </li>
+        <li>
+          <span class="pasos__num dato">03</span>
+          <p>
+            Diga <strong>cuántos meses al año la va a usar</strong>. Si son pocos, le decimos
+            si le sale mejor rentar: es información que a nosotros nos cuesta y a usted le sirve.
+          </p>
+        </li>
+        <li>
+          <span class="pasos__num dato">04</span>
+          <p>
+            Recibe <strong>la cotización el mismo día hábil</strong> con opciones nuevas y
+            seminuevas, y con el costo de la póliza por separado.
+          </p>
+        </li>
+      </ol>
+      <a class="btn btn--relleno" href="/contacto">Empezar la cotización</a>
+    </div>
+  </section>
+
+  <LlamadoAccion
+    titulo="¿Comprar o rentar? Le decimos cuál le sale mejor"
+    texto="Marque con el trabajo, la altura y los meses de uso al año. La respuesta no siempre es comprar."
+  />
+</Base>
+
+<style>
+  .encabezado { display: grid; gap: var(--e6); align-items: center; }
+  @media (min-width: 900px) { .encabezado { grid-template-columns: 1.15fr 1fr; gap: var(--e8); } }
+  .encabezado h1 { margin-bottom: var(--e5); }
+  .pareja { align-items: start; }
+  @media (min-width: 900px) { .pareja { grid-template-columns: 1.3fr 1fr; gap: var(--e8); } }
+
+  .pasos { list-style: none; padding: 0; margin: var(--e6) 0 var(--e6); display: grid; gap: var(--e5); }
+  @media (min-width: 760px) { .pasos { grid-template-columns: repeat(2, 1fr); } }
+  .pasos li { display: grid; grid-template-columns: 48px 1fr; gap: var(--e4); align-items: start; }
+  .pasos__num {
+    display: grid; place-items: center; width: 44px; height: 44px;
+    background: var(--azul); color: var(--canastilla); font-weight: 700; font-size: 0.9375rem;
+  }
+  .pasos p { margin: 0; }
+</style>

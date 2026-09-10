@@ -1,0 +1,35 @@
+---
+/** Banda de cierre. Un solo relleno, y el teléfono siempre a la vista. */
+import { SITE } from "../config/seo";
+import Icono from "./Icono.astro";
+const { titulo = "¿Necesita el equipo esta semana?", texto } = Astro.props as {
+  titulo?: string;
+  texto?: string;
+};
+---
+
+<section class="banda--azul cta">
+  <div class="hoja cta__interior">
+    <div>
+      <h2 class="titulo-2">{titulo}</h2>
+      <p class="cta__texto">
+        {texto ??
+          `Cotizamos el mismo día hábil y entregamos con flete propio en ${SITE.ciudades.join(", ")}.`}
+      </p>
+    </div>
+    <div class="apilado">
+      <a class="btn btn--sobre-azul btn--grande" href="/contacto">Pedir cotización</a>
+      <a class="btn btn--contorno-claro btn--grande" href={`tel:${SITE.telephone}`}>
+        <Icono nombre="contacto" tam={16} />
+        {SITE.telephoneDisplay}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .cta { padding-block: clamp(var(--e7), 5vw, var(--e8)); }
+  .cta__interior { display: grid; gap: var(--e6); align-items: center; }
+  @media (min-width: 900px) { .cta__interior { grid-template-columns: 1.4fr 1fr; } }
+  .cta__texto { color: var(--riel); font-size: var(--lede); line-height: 1.6; margin: var(--e4) 0 0; }
+</style>

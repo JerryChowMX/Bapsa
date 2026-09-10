@@ -1,0 +1,14 @@
+{
+  "name": "BAPSA Equipo de Elevación",
+  "short_name": "BAPSA",
+  "description": "Renta y venta de brazos articulados, plataformas de tijera y elevadores personales en Ramos Arizpe, Saltillo y Arteaga.",
+  "start_url": "/",
+  "display": "browser",
+  "lang": "es-MX",
+  "background_color": "#F2F5FC",
+  "theme_color": "#05025E",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/brand/bapsa-logo-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

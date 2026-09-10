@@ -1,0 +1,38 @@
+---
+/** Migas visibles. Nunca se emite el BreadcrumbList sin pintar esto:
+ *  marcar migas que el usuario no ve es el caso que Google sanciona. */
+import type { Miga } from "../lib/schema";
+const { migas } = Astro.props as { migas: Miga[] };
+---
+
+<nav aria-label="Ruta de navegación" class="migas">
+  <div class="hoja">
+    <ol>
+      {
+        migas.map((m, i) =>
+          i === migas.length - 1 ? (
+            <li aria-current="page">{m.nombre}</li>
+          ) : (
+            <li>
+              <a href={m.ruta}>{m.nombre}</a>
+              <span aria-hidden="true">/</span>
+            </li>
+          )
+        )
+      }
+    </ol>
+  </div>
+</nav>
+
+<style>
+  .migas { border-bottom: 1px solid var(--riel); background: var(--aire); }
+  ol {
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--e2);
+    list-style: none; margin: 0; padding: var(--e3) 0;
+    font-size: var(--pie-foto); color: var(--acero);
+  }
+  li { display: flex; align-items: center; gap: var(--e2); }
+  a { color: var(--senal); }
+  li[aria-current="page"] { color: var(--chasis); font-weight: 600; }
+  span { color: var(--riel); }
+</style>

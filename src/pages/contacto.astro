@@ -1,0 +1,154 @@
+---
+import Base from "../layouts/Base.astro";
+import Icono from "../components/Icono.astro";
+import PlacaDatos from "../components/PlacaDatos.astro";
+import FormularioCotizacion from "../components/FormularioCotizacion.astro";
+import { SITE, direccionUnaLinea } from "../config/seo";
+import { nodoPaginaContacto } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Contacto", ruta: "/contacto" },
+];
+const schema = [nodoPaginaContacto("/contacto")];
+---
+
+<Base
+  titulo="Contacto y cotización de equipo de elevación"
+  descripcion="Cotice renta o venta de equipo de elevación en Ramos Arizpe. Teléfonos, correo, dirección y horarios de BAPSA. Respuesta el mismo día hábil."
+  ruta="/contacto"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja">
+      <p class="etiqueta">Contacto</p>
+      <h1 class="titulo-2">Cotice su equipo</h1>
+      <div class="filete"></div>
+      <p class="lede">
+        Cotizamos renta, venta, servicio y refacciones el mismo día hábil. Si el trabajo es
+        urgente, el teléfono es más rápido que el formulario: del otro lado contesta alguien que
+        sabe qué máquina cabe en su obra.
+      </p>
+    </div>
+  </section>
+
+  <section class="seccion contacto">
+    <div class="hoja rejilla contacto__rejilla">
+      <div class="contacto__datos">
+        <h2 class="titulo-3">Datos directos</h2>
+        <ul class="canales">
+          <li>
+            <Icono nombre="contacto" tam={20} />
+            <div>
+              <span class="canales__rotulo">Teléfono</span>
+              <a class="dato dato--fuerte" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>
+            </div>
+          </li>
+          <li>
+            <Icono nombre="telefono" tam={20} />
+            <div>
+              <span class="canales__rotulo">Segundo número</span>
+              <a class="dato dato--fuerte" href={`tel:${SITE.telephoneAlt}`}>
+                {SITE.telephoneAltDisplay}
+              </a>
+            </div>
+          </li>
+          <li>
+            <Icono nombre="correo" tam={20} />
+            <div>
+              <span class="canales__rotulo">Correo</span>
+              <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+            </div>
+          </li>
+          <li>
+            <Icono nombre="cobertura" tam={20} />
+            <div>
+              <span class="canales__rotulo">Dirección</span>
+              <address>{direccionUnaLinea}</address>
+            </div>
+          </li>
+          <li>
+            <Icono nombre="horario" tam={20} />
+            <div>
+              <span class="canales__rotulo">Horario</span>
+              <span>Lunes a viernes de 8:30 a 18:00</span>
+              <span>Sábado de 8:30 a 13:00</span>
+              <span class="canales__cerrado">Domingo cerrado</span>
+            </div>
+          </li>
+        </ul>
+
+        <PlacaDatos
+          banda="ANTES DE LLAMAR"
+          registro="4 DATOS"
+          titulo="Datos que agilizan la cotización"
+          renglones={[
+            { etiqueta: "Altura del trabajo", valor: "EN METROS" },
+            { etiqueta: "Interior o intemperie", valor: "PISO Y TERRENO" },
+            { etiqueta: "Días de renta", valor: "APROXIMADOS" },
+            { etiqueta: "Lugar de la obra", valor: "MUNICIPIO" },
+          ]}
+        />
+        <p class="chico contacto__nota">
+          Con esos cuatro datos se cotiza en una llamada. Si no los tiene todos, llame de todos
+          modos: la altura del punto de trabajo es la única indispensable.
+        </p>
+      </div>
+
+      <div>
+        <FormularioCotizacion />
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">¿Qué necesita cotizar?</h2>
+      <div class="filete"></div>
+      <ul class="rejilla rejilla--4 atajos">
+        <li class="tarjeta">
+          <h3 class="titulo-3"><a href="/renta">Renta de equipo</a></h3>
+          <p class="chico">Cinco familias con entrega de flete propio.</p>
+        </li>
+        <li class="tarjeta">
+          <h3 class="titulo-3"><a href="/venta">Venta de equipo</a></h3>
+          <p class="chico">Nuevo y seminuevo, con respaldo de taller.</p>
+        </li>
+        <li class="tarjeta">
+          <h3 class="titulo-3"><a href="/servicio">Servicio y pólizas</a></h3>
+          <p class="chico">Mantenimiento multimarca, preventivo y correctivo.</p>
+        </li>
+        <li class="tarjeta">
+          <h3 class="titulo-3"><a href="/refacciones">Refacciones</a></h3>
+          <p class="chico">Con número de parte o número de serie.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .contacto__rejilla { align-items: start; }
+  @media (min-width: 980px) { .contacto__rejilla { grid-template-columns: 1fr 1.35fr; gap: var(--e8); } }
+  .contacto__datos { display: grid; gap: var(--e5); }
+  .contacto__datos h2 { margin-bottom: 0; }
+
+  .canales { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--e5); }
+  .canales li { display: grid; grid-template-columns: 28px 1fr; gap: var(--e3); align-items: start; }
+  .canales li > div { display: grid; gap: 2px; }
+  .canales__rotulo {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase; color: var(--acero);
+  }
+  .canales a { font-size: var(--cuerpo); }
+  .canales .dato--fuerte { font-size: 1.125rem; }
+  .canales address { font-style: normal; line-height: 1.5; }
+  .canales__cerrado { color: var(--acero); font-size: var(--cuerpo-chico); }
+  .contacto__nota { color: var(--acero); margin: 0; }
+
+  .atajos { list-style: none; padding: 0; margin: var(--e6) 0 0; }
+  .atajos h3 { font-size: 1.0625rem; }
+  .atajos h3 a { color: var(--azul); text-decoration: none; }
+  .atajos h3 a:hover { color: var(--senal); text-decoration: underline; }
+</style>
