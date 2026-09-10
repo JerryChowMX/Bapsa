@@ -3,9 +3,10 @@
 
 export type Entrada = { nombre: string; ruta: string; resumen?: string };
 
-/** La barra. Cinco entradas y un solo relleno: "Cotizar". */
+/** La barra. Seis entradas y un solo relleno: "Cotizar". */
 export const NAV_PRINCIPAL: Entrada[] = [
   { nombre: "Renta", ruta: "/renta" },
+  { nombre: "Equipo", ruta: "/equipo" },
   { nombre: "Venta", ruta: "/venta" },
   { nombre: "Servicio", ruta: "/servicio" },
   { nombre: "Refacciones", ruta: "/refacciones" },
@@ -47,7 +48,13 @@ export const FAMILIAS: Required<Entrada>[] = [
 ];
 
 export const NAV_PIE: { titulo: string; entradas: Entrada[] }[] = [
-  { titulo: "Equipo en renta", entradas: FAMILIAS.map(({ nombre, ruta }) => ({ nombre, ruta })) },
+  {
+    titulo: "Equipo en renta",
+    entradas: [
+      { nombre: "Catálogo completo", ruta: "/equipo" },
+      ...FAMILIAS.map(({ nombre, ruta }) => ({ nombre, ruta })),
+    ],
+  },
   {
     titulo: "Servicios",
     entradas: [

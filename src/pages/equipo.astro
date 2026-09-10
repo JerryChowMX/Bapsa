@@ -1,0 +1,213 @@
+---
+import Base from "../layouts/Base.astro";
+import Icono from "../components/Icono.astro";
+import LlamadoAccion from "../components/LlamadoAccion.astro";
+import { SITE } from "../config/seo";
+import { MAQUINAS, MAQUINAS_POR_ALTURA, MARCAS_CATALOGO, maquinasDeFamilia } from "../datos/maquinas";
+import { FAMILIAS_DATOS } from "../datos/familias";
+import { nodoListaMaquinas } from "../lib/schema";
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Equipo", ruta: "/equipo" },
+];
+
+const masAlta = MAQUINAS_POR_ALTURA[0];
+const masCarga = [...MAQUINAS].sort((a, b) => parseInt(b.capacidad) - parseInt(a.capacidad))[0];
+const masAngosta = [...MAQUINAS].sort((a, b) => parseFloat(a.ancho) - parseFloat(b.ancho))[0];
+
+const conMaquinas = FAMILIAS_DATOS.filter((f) => maquinasDeFamilia(f.slug).length > 0);
+
+const schema = [
+  nodoListaMaquinas(
+    `${SITE.url}/equipo#catalogo`,
+    "Catálogo de equipo de elevación en renta",
+    MAQUINAS_POR_ALTURA.map((m) => ({ nombre: `${m.marca} ${m.modelo}`, ruta: `/equipo/${m.slug}` }))
+  ),
+];
+---
+
+<Base
+  titulo="Catálogo de equipo de elevación en renta"
+  descripcion={`Las ${MAQUINAS.length} máquinas de BAPSA con su ficha técnica completa: altura, capacidad, ancho y alimentación, comparadas en una sola tabla.`}
+  ruta="/equipo"
+  migas={migas}
+  schema={schema}
+>
+  <section class="seccion">
+    <div class="hoja">
+      <p class="etiqueta">Catálogo</p>
+      <h1 class="titulo-2">El equipo de BAPSA, máquina por máquina</h1>
+      <div class="filete"></div>
+      <p class="lede">
+        BAPSA renta {MAQUINAS.length} modelos de {MARCAS_CATALOGO.join(" y ")} con altura de
+        trabajo entre {MAQUINAS_POR_ALTURA[MAQUINAS_POR_ALTURA.length - 1].alturaTrabajo} y
+        {" "}{masAlta.alturaTrabajo}. Cada cifra de estas fichas está copiada de la ficha técnica
+        del fabricante, no de un catálogo genérico.
+      </p>
+      <div class="apilado">
+        <a class="btn btn--relleno" href="/contacto">Cotizar una máquina</a>
+        <a class="btn btn--azul" href="/renta">Cómo elegir la familia</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Las tres máquinas que resuelven los casos extremos</h2>
+      <div class="filete"></div>
+      <ul class="extremos rejilla rejilla--3">
+        <li class="tarjeta">
+          <Icono nombre="altura" tam={28} />
+          <p class="etiqueta">La más alta</p>
+          <h3 class="titulo-3">
+            <a href={`/equipo/${masAlta.slug}`}>{masAlta.marca} {masAlta.modelo}</a>
+          </h3>
+          <p class="extremos__cifra dato dato--fuerte">{masAlta.alturaTrabajo}</p>
+          <p class="chico">de altura de trabajo. Es el techo del catálogo.</p>
+        </li>
+        <li class="tarjeta">
+          <Icono nombre="placa-datos" tam={28} />
+          <p class="etiqueta">La de más carga</p>
+          <h3 class="titulo-3">
+            <a href={`/equipo/${masCarga.slug}`}>{masCarga.marca} {masCarga.modelo}</a>
+          </h3>
+          <p class="extremos__cifra dato dato--fuerte">{masCarga.capacidad}</p>
+          <p class="chico">de capacidad, entre personas, herramienta y material.</p>
+        </li>
+        <li class="tarjeta">
+          <Icono nombre="plataforma-tijera" tam={28} />
+          <p class="etiqueta">La más angosta</p>
+          <h3 class="titulo-3">
+            <a href={`/equipo/${masAngosta.slug}`}>{masAngosta.marca} {masAngosta.modelo}</a>
+          </h3>
+          <p class="extremos__cifra dato dato--fuerte">{masAngosta.ancho}</p>
+          <p class="chico">de ancho: pasa por una puerta estándar.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <h2 class="titulo-2">Las {MAQUINAS.length} máquinas comparadas</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        Ordenadas de mayor a menor altura de trabajo, que es como se compara este equipo. La
+        altura de trabajo ya incluye a una persona de pie en la plataforma: son 2 metros más que
+        la altura de plataforma que declara el fabricante.
+      </p>
+      <div class="tabla-envoltura">
+        <table>
+          <caption>
+            Equipo de elevación en renta de BAPSA. Cifras de las fichas técnicas de Genie y JLG.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Modelo</th>
+              <th scope="col">Tipo</th>
+              <th scope="col" class="cifra">Altura de trabajo</th>
+              <th scope="col" class="cifra">Capacidad</th>
+              <th scope="col" class="cifra">Ancho</th>
+              <th scope="col">Alimentación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              MAQUINAS_POR_ALTURA.map((m) => (
+                <tr>
+                  <th scope="row">
+                    <a href={`/equipo/${m.slug}`}>
+                      {m.marca} {m.modelo}
+                    </a>
+                  </th>
+                  <td>{m.tipo}</td>
+                  <td class="cifra">{m.alturaTrabajo}</td>
+                  <td class="cifra">{m.capacidad}</td>
+                  <td class="cifra">{m.ancho}</td>
+                  <td>{m.alimentacion}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="chico">
+        Todo el equipo del catálogo es <strong>eléctrico</strong>, con neumáticos que no dejan
+        marcas: puede entrar a una nave en operación y trabajar sobre piso terminado. Para
+        intemperie y terreno irregular, consulte la{" "}
+        <a href="/renta/brazos-articulados-de-combustion">renta de equipo de combustión</a>.
+      </p>
+    </div>
+  </section>
+
+  {
+    conMaquinas.map((f) => (
+      <section class="seccion banda--neblina">
+        <div class="hoja">
+          <h2 class="titulo-2">{f.nombre}</h2>
+          <div class="filete" />
+          <p class="medida">{f.definicion}</p>
+          <ul class="fichas rejilla rejilla--3">
+            {maquinasDeFamilia(f.slug).map((m) => (
+              <li class="tarjeta">
+                <p class="etiqueta">{m.marca}</p>
+                <h3 class="titulo-3">
+                  <a href={`/equipo/${m.slug}`}>{m.modelo}</a>
+                </h3>
+                <p class="chico">{m.resumen}</p>
+                <dl class="fichas__datos">
+                  <div>
+                    <dt>Altura</dt>
+                    <dd class="dato">{m.alturaTrabajo}</dd>
+                  </div>
+                  <div>
+                    <dt>Capacidad</dt>
+                    <dd class="dato">{m.capacidad}</dd>
+                  </div>
+                </dl>
+                <p class="tarjeta__pie">
+                  <a class="btn btn--azul btn--chico" href={`/equipo/${m.slug}`}>
+                    Ficha técnica
+                    <Icono nombre="flecha" tam={16} />
+                  </a>
+                </p>
+              </li>
+            ))}
+          </ul>
+          <p class="chico">
+            <a href={`/renta/${f.slug}`}>Cuándo conviene esta familia y qué incluye la renta</a>
+          </p>
+        </div>
+      </section>
+    ))
+  }
+
+  <LlamadoAccion
+    titulo="¿Cuál de las siete le sirve?"
+    texto="Diga la altura del punto de trabajo y si es interior o intemperie. Con eso le decimos el modelo exacto y le cotizamos el mismo día hábil."
+  />
+</Base>
+
+<style>
+  .extremos, .fichas { list-style: none; padding: 0; margin: var(--e6) 0 var(--e5); }
+  .extremos .etiqueta { margin-bottom: var(--e1); }
+  .extremos h3 { margin-bottom: var(--e2); }
+  .extremos h3 a, .fichas h3 a { color: var(--azul); text-decoration: none; }
+  .extremos h3 a:hover, .fichas h3 a:hover { color: var(--senal); text-decoration: underline; }
+  .extremos__cifra { font-size: 1.75rem; color: var(--azul); margin: 0; line-height: 1.1; }
+  .extremos .chico { margin: 0; color: var(--acero); }
+
+  .fichas .etiqueta { margin-bottom: var(--e1); }
+  .fichas h3 { font-size: 1.25rem; margin-bottom: var(--e2); }
+  .fichas__datos { display: flex; gap: var(--e5); margin: var(--e3) 0 0; }
+  .fichas__datos div { border-left: 3px solid var(--canastilla); padding-left: var(--e3); }
+  .fichas__datos dt {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+  }
+  .fichas__datos dd { margin: var(--e1) 0 0; color: var(--azul); font-weight: 700; }
+
+  table a { color: var(--senal); font-weight: 600; }
+  .banda--neblina table a { color: var(--azul); }
+</style>

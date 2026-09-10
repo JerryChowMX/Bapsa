@@ -143,8 +143,14 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
   .menu-movil__panel p { margin: var(--e4) 0 0; font-size: 0.8125rem; }
   .menu-movil__horario { color: var(--acero); font-family: var(--texto); }
 
-  @media (min-width: 900px) {
+  /* Con seis entradas, la barra completa no cabe por debajo de 1040px:
+     ahí manda el menú de celular. El teléfono aparece más tarde todavía,
+     porque es lo primero que se puede sacrificar sin perder navegación. */
+  @media (min-width: 1040px) {
     .nav-escritorio, .barra__acciones { display: flex; }
     .menu-movil { display: none; }
+  }
+  @media (max-width: 1179px) {
+    .barra__tel { display: none; }
   }
 </style>

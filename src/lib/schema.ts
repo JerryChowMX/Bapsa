@@ -159,9 +159,11 @@ export function nodoFaq(pares: ParFaq[], ruta: string): Nodo {
 }
 
 /**
- * Producto de catálogo. Sin `offers` con precio: BAPSA cotiza por proyecto y
- * marcar un precio que no está en la página es exactamente lo que causa el
- * retiro de rich results.
+ * Producto de catálogo.
+ *
+ * Sin cifra de precio: BAPSA cotiza por proyecto, y marcar un precio que no
+ * está en la página es exactamente lo que causa el retiro de rich results.
+ * Se declara la moneda, la disponibilidad y el vendedor, y nada más.
  */
 export function nodoMaquina(m: {
   nombre: string;
@@ -169,6 +171,7 @@ export function nodoMaquina(m: {
   ruta: string;
   marca?: string;
   modelo?: string;
+  sku?: string;
   imagen?: string;
   propiedades: { nombre: string; valor: string; unidad?: string }[];
 }): Nodo {
@@ -187,13 +190,10 @@ export function nodoMaquina(m: {
     })),
     offers: {
       "@type": "Offer",
+      "@id": `${urlAbsoluta(m.ruta)}#offer`,
       availability: "https://schema.org/InStock",
       priceCurrency: "MXN",
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        // Sin cifra: el precio se cotiza. Se declara la moneda y nada más.
-        valueAddedTaxIncluded: false,
-      },
+      businessFunction: "http://purl.org/goodrelations/v1#LeaseOut",
       seller: { "@id": ID_ORG },
       url: urlAbsoluta("/contacto"),
       areaServed: SITE.ciudades.map((c) => ({ "@type": "City", name: c })),
@@ -201,8 +201,29 @@ export function nodoMaquina(m: {
   };
   if (m.marca) nodo.brand = { "@type": "Brand", name: m.marca };
   if (m.modelo) nodo.model = m.modelo;
+  if (m.sku) nodo.sku = m.sku;
   if (m.imagen) nodo.image = urlAbsoluta(m.imagen);
   return nodo;
+}
+
+/** Listado de máquinas, para el catálogo y para las fichas de familia. */
+export function nodoListaMaquinas(
+  id: string,
+  nombre: string,
+  items: { nombre: string; ruta: string }[]
+): Nodo {
+  return {
+    "@type": "ItemList",
+    "@id": id,
+    name: nombre,
+    numberOfItems: items.length,
+    itemListElement: items.map((m, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: m.nombre,
+      url: urlAbsoluta(m.ruta),
+    })),
+  };
 }
 
 export function nodoPaginaContacto(ruta: string): Nodo {

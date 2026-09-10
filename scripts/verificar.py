@@ -31,6 +31,7 @@ class Lector(HTMLParser):
     def __init__(self):
         super().__init__(convert_charrefs=True)
         self.enlaces = []
+        self.anclas_sin_href = 0
         self.imgs = []
         self.jsonld = []
         self._en_ld = False
@@ -39,8 +40,14 @@ class Lector(HTMLParser):
 
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
-        if tag == "a" and a.get("href"):
-            self.enlaces.append(a["href"])
+        if tag == "a":
+            # Un <a> sin href no es un enlace: no se puede seguir, no se puede
+            # tabular y no lo rastrea nadie. Casi siempre es una variable que
+            # llegó `undefined` y el atributo se cayó en silencio.
+            if a.get("href"):
+                self.enlaces.append(a["href"])
+            elif "name" not in a and "id" not in a:
+                self.anclas_sin_href += 1
         elif tag == "img":
             self.imgs.append(a)
         elif tag == "script" and a.get("type") == "application/ld+json":
@@ -93,6 +100,9 @@ def main():
         p.feed(html)
 
         # 1. Enlaces internos
+        if p.anclas_sin_href:
+            errores.append(f"{rel}: {p.anclas_sin_href} etiqueta(s) <a> sin href")
+
         for href in p.enlaces:
             if re.match(r"^(https?:|mailto:|tel:|#|data:)", href):
                 continue

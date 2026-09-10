@@ -1,6 +1,6 @@
 # Fotos pendientes
 
-El sitio tiene **nueve huecos de foto**. Cada uno se pinta como un recuadro
+El sitio tiene **dieciséis huecos de foto**: nueve de sección y siete de máquina. Cada uno se pinta como un recuadro
 rotulado con la clave, la medida y el texto alternativo que le corresponde, así
 que es imposible publicar sin darse cuenta de cuál falta.
 
@@ -50,6 +50,28 @@ campo `foto` si decide centralizarlo; en las páginas sueltas:
 | FOTO-07 | `/venta` (héroe) | 800×600 | Equipo formado en el patio, listo para entrega. |
 | FOTO-08 | `/servicio` (héroe) | 800×600 | Técnico revisando el sistema hidráulico dentro del taller. |
 | FOTO-09 | `/nosotros` (héroe) | 800×600 | Instalaciones sobre el Boulevard Miguel Ramos Arizpe, con equipo en el patio. |
+
+## Los siete huecos de máquina
+
+Uno por modelo del catálogo, todos de 800×600 en la ficha correspondiente.
+**Estas son las más importantes del sitio**: son las que acompañan la ficha
+técnica, y una foto real de la máquina de BAPSA vale más que cualquier render
+del fabricante. Si solo se pueden conseguir algunas, empiece por las tres de
+arriba, que son las que más se buscan.
+
+| Clave | Máquina | Página | Qué debe mostrar |
+|---|---|---|---|
+| MAQ-Z4525J | Genie Z-45/25J DC | `/equipo/genie-z-45-25j-dc` | El brazo con la cesta elevada dentro de nave. Si se ve el plumín articulado, mejor. |
+| MAQ-E450A | JLG E450A | `/equipo/jlg-e450a` | El brazo trabajando, idealmente con la plataforma girada, que es su ventaja. |
+| MAQ-N40E | JLG n40E | `/equipo/jlg-n40e` | Maniobrando en pasillo angosto: lo que la vende es que quepa. |
+| MAQ-GS3246 | Genie GS-3246 | `/equipo/genie-gs-3246` | La tijera elevada a altura completa, con algo que dé escala. |
+| MAQ-GS2646 | Genie GS-2646 | `/equipo/genie-gs-2646` | Dos operadores arriba con material: es la de más carga de su familia. |
+| MAQ-GS2632 | Genie GS-2632 | `/equipo/genie-gs-2632` | Pasando por una puerta o por pasillo de rack, que es su argumento entero. |
+| MAQ-GS2046 | Genie GS-2046 | `/equipo/genie-gs-2046` | La cesta cargada con material: 545 kg es su cifra. |
+
+Si de alguna máquina hay foto de la **placa remachada del chasís** con el
+número de serie legible, mándela también: se puede usar en la ficha y refuerza
+justo la idea que sostiene todo el sistema visual.
 
 ## Además hacen falta
 

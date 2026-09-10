@@ -9,7 +9,7 @@
     "build": "astro build && npm run test",
     "build:only": "astro build",
     "preview": "astro preview",
-    "test": "npm run test:seo && npm run test:enlaces",
+    "test": "npm run check && npm run test:seo && npm run test:enlaces",
     "test:seo": "python3 scripts/audit.py ./dist --base-url https://www.bapsa.com.mx --strict",
     "test:enlaces": "python3 scripts/verificar.py ./dist",
     "check": "astro check"

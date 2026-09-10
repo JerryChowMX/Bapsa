@@ -1,0 +1,235 @@
+---
+import Base from "../../layouts/Base.astro";
+import Icono from "../../components/Icono.astro";
+import PlacaDatos from "../../components/PlacaDatos.astro";
+import Foto from "../../components/Foto.astro";
+import Estado from "../../components/Estado.astro";
+import FormularioCotizacion from "../../components/FormularioCotizacion.astro";
+import { SITE } from "../../config/seo";
+import { MAQUINAS, maquinasDeFamilia } from "../../datos/maquinas";
+import { porSlug as familiaPorSlug } from "../../datos/familias";
+import { nodoMaquina } from "../../lib/schema";
+
+export function getStaticPaths() {
+  return MAQUINAS.map((maquina) => ({ params: { slug: maquina.slug }, props: { maquina } }));
+}
+
+const { maquina } = Astro.props;
+const ruta = `/equipo/${maquina.slug}`;
+const familia = familiaPorSlug(maquina.familia);
+const hermanas = maquinasDeFamilia(maquina.familia).filter((m) => m.slug !== maquina.slug);
+const nombre = `${maquina.marca} ${maquina.modelo}`;
+
+const migas = [
+  { nombre: "Inicio", ruta: "/" },
+  { nombre: "Equipo", ruta: "/equipo" },
+  { nombre: nombre, ruta },
+];
+
+// Solo se marcan las propiedades que están visibles en la tabla de la página.
+const propiedades = maquina.especificaciones.flatMap((g) =>
+  g.filas.map((f) => ({ nombre: f.concepto, valor: f.valor }))
+);
+
+const schema = [
+  nodoMaquina({
+    nombre: `${nombre} — ${maquina.tipo}`,
+    descripcion: maquina.definicion,
+    ruta,
+    marca: maquina.marca,
+    modelo: maquina.modelo,
+    sku: maquina.slug.toUpperCase(),
+    propiedades,
+  }),
+];
+---
+
+<Base
+  titulo={maquina.titulo}
+  descripcion={maquina.descripcion}
+  ruta={ruta}
+  migas={migas}
+  schema={schema}
+  imagenAlt={maquina.fotoAlt}
+>
+  <section class="seccion">
+    <div class="hoja encabezado">
+      <div>
+        <p class="etiqueta">{maquina.marca} · {maquina.tipo}</p>
+        <h1 class="titulo-2">{maquina.h1}</h1>
+        <div class="filete"></div>
+        {/* La definición abre la página: es la frase que se extrae y se cita. */}
+        <p class="lede">{maquina.definicion}</p>
+        <p class="encabezado__estado">
+          <Estado tipo="disponible" dato="cotización el mismo día hábil" />
+        </p>
+        <div class="apilado">
+          <a class="btn btn--relleno" href="#cotizar">Cotizar esta máquina</a>
+          <a class="btn btn--azul" href={`tel:${SITE.telephone}`}>
+            <Icono nombre="contacto" tam={16} />
+            {SITE.telephoneDisplay}
+          </a>
+        </div>
+      </div>
+
+      <div class="encabezado__lado">
+        <PlacaDatos
+          banda={maquina.marca}
+          registro={maquina.modelo}
+          titulo={`Datos principales de la ${nombre}`}
+          renglones={[
+            { etiqueta: "Altura de trabajo", valor: maquina.alturaTrabajo.toUpperCase() },
+            { etiqueta: "Capacidad", valor: maquina.capacidad.toUpperCase() },
+            { etiqueta: "Ancho", valor: maquina.ancho.toUpperCase() },
+            { etiqueta: "Alimentación", valor: maquina.alimentacion.toUpperCase() },
+          ]}
+        />
+        <Foto alt={maquina.fotoAlt} clave={maquina.fotoClave} ancho={800} alto={600} prioritaria />
+      </div>
+    </div>
+  </section>
+
+  <section class="seccion banda--neblina">
+    <div class="hoja">
+      <h2 class="titulo-2">Para qué se pide esta máquina</h2>
+      <div class="filete"></div>
+      <ul class="lista-marcada">
+        {maquina.paraQue.map((p) => <li>{p}</li>)}
+      </ul>
+      {
+        familia && (
+          <p class="chico">
+            Es un equipo de la familia de{" "}
+            <a href={`/renta/${familia.slug}`}>{familia.nombre.toLowerCase()}</a>.
+            {" "}
+            {familia.resumen}
+          </p>
+        )
+      }
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <h2 class="titulo-2">Ficha técnica completa</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        Todas las cifras están copiadas de la ficha técnica del fabricante. La altura de trabajo
+        ya incluye a una persona de pie en la plataforma: son 2 metros más que la altura de
+        plataforma.
+      </p>
+
+      <div class="especificaciones">
+        {
+          maquina.especificaciones.map((grupo) => (
+            <div class="tabla-envoltura">
+              <table>
+                <caption>
+                  {grupo.grupo} · {nombre}
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Concepto</th>
+                    <th scope="col" class="cifra">Valor</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {grupo.filas.map((f) => (
+                    <tr>
+                      <th scope="row">{f.concepto}</th>
+                      <td class="cifra">{f.valor}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))
+        }
+      </div>
+
+      <p class="fuente chico">
+        <Icono nombre="placa-datos" tam={16} />
+        <span>
+          Fuente: <strong>{maquina.fuente}</strong>. Las especificaciones pueden variar según la
+          configuración y las opciones de cada unidad; la máquina exacta se confirma al cotizar.
+        </span>
+      </p>
+    </div>
+  </section>
+
+  {
+    hermanas.length > 0 && (
+      <section class="seccion banda--neblina">
+        <div class="hoja">
+          <h2 class="titulo-2">Otras máquinas de la misma familia</h2>
+          <div class="filete" />
+          <div class="tabla-envoltura">
+            <table>
+              <caption>Comparación con el resto de {familia?.nombre.toLowerCase()} del catálogo.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Modelo</th>
+                  <th scope="col" class="cifra">Altura de trabajo</th>
+                  <th scope="col" class="cifra">Capacidad</th>
+                  <th scope="col" class="cifra">Ancho</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">
+                    {nombre} <span class="esta">· esta máquina</span>
+                  </th>
+                  <td class="cifra">{maquina.alturaTrabajo}</td>
+                  <td class="cifra">{maquina.capacidad}</td>
+                  <td class="cifra">{maquina.ancho}</td>
+                </tr>
+                {hermanas.map((m) => (
+                  <tr>
+                    <th scope="row">
+                      <a href={`/equipo/${m.slug}`}>
+                        {m.marca} {m.modelo}
+                      </a>
+                    </th>
+                    <td class="cifra">{m.alturaTrabajo}</td>
+                    <td class="cifra">{m.capacidad}</td>
+                    <td class="cifra">{m.ancho}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p class="chico">
+            <a href="/equipo">Ver las {MAQUINAS.length} máquinas del catálogo</a>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="seccion">
+    <div class="hoja">
+      <FormularioCotizacion equipoPreseleccionado={familia?.nombre ?? ""} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .encabezado { display: grid; gap: var(--e6); align-items: start; }
+  @media (min-width: 940px) { .encabezado { grid-template-columns: 1.2fr 1fr; gap: var(--e8); } }
+  .encabezado h1 { margin-bottom: var(--e5); }
+  .encabezado__estado { margin: 0 0 var(--e5); }
+  .encabezado__lado { display: grid; gap: var(--e5); }
+
+  .especificaciones { display: grid; gap: var(--e5); margin-top: var(--e6); }
+  @media (min-width: 900px) { .especificaciones { grid-template-columns: repeat(2, 1fr); align-items: start; } }
+
+  .fuente {
+    display: flex; gap: var(--e3); align-items: flex-start;
+    margin: var(--e6) 0 0; padding: var(--e4);
+    background: var(--reflejante); color: var(--azul); max-width: var(--ancho-lectura);
+  }
+  .fuente span { max-width: none; }
+
+  .esta { font-family: var(--texto); font-weight: 400; color: var(--acero); font-size: 0.8125rem; }
+  table a { color: var(--azul); font-weight: 600; }
+</style>

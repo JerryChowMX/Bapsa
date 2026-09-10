@@ -8,7 +8,8 @@ import FormularioCotizacion from "../../components/FormularioCotizacion.astro";
 import { SITE } from "../../config/seo";
 import { FAMILIAS_DATOS } from "../../datos/familias";
 import { FAQ_POR_FAMILIA } from "../../datos/faq";
-import { nodoServicio, nodoMaquina, nodoFaq } from "../../lib/schema";
+import { maquinasDeFamilia } from "../../datos/maquinas";
+import { nodoServicio, nodoFaq, nodoListaMaquinas } from "../../lib/schema";
 
 export function getStaticPaths() {
   return FAMILIAS_DATOS.map((familia) => ({ params: { slug: familia.slug }, props: { familia } }));
@@ -18,6 +19,9 @@ const { familia } = Astro.props;
 const ruta = `/renta/${familia.slug}`;
 const faq = FAQ_POR_FAMILIA[familia.slug] ?? [];
 const otras = FAMILIAS_DATOS.filter((f) => f.slug !== familia.slug);
+// Si hay máquinas reales de esta familia, mandan ellas: los rangos de la
+// categoría solo se muestran cuando todavía no hay ficha de fabricante.
+const maquinas = maquinasDeFamilia(familia.slug);
 
 const migas = [
   { nombre: "Inicio", ruta: "/" },
@@ -33,14 +37,13 @@ const schema: Record<string, unknown>[] = [
     tipo: familia.nombre,
   }),
 ];
-if (familia.medidas.length > 0) {
+if (maquinas.length > 0) {
   schema.push(
-    nodoMaquina({
-      nombre: familia.nombre,
-      descripcion: familia.definicion,
-      ruta,
-      propiedades: familia.medidas.map((m) => ({ nombre: m.concepto, valor: m.valor })),
-    })
+    nodoListaMaquinas(
+      `${SITE.url}${ruta}#maquinas`,
+      `${familia.nombre} en renta de BAPSA`,
+      maquinas.map((m) => ({ nombre: `${m.marca} ${m.modelo}`, ruta: `/equipo/${m.slug}` }))
+    )
   );
 }
 if (faq.length > 0) schema.push(nodoFaq(faq, ruta));
@@ -75,53 +78,116 @@ if (faq.length > 0) schema.push(nodoFaq(faq, ruta));
   </section>
 
   {
-    familia.medidas.length > 0 && (
+    maquinas.length > 0 ? (
       <section class="seccion banda--neblina">
         <div class="hoja">
-          <h2 class="titulo-2">Medidas de la categoría</h2>
-          <div class="filete"></div>
+          <h2 class="titulo-2">
+            {maquinas.length === 1 ? "La máquina de BAPSA en esta familia" : `Las ${maquinas.length} máquinas de BAPSA en esta familia`}
+          </h2>
+          <div class="filete" />
           <p class="medida">
-            Estos son los rangos con los que trabaja la categoría, no un modelo en particular. La
-            máquina exacta —modelo, número económico y altura— se confirma al cotizar, según lo
-            que esté libre en la fecha que usted necesita.
+            Cifras copiadas de la ficha técnica de cada fabricante. La altura de trabajo ya
+            incluye a una persona de pie en la plataforma: son 2 metros más que la altura de
+            plataforma.
           </p>
-          <div class="rejilla medidas">
-            <div class="tabla-envoltura">
-              <table>
-                <caption>Rangos típicos de {familia.nombre.toLowerCase()} en renta.</caption>
-                <thead>
+          <div class="tabla-envoltura">
+            <table>
+              <caption>{familia.nombre} en renta de BAPSA, de mayor a menor altura de trabajo.</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Modelo</th>
+                  <th scope="col" class="cifra">Altura de trabajo</th>
+                  <th scope="col" class="cifra">Capacidad</th>
+                  <th scope="col" class="cifra">Ancho</th>
+                  <th scope="col">Para qué destaca</th>
+                </tr>
+              </thead>
+              <tbody>
+                {maquinas.map((m) => (
                   <tr>
-                    <th scope="col">Concepto</th>
-                    <th scope="col" class="cifra">Rango</th>
-                    <th scope="col">Nota</th>
+                    <th scope="row">
+                      <a href={`/equipo/${m.slug}`}>
+                        {m.marca} {m.modelo}
+                      </a>
+                    </th>
+                    <td class="cifra">{m.alturaTrabajo}</td>
+                    <td class="cifra">{m.capacidad}</td>
+                    <td class="cifra">{m.ancho}</td>
+                    <td>{m.resumen}</td>
                   </tr>
-                </thead>
-                <tbody>
-                  {familia.medidas.map((m) => (
-                    <tr>
-                      <th scope="row">{m.concepto}</th>
-                      <td class="cifra">{m.valor}</td>
-                      <td>{m.nota ?? "—"}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <PlacaDatos
-              banda="EJEMPLO DE FICHA"
-              registro="DATO VERIFICADO"
-              titulo={`Ficha de referencia de ${familia.nombre}`}
-              renglones={[
-                { etiqueta: "Familia", valor: familia.nombre.toUpperCase() },
-                ...familia.medidas.slice(0, 4).map((m) => ({
-                  etiqueta: m.concepto,
-                  valor: m.valor.toUpperCase(),
-                })),
-              ]}
-            />
+                ))}
+              </tbody>
+            </table>
           </div>
+
+          <ul class="maquinas rejilla rejilla--3">
+            {maquinas.map((m) => (
+              <li class="tarjeta">
+                <p class="etiqueta">{m.marca}</p>
+                <h3 class="titulo-3">
+                  <a href={`/equipo/${m.slug}`}>{m.modelo}</a>
+                </h3>
+                <p class="chico">{m.resumen}</p>
+                <p class="tarjeta__pie">
+                  <a class="btn btn--azul btn--chico" href={`/equipo/${m.slug}`}>
+                    Ficha técnica
+                    <Icono nombre="flecha" tam={16} />
+                  </a>
+                </p>
+              </li>
+            ))}
+          </ul>
         </div>
       </section>
+    ) : (
+      familia.medidas.length > 0 && (
+        <section class="seccion banda--neblina">
+          <div class="hoja">
+            <h2 class="titulo-2">Medidas de la categoría</h2>
+            <div class="filete" />
+            <p class="medida">
+              Estos son los rangos con los que trabaja la categoría, no un modelo en particular:
+              de esta familia todavía no hay ficha de fabricante publicada en el sitio. La
+              máquina exacta —modelo, número económico y altura— se confirma al cotizar.
+            </p>
+            <div class="rejilla medidas">
+              <div class="tabla-envoltura">
+                <table>
+                  <caption>Rangos típicos de {familia.nombre.toLowerCase()} en renta.</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Concepto</th>
+                      <th scope="col" class="cifra">Rango</th>
+                      <th scope="col">Nota</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {familia.medidas.map((m) => (
+                      <tr>
+                        <th scope="row">{m.concepto}</th>
+                        <td class="cifra">{m.valor}</td>
+                        <td>{m.nota ?? "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <PlacaDatos
+                banda="RANGO DE CATEGORÍA"
+                registro="POR CONFIRMAR"
+                titulo={`Rangos de referencia de ${familia.nombre}`}
+                renglones={[
+                  { etiqueta: "Familia", valor: familia.nombre.toUpperCase() },
+                  ...familia.medidas.slice(0, 4).map((m) => ({
+                    etiqueta: m.concepto,
+                    valor: m.valor.toUpperCase(),
+                  })),
+                ]}
+              />
+            </div>
+          </div>
+        </section>
+      )
     )
   }
 
@@ -206,6 +272,12 @@ if (faq.length > 0) schema.push(nodoFaq(faq, ruta));
   .encabezado h1 { margin-bottom: var(--e5); }
 
   .medidas { margin-top: var(--e6); align-items: start; }
+  .maquinas { list-style: none; padding: 0; margin: var(--e6) 0 0; }
+  .maquinas .etiqueta { margin-bottom: var(--e1); }
+  .maquinas h3 { font-size: 1.25rem; margin-bottom: var(--e2); }
+  .maquinas h3 a { color: var(--azul); text-decoration: none; }
+  .maquinas h3 a:hover { color: var(--senal); text-decoration: underline; }
+  .banda--neblina table a { color: var(--azul); font-weight: 600; }
   @media (min-width: 900px) { .medidas { grid-template-columns: 1.5fr 1fr; gap: var(--e6); } }
 
   .criterio { align-items: start; }

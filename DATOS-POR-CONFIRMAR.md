@@ -30,7 +30,8 @@ respuestas de IA que la ausencia del campo.
   que es justo lo que hace que un modelo cite a BAPSA con confianza.
 
 ### 1.3 Fotografías
-- Ver `FOTOS-PENDIENTES.md`. Hay **nueve** huecos rotulados en el sitio.
+- Ver `FOTOS-PENDIENTES.md`. Hay **dieciséis** huecos rotulados en el sitio:
+  nueve de secciones y siete de máquina, uno por modelo del catálogo.
 
 ---
 
@@ -73,21 +74,53 @@ respuestas de IA que la ausencia del campo.
   sitio no las responde con un dato. Cada una que se pueda responder con una
   cifra concreta es un fragmento citable más.
 
-### 2.6 El inventario real
-- **Archivo:** `src/datos/familias.ts` → campo `medidas` de cada familia
-- **Estado:** los rangos de las tablas son **rangos típicos de la categoría**,
-  y así se rotulan en la página ("Estos son los rangos con los que trabaja la
-  categoría, no un modelo en particular").
-- **Qué hace falta:** la lista real de máquinas con marca, modelo, número
-  económico, altura de trabajo, alcance horizontal, capacidad y tracción.
-- **Por qué importa:** es la mejora de mayor impacto que le queda al sitio.
-  Con el inventario real, cada máquina puede tener su propia página y su
-  propio `Product` en el JSON-LD, y ahí es donde se gana la consulta larga
-  ("renta brazo articulado 45 pies Saltillo").
-- **Nota especial · maquinaria pesada:** de esta familia solo sabemos que
-  existe. La página `/renta/maquinaria-pesada` está escrita de forma honesta
-  —dice que la disponibilidad se confirma por teléfono— pero es la más pobre
-  del sitio y se queda así hasta que haya datos.
+### 2.6 El inventario — resuelto a medias
+**Resuelto (septiembre 2026).** BAPSA entregó las fichas técnicas de siete
+máquinas y el sitio ya las publica con la cifra exacta del fabricante, cada
+una con su página, su tabla completa y su `Product` en el JSON-LD:
+
+| Modelo | Familia | Altura de trabajo | Fuente |
+|---|---|---|---|
+| Genie Z-45/25J DC | Brazo articulado eléctrico | 15.94 m | Ficha Genie 2025 |
+| JLG E450A | Brazo articulado eléctrico | 15.72 m | Ficha JLG E450A |
+| JLG n40E | Brazo articulado eléctrico angosto | 14.19 m | Ficha JLG n40E |
+| Genie GS-3246 | Plataforma de tijera | 11.75 m | Folleto Genie GS-2046/2646/3246 |
+| Genie GS-2646 | Plataforma de tijera | 9.96 m | Ficha Genie GS-2632 y GS-2646 E-Drive |
+| Genie GS-2632 | Plataforma de tijera angosta | 9.96 m | Ficha Genie GS-2632 y GS-2646 E-Drive |
+| Genie GS-2046 | Plataforma de tijera | 8.10 m | Folleto Genie GS-2046/2646/3246 |
+
+**Lo que sigue abierto de esas siete:**
+
+- **Cuántas unidades hay de cada modelo.** El sitio dice qué modelos renta
+  BAPSA, no cuántos. Con el número económico de cada unidad se puede llegar a
+  una ficha por máquina, que es el siguiente escalón.
+- **GS-2046, GS-2646 y GS-3246 vienen de un folleto de familia**, no de una
+  ficha por modelo. Hay que confirmar cuáles de los tres están de verdad en la
+  flota; los tres están publicados asumiendo que sí.
+- **Variante del GS-2646.** El folleto de familia declara 9.92 m y la ficha del
+  GS-2646 E-Drive declara 9.96 m en interior. El sitio usa la ficha, que es la
+  más detallada. Conviene confirmar cuál variante tiene BAPSA.
+
+### 2.7 Las tres familias que siguen sin ficha
+Estas páginas existen y describen la categoría de forma honesta —dicen con
+esas palabras que los rangos son de la categoría y no de un modelo—, pero no
+tienen ni una sola máquina publicada:
+
+- **Brazos articulados de combustión.** *Y aquí hay una alerta:* todas las
+  fichas que entregó BAPSA son de equipo **eléctrico**. La página sostiene
+  «hasta 120 pies» y tracción 4×4 con base en el cuestionario de alcance, no
+  en una ficha. **Antes de publicar hay que confirmar si BAPSA de verdad renta
+  equipo de combustión**; si no, esa página se retira y se ajusta el discurso
+  del sitio, porque hoy es la única afirmación fuerte sin respaldo documental.
+- **Elevadores personales.** Sin ficha. Los rangos son de categoría.
+- **Maquinaria pesada.** Solo sabemos que existe. Es la página más pobre del
+  sitio y se queda así hasta que haya datos.
+
+### 2.8 Tarifas
+Sigue sin haber una sola cifra de precio en el sitio. Es la pregunta más
+buscada del giro. Aunque sea un rango por día y por familia —«una tijera de 10
+metros va de X a Y pesos por día»—, cada cifra concreta es un fragmento
+citable más, y hoy la competencia tampoco los publica.
 
 ---
 

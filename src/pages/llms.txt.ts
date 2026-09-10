@@ -1,6 +1,7 @@
 import type { APIRoute } from "astro";
 import { SITE, direccionUnaLinea } from "../config/seo";
 import { FAMILIAS_DATOS } from "../datos/familias";
+import { MAQUINAS_POR_ALTURA, MARCAS_CATALOGO } from "../datos/maquinas";
 import { FAQ_GENERAL } from "../datos/faq";
 
 /**
@@ -24,11 +25,21 @@ Horario: ${SITE.openingHoursDisplay}.
 Cobertura con flete propio: ${SITE.ciudades.join(", ")} (Coahuila, México).
 Marcas atendidas en servicio y refacciones: ${SITE.marcas.join(", ")}.
 
-## Equipo en renta
+## Catálogo de máquinas en renta
+Marcas en catálogo: ${MARCAS_CATALOGO.join(", ")}. Todo el equipo listado es eléctrico y con neumáticos que no dejan marcas.
+Cifras tomadas de la ficha técnica de cada fabricante.
+
+${MAQUINAS_POR_ALTURA.map(
+  (m) =>
+    `- [${m.marca} ${m.modelo}](${u(`/equipo/${m.slug}`)}) — ${m.tipo}. Altura de trabajo ${m.alturaTrabajo}, capacidad ${m.capacidad}, ancho ${m.ancho}, alimentación ${m.alimentacion}. ${m.resumen}`
+).join("\n")}
+
+## Familias de equipo
 ${FAMILIAS_DATOS.map((f) => `- [${f.nombre}](${u(`/renta/${f.slug}`)}): ${f.resumen}`).join("\n")}
 
 ## Líneas de negocio
 - [Renta de equipo de elevación](${u("/renta")}): cinco familias con entrega de flete propio en Ramos Arizpe, Saltillo y Arteaga.
+- [Catálogo completo](${u("/equipo")}): las ${MAQUINAS_POR_ALTURA.length} máquinas comparadas por altura, capacidad y ancho.
 - [Venta de equipo](${u("/venta")}): equipo nuevo y seminuevo con taller y refacciones propias detrás.
 - [Servicio y pólizas](${u("/servicio")}): mantenimiento preventivo y correctivo multimarca, con bitácora por máquina.
 - [Refacciones](${u("/refacciones")}): piezas para ${SITE.marcas.length} marcas, cotizadas con número de parte o de serie.

@@ -60,6 +60,7 @@ src/
     navegacion.ts     ← la navegación, usada por barra, pie y migas
     formulario.ts     ← a dónde llegan las solicitudes  (POR CONFIRMAR)
   datos/
+    maquinas.ts       ← EL CATÁLOGO REAL: 7 máquinas con su ficha de fabricante
     familias.ts       ← las cinco familias de equipo y sus rangos
     faq.ts            ← preguntas frecuentes
   lib/
@@ -75,6 +76,17 @@ scripts/
   audit.py            ← auditoría SEO/GEO
   verificar.py        ← enlaces, @id, HTML crudo, imágenes
 ```
+
+### La regla de `maquinas.ts`
+
+Cada cifra de ese archivo está copiada de la ficha técnica del fabricante que
+BAPSA entregó, y el campo `fuente` dice de qué documento salió. El sitio la
+muestra al pie de cada ficha: en un giro donde el número es el producto, decir
+de dónde sale el número es parte del producto.
+
+**Si un dato no venía en la ficha, no va.** No se completa con un catálogo
+genérico, no se estima y no se redondea de otra fuente. Cuando falta, se omite
+y se anota en `DATOS-POR-CONFIRMAR.md`.
 
 **No edite metadatos, teléfonos ni la descripción fuera de `src/config/seo.ts`.**
 Ese archivo alimenta el `<head>`, el JSON-LD, el pie, el `llms.txt` y el

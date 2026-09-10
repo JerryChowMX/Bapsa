@@ -7,7 +7,10 @@ import Foto from "../components/Foto.astro";
 import LlamadoAccion from "../components/LlamadoAccion.astro";
 import { SITE } from "../config/seo";
 import { FAMILIAS_DATOS } from "../datos/familias";
-import { nodoServicio } from "../lib/schema";
+import { MAQUINAS, MAQUINAS_POR_ALTURA, MARCAS_CATALOGO } from "../datos/maquinas";
+import { nodoServicio, nodoListaMaquinas } from "../lib/schema";
+
+const masAlta = MAQUINAS_POR_ALTURA[0];
 
 const schema = [
   nodoServicio({
@@ -16,6 +19,11 @@ const schema = [
     ruta: "/renta",
     tipo: "Renta de plataformas aéreas y brazos articulados",
   }),
+  nodoListaMaquinas(
+    `${SITE.url}/equipo#catalogo`,
+    "Catálogo de equipo de elevación en renta",
+    MAQUINAS_POR_ALTURA.map((m) => ({ nombre: `${m.marca} ${m.modelo}`, ruta: `/equipo/${m.slug}` }))
+  ),
 ];
 ---
 
@@ -42,7 +50,7 @@ const schema = [
         </p>
         <div class="apilado">
           <a class="btn btn--relleno btn--grande" href="/contacto">Pedir cotización</a>
-          <a class="btn btn--azul btn--grande" href="/renta">Ver el equipo</a>
+          <a class="btn btn--azul btn--grande" href="/equipo">Ver las {MAQUINAS.length} máquinas</a>
         </div>
         <p class="heroe__tel chico">
           O marque al <a class="dato" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>.{" "}
@@ -57,10 +65,11 @@ const schema = [
           titulo="Datos de la empresa"
           renglones={[
             { etiqueta: "Experiencia", valor: `+${SITE.aniosOperacion} AÑOS` },
-            { etiqueta: "Altura máxima", valor: "120 FT" },
+            { etiqueta: "Equipos en catálogo", valor: String(MAQUINAS.length) },
+            { etiqueta: "Altura máxima", valor: masAlta.alturaTrabajo.toUpperCase() },
+            { etiqueta: "Marcas", valor: MARCAS_CATALOGO.join(" · ").toUpperCase() },
             { etiqueta: "Flete", valor: "PROPIO" },
             { etiqueta: "Servicio", valor: "TALLER PROPIO" },
-            { etiqueta: "Refacciones", valor: "MULTIMARCA" },
           ]}
         />
         <p class="heroe__estado">
@@ -106,6 +115,58 @@ const schema = [
           ))
         }
       </ul>
+    </div>
+  </section>
+
+  <section class="seccion">
+    <div class="hoja">
+      <p class="etiqueta">Catálogo</p>
+      <h2 class="titulo-2">Las {MAQUINAS.length} máquinas, con su ficha de fabricante</h2>
+      <div class="filete"></div>
+      <p class="medida">
+        BAPSA renta {MAQUINAS.length} modelos de {MARCAS_CATALOGO.join(" y ")}, con altura de
+        trabajo entre {MAQUINAS_POR_ALTURA[MAQUINAS_POR_ALTURA.length - 1].alturaTrabajo} y{" "}
+        {masAlta.alturaTrabajo}. Todo el catálogo es eléctrico y con neumáticos que no dejan
+        marcas, así que puede entrar a una nave en operación.
+      </p>
+      <div class="tabla-envoltura">
+        <table>
+          <caption>
+            Equipo en renta de BAPSA, de mayor a menor altura de trabajo. Cifras de las fichas
+            técnicas de Genie y JLG.
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Modelo</th>
+              <th scope="col">Tipo</th>
+              <th scope="col" class="cifra">Altura de trabajo</th>
+              <th scope="col" class="cifra">Capacidad</th>
+              <th scope="col" class="cifra">Ancho</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              MAQUINAS_POR_ALTURA.map((m) => (
+                <tr>
+                  <th scope="row">
+                    <a href={`/equipo/${m.slug}`}>
+                      {m.marca} {m.modelo}
+                    </a>
+                  </th>
+                  <td>{m.tipo}</td>
+                  <td class="cifra">{m.alturaTrabajo}</td>
+                  <td class="cifra">{m.capacidad}</td>
+                  <td class="cifra">{m.ancho}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <a class="btn btn--azul" href="/equipo">
+        Ver el catálogo completo
+        <Icono nombre="flecha" tam={16} />
+      </a>
     </div>
   </section>
 
@@ -236,5 +297,6 @@ const schema = [
   .familias__medida { color: var(--acero); font-size: 0.8125rem; margin: 0; }
 
   .pareja { align-items: center; }
+  table a { color: var(--senal); font-weight: 600; }
   @media (min-width: 900px) { .pareja { grid-template-columns: 1.15fr 1fr; gap: var(--e8); } }
 </style>
