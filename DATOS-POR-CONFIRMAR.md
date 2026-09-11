@@ -115,8 +115,21 @@ afirma lo contrario y lo usa como argumento: **todo el equipo es eléctrico, y
 por eso entra a una nave en operación**. Hay una pregunta frecuente que lo dice
 sin rodeos, para que nadie pida una máquina que BAPSA no tiene.
 
+BAPSA lo reconfirmó el 11 de septiembre. En esa segunda pasada salieron dos
+rastros que habían quedado: la placa de `/nosotros` declaraba «Altura máxima
+120 FT» —una cifra que ninguna máquina eléctrica alcanza— y la tabla de
+`/refacciones` ofrecía piezas de motor de combustión. Las dos se corrigieron y
+**ahora hay una guarda en las pruebas**: `scripts/verificar.py` rompe el build
+si aparece «120 ft», «tracción 4×4», «motor diésel», «motor de combustión» o
+«de gasolina` en cualquier página. La lista está en `FRASES_PROHIBIDAS`.
+
+Lo que el sitio **sí** dice de combustión son dos negaciones, a propósito: una
+pregunta frecuente que contesta «No, solo eléctrico» y una nota al pie del
+catálogo. Sirven para que quien necesita diésel no pierda una llamada. Si
+prefiere que el sitio ni lo mencione, se quitan en dos líneas.
+
 *Si algún día vuelve la línea de combustión*, la familia se restaura desde el
-historial de git (commit anterior a este) — no hay que volver a escribirla.
+historial de git — no hay que volver a escribirla.
 
 **Siguen sin una sola máquina publicada:**
 
@@ -156,14 +169,7 @@ radio es **0**, no «ligeramente redondeado», porque la palabra BAPSA está
 dibujada con esquinas en pico. El efecto de hover se resuelve subiendo un
 escalón de superficie y cambiando el borde a Azul BAPSA.
 
-### 2.9 Refacciones para motor de combustión
-La tabla de `/refacciones` sigue listando «Motor de combustión: filtros,
-bandas, bujías, inyección y componentes de escape». Se dejó a propósito: BAPSA
-da servicio a equipo **multimarca de terceros**, que sí puede ser diésel, y eso
-es una línea distinta de rentar una máquina de combustión. Confirmar de todos
-modos que el área de refacciones sigue surtiendo esas piezas.
-
-### 2.10 Tarifas
+### 2.9 Tarifas
 Sigue sin haber una sola cifra de precio en el sitio. Es la pregunta más
 buscada del giro. Aunque sea un rango por día y por familia —«una tijera de 10
 metros va de X a Y pesos por día»—, cada cifra concreta es un fragmento

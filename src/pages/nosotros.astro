@@ -4,6 +4,7 @@ import PlacaDatos from "../components/PlacaDatos.astro";
 import Foto from "../components/Foto.astro";
 import LlamadoAccion from "../components/LlamadoAccion.astro";
 import { SITE, direccionUnaLinea } from "../config/seo";
+import { MAQUINAS, MAQUINAS_POR_ALTURA, MARCAS_CATALOGO } from "../datos/maquinas";
 import { ID_ORG } from "../lib/schema";
 
 const migas = [
@@ -89,7 +90,9 @@ const schema = [
           titulo="Datos de la empresa"
           renglones={[
             { etiqueta: "Experiencia", valor: `+${SITE.aniosOperacion} AÑOS` },
-            { etiqueta: "Altura máxima", valor: "120 FT" },
+            { etiqueta: "Equipos en catálogo", valor: String(MAQUINAS.length) },
+            { etiqueta: "Altura máxima", valor: MAQUINAS_POR_ALTURA[0].alturaTrabajo.toUpperCase() },
+            { etiqueta: "Marcas", valor: MARCAS_CATALOGO.join(" · ").toUpperCase() },
             { etiqueta: "Cobertura", valor: "SALTILLO · RAMOS · ARTEAGA" },
             { etiqueta: "Flete", valor: "PROPIO" },
             { etiqueta: "Taller", valor: "PROPIO" },

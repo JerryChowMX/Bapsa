@@ -11,6 +11,9 @@ Comprobaciones que audit.py no cubre. Rompen el build si fallan.
 3. Contenido en el HTML crudo: se verifica que el primer párrafo de cada
    página exista sin ejecutar JavaScript.
 4. Imágenes: ninguna sin alt, ninguna sin width y height.
+4b. Afirmaciones prohibidas: capacidades que BAPSA NO tiene y que se colaron
+   dos veces en el copy. Son frases que solo aparecen afirmando, así que no
+   hay falsos positivos con una negación del tipo "no rentamos diésel".
 5. Texto pegado: Astro recorta el espacio entre un texto y una etiqueta en
    línea cuando la etiqueta abre en el renglón siguiente, y sale "revise la
    venta" convertido en "revise laventa". Se ve mal y ensucia el fragmento
@@ -25,6 +28,20 @@ import sys
 from html.parser import HTMLParser
 
 RAIZ = sys.argv[1] if len(sys.argv) > 1 else "./dist"
+
+# BAPSA confirmó (sep 2026) que solo renta equipo ELÉCTRICO. Estas frases
+# describen equipo de combustión y ninguna se puede sostener con una ficha del
+# catálogo. Ya se colaron dos veces —en la placa de /nosotros y en la tabla de
+# /refacciones— así que ahora rompen el build.
+FRASES_PROHIBIDAS = [
+    "120 ft",
+    "120 pies",
+    "tracción 4×4",
+    "4×4 diésel",
+    "motor diésel",
+    "motor de combustión",
+    "de gasolina",
+]
 
 
 class Lector(HTMLParser):
@@ -155,6 +172,14 @@ def main():
                 errores.append(f"{rel}: <img> sin alt ({img.get('src')})")
             if not img.get("width") or not img.get("height"):
                 errores.append(f"{rel}: <img> sin width/height ({img.get('src')})")
+
+        # 4b. Afirmaciones que BAPSA no puede sostener
+        texto_plano = re.sub(r"<[^>]+>", " ", re.sub(r"<(script|style|head)[\s\S]*?</\1>", " ", html))
+        for frase in FRASES_PROHIBIDAS:
+            if frase in texto_plano.lower():
+                errores.append(
+                    f"{rel}: afirmación prohibida «{frase}» — BAPSA solo renta equipo eléctrico"
+                )
 
         # 5. Texto pegado a una etiqueta en línea
         cuerpo = re.sub(r"<(script|style|head)[\s\S]*?</\1>", "", html)
