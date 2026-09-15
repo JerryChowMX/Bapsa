@@ -23,9 +23,9 @@ y Python 3 para las pruebas, que usan solo la librería estándar.
 | Comando | Qué hace |
 |---|---|
 | `npm run dev` | Servidor de desarrollo. |
-| `npm run build` | Construye a `dist/` **y corre las pruebas**. Falla el build si algo no pasa. |
-| `npm run build:only` | Construye sin correr pruebas. |
-| `npm run test` | Las dos baterías, contra `dist/`. |
+| `npm run build` | Construye a `dist/`. Nada más — es lo que corre cualquier plataforma de despliegue. |
+| `npm run verify` | Construye **y corre las pruebas**. Es lo que se usa en local y en CI. |
+| `npm run test` | Las pruebas solas, contra un `dist/` ya construido. |
 | `npm run test:seo` | Title, description, canonical, OG, h1, JSON-LD, alt, duplicados. |
 | `npm run test:enlaces` | Enlaces internos rotos, referencias `@id`, contenido en HTML crudo. |
 | `npm run preview` | Sirve `dist/` localmente. |
@@ -185,7 +185,7 @@ Desde el dashboard (**Workers & Pages → Create → Pages → Connect to Git**)
 | Repositorio | `JerryChowMX/Bapsa` |
 | Rama de producción | `claude/exciting-bardeen-tqqw6h` |
 | Framework preset | Astro |
-| Build command | `npm run build:only` |
+| Build command | `npm run build` |
 | Output directory | `dist` |
 | Variable de entorno | `ROBOTS_BLOQUEAR` = `1` |
 | Variable de entorno | `NODE_VERSION` = `22.12.0` |
@@ -193,7 +193,7 @@ Desde el dashboard (**Workers & Pages → Create → Pages → Connect to Git**)
 O desde la terminal, sin tocar el dashboard:
 
 ```bash
-npm run build:only
+ROBOTS_BLOQUEAR=1 npm run build
 npx wrangler pages deploy dist --project-name bapsa
 ```
 
@@ -204,9 +204,11 @@ repositorio trae un `.nvmrc` con `22.12.0` y `engines` en el `package.json`,
 que Pages respeta; la variable `NODE_VERSION` es el cinturón además del
 tirante, por si el proyecto quedó creado con una imagen de build vieja.
 
-**El build command es `build:only`, no `build`.** El segundo corre además la
-batería de pruebas, que necesita Python y tarda de más en un runner. Las
-pruebas van en local y en CI, no bloqueando un deploy de preview.
+**`npm run build` solo construye.** Las pruebas viven en `npm run verify`, que
+es lo que se corre en local y en integración continua. Es a propósito: el
+comando por defecto de Cloudflare, Vercel y Netlify es `npm run build`, y
+colgarle ahí una batería que necesita Python convierte cualquier despliegue en
+una ruleta.
 
 **`ROBOTS_BLOQUEAR=1` no es opcional en un preview.** Hace dos cosas: saca el
 `robots.txt` con `Disallow: /` y genera un `_headers` con

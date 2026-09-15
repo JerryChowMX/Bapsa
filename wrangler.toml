@@ -3,10 +3,9 @@
 # `pages_build_output_dir` deja que `wrangler pages deploy` funcione sin
 # argumentos desde la raíz del repositorio.
 #
-# El build de Pages debe usar `npm run build:only`, NO `npm run build`:
-# el segundo corre además la batería de pruebas, que necesita Python y
-# tarda de más en un runner de CI. Las pruebas van en local y en el hook
-# de integración continua, no bloqueando un deploy de preview.
+# El build command es `npm run build`, que solo construye. Las pruebas
+# viven en `npm run verify` y corren en local y en CI, nunca bloqueando
+# un despliegue.
 name = "bapsa"
 pages_build_output_dir = "dist"
 compatibility_date = "2026-09-15"
