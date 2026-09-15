@@ -173,6 +173,50 @@ se detecta.
 
 ---
 
+## Desplegar a Cloudflare Pages
+
+### Preview para enseñarle al cliente
+
+Desde el dashboard (**Workers & Pages → Create → Pages → Connect to Git**):
+
+| Campo | Valor |
+|---|---|
+| Repositorio | `JerryChowMX/Bapsa` |
+| Rama de producción | `claude/exciting-bardeen-tqqw6h` |
+| Framework preset | Astro |
+| Build command | `npm run build:only` |
+| Output directory | `dist` |
+| Variable de entorno | `ROBOTS_BLOQUEAR` = `1` |
+
+O desde la terminal, sin tocar el dashboard:
+
+```bash
+npm run build:only
+npx wrangler pages deploy dist --project-name bapsa
+```
+
+**El build command es `build:only`, no `build`.** El segundo corre además la
+batería de pruebas, que necesita Python y tarda de más en un runner. Las
+pruebas van en local y en CI, no bloqueando un deploy de preview.
+
+**`ROBOTS_BLOQUEAR=1` no es opcional en un preview.** Hace dos cosas: saca el
+`robots.txt` con `Disallow: /` y genera un `_headers` con
+`X-Robots-Tag: noindex, nofollow`. La cabecera importa tanto como el
+`robots.txt`: un `Disallow` solo pide al crawler que no entre, pero una URL
+enlazada desde fuera puede quedar indexada igual, vacía y con el dominio
+`pages.dev`. Un preview se indexa antes de que nadie lo note.
+
+### El día que se publique de verdad
+
+1. Quitar la variable `ROBOTS_BLOQUEAR` del proyecto y redesplegar. Verificar
+   con `curl` que el `robots.txt` ya no diga `Disallow: /` y que no salga
+   ninguna cabecera `X-Robots-Tag`.
+2. Apuntar `www.bapsa.com.mx` al proyecto de Pages y dejar el 301 del dominio
+   sin `www`.
+3. Correr los siete `curl` de la sección de abajo.
+
+---
+
 ## Antes de publicar
 
 Lo que falta para poder publicar está en **`DATOS-POR-CONFIRMAR.md`** y
