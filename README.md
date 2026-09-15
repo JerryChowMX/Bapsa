@@ -190,6 +190,14 @@ Desde el dashboard (**Workers & Pages → Create → Pages → Connect to Git**)
 | Variable de entorno | `ROBOTS_BLOQUEAR` = `1` |
 | Variable de entorno | `NODE_VERSION` = `22.12.0` |
 
+**No agregues un `wrangler.toml` a este repositorio.** Cuando Pages encuentra
+uno, lee de ahí la configuración de build y **deja de leer la del dashboard**:
+tu build command y tus variables de entorno se ignoran en silencio. El build
+command no es un campo de `wrangler.toml` para Pages, así que el resultado es
+que se salta la construcción y falla con `Output directory "dist" not found`.
+Ya pasó una vez. Si algún día hace falta el archivo, la configuración de build
+completa tiene que vivir dentro de él.
+
 O desde la terminal, sin tocar el dashboard:
 
 ```bash
