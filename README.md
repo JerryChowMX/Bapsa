@@ -17,7 +17,8 @@ npm run dev      # http://localhost:4321
 npm run build    # construye y corre toda la batería de pruebas
 ```
 
-Requiere Node 18+ y Python 3 (las pruebas de SEO usan solo la stdlib).
+Requiere **Node 22.12 o superior** (lo exige Astro 7; está fijado en `.nvmrc`)
+y Python 3 para las pruebas, que usan solo la librería estándar.
 
 | Comando | Qué hace |
 |---|---|
@@ -187,6 +188,7 @@ Desde el dashboard (**Workers & Pages → Create → Pages → Connect to Git**)
 | Build command | `npm run build:only` |
 | Output directory | `dist` |
 | Variable de entorno | `ROBOTS_BLOQUEAR` = `1` |
+| Variable de entorno | `NODE_VERSION` = `22.12.0` |
 
 O desde la terminal, sin tocar el dashboard:
 
@@ -194,6 +196,13 @@ O desde la terminal, sin tocar el dashboard:
 npm run build:only
 npx wrangler pages deploy dist --project-name bapsa
 ```
+
+**La versión de Node no es opcional.** Astro 7 exige **Node ≥ 22.12.0** y
+Cloudflare Pages arranca con Node 18 si no encuentra nada que le diga otra
+cosa: el build truena ahí, no en el código, y el error no lo parece. El
+repositorio trae un `.nvmrc` con `22.12.0` y `engines` en el `package.json`,
+que Pages respeta; la variable `NODE_VERSION` es el cinturón además del
+tirante, por si el proyecto quedó creado con una imagen de build vieja.
 
 **El build command es `build:only`, no `build`.** El segundo corre además la
 batería de pruebas, que necesita Python y tarda de más en un runner. Las

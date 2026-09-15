@@ -3,6 +3,10 @@
   "type": "module",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=22.12.0",
+    "npm": ">=9.6.5"
+  },
   "description": "Sitio de BAPSA · Equipo de Elevación — Ramos Arizpe, Coahuila.",
   "scripts": {
     "dev": "astro dev",
