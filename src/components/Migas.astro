@@ -34,5 +34,8 @@ const { migas } = Astro.props as { migas: Miga[] };
   li { display: flex; align-items: center; gap: var(--e2); }
   a { color: var(--senal); }
   li[aria-current="page"] { color: var(--chasis); font-weight: 600; }
-  span { color: var(--riel); }
+  /* La barra separadora hereda el Acero del <ol> (6.03:1). Estaba en Riel,
+     que da 1.38:1 y desaparece: Riel es filete de 1px, nunca texto. Lleva
+     aria-hidden, así que no era una falla de WCAG —el lector de pantalla
+     nunca la vio— pero quien navega mirando tampoco la veía. */
 </style>

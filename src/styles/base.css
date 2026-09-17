@@ -90,7 +90,15 @@ a:hover { color: var(--azul); }
 /* Señal sobre Neblina se queda en 4.08:1 y no llega al mínimo de lectura:
    dentro de una banda gris-azul los enlaces se pintan de azul, no de naranja. */
 .banda--neblina a { color: var(--azul); }
-.banda--azul a { color: var(--reflejante); }
+/* `:not(.btn)` no es cosmética. `.banda--azul a` (0,1,1) le gana por
+   especificidad a `.btn--sobre-azul` (0,1,0), así que el botón de cierre del
+   sitio —«Pedir cotización», en ocho rutas— salía con texto Reflejante sobre
+   Canastilla: 1.77:1, ilegible, y justo lo que la dirección visual prohíbe de
+   frente («nunca texto claro sobre canastilla; sobre naranja siempre va Azul
+   BAPSA»). Un botón trae su propio par de colores ya resuelto; la regla de la
+   banda es para el enlace de texto, que es el único que necesita aclararse
+   sobre azul. */
+.banda--azul a:not(.btn) { color: var(--reflejante); }
 
 /* ── Estructura ───────────────────────────────────────────────────────── */
 
@@ -101,6 +109,28 @@ a:hover { color: var(--azul); }
 .banda--azul h1, .banda--azul h2, .banda--azul h3 { color: var(--aire); }
 .banda--azul .etiqueta { color: var(--canastilla); } /* 7.08:1 sobre azul */
 .banda--aviso { background: var(--reflejante); color: var(--azul); } /* 12.54:1 */
+
+/* ── Señal sobre superficie entintada ─────────────────────────────────────
+   Señal se eligió contra Aire, donde da 4.52:1 y pasa por dos centésimas.
+   Sobre papel más entintado se cae del mínimo de lectura: 4.08:1 en Neblina,
+   3.81:1 en Cielo bajo, 3.47:1 en Reflejante.
+
+   La dirección visual ya lo había visto —«Nunca Señal sobre Neblina»— pero la
+   regla estaba escrita solo para los enlaces de `.banda--neblina`. Todo lo
+   demás que hereda Señal se seguía pintando por debajo del mínimo: la etiqueta
+   de sección en 17 rutas, el «Foto pendiente» de cada hueco, el rótulo del
+   bloque de contacto directo, y los enlaces de modelo en las filas alternas
+   de las tablas de catálogo.
+
+   En vez de perseguir cada caso —y volver a perseguirlo cada vez que entre un
+   componente nuevo— la superficie redefine el token. Lo que use `var(--senal)`
+   adentro lo hereda solo ahí; sobre Aire y Placa no cambia un pixel. */
+.banda--neblina,
+.banda--aviso,
+.directo,
+.foto,
+.fuente,
+tbody tr:nth-child(even) { --senal: var(--senal-honda); }
 
 .rejilla { display: grid; gap: var(--e5); }
 /* Un hijo de rejilla nunca empuja la hoja fuera de la pantalla.

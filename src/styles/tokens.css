@@ -25,7 +25,13 @@
 
   /* ── Acento ─────────────────────────────────────────────────────────── */
   --canastilla: #F38735; /* 2.31:1 — SOLO relleno. Nunca texto */
-  --senal:      #A85D25; /* 4.52:1 — el mismo naranja, en versión legible */
+  --senal:      #A85D25; /* 4.52:1 sobre Aire — el mismo naranja, en versión legible */
+  /* La misma Señal para superficie entintada: idéntico tono (24°) e idéntica
+     saturación, 4.6 puntos menos de luminosidad. Señal se validó contra Aire
+     y ahí pasa por 0.02; sobre cualquier papel más entintado se cae del
+     mínimo. No se usa directamente: la superficie redefine `--senal` con
+     este valor y todo lo que haya adentro lo hereda (ver base.css). */
+  --senal-honda: #8D4E1F; /* 5.36:1 Neblina · 5.01:1 Cielo bajo · 4.55:1 Reflejante */
   --reflejante: #F5D2B4; /* fondo de aviso. El azul encima da 12.54:1 */
 
   /* ── Estado. No son colores de marca y viven fuera de la paleta.
