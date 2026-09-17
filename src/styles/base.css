@@ -103,6 +103,16 @@ a:hover { color: var(--azul); }
 .banda--aviso { background: var(--reflejante); color: var(--azul); } /* 12.54:1 */
 
 .rejilla { display: grid; gap: var(--e5); }
+/* Un hijo de rejilla nunca empuja la hoja fuera de la pantalla.
+   Por omisión un elemento de rejilla trae `min-width: auto`, así que la
+   columna no puede encoger por debajo del contenido más ancho que lleve
+   adentro: una placa con renglones en `nowrap` o una tabla de ficha estiran
+   la columna, la columna estira la hoja, y en celular el titular y el párrafo
+   quedan cortados a media palabra. Con `min-width: 0` la columna manda sobre
+   su contenido; lo que no quepa se resuelve adentro —la tabla rueda dentro de
+   su envoltura, la placa parte la etiqueta en dos renglones— y la página
+   nunca rueda en horizontal. */
+.rejilla > * { min-width: 0; }
 @media (min-width: 720px)  { .rejilla--2 { grid-template-columns: repeat(2, 1fr); } }
 @media (min-width: 980px)  { .rejilla--3 { grid-template-columns: repeat(3, 1fr); } }
 @media (min-width: 980px)  { .rejilla--4 { grid-template-columns: repeat(4, 1fr); } }
@@ -167,7 +177,7 @@ a:hover { color: var(--azul); }
    Sin esto una columna de "12.5 m / 8.0 m / 43.0 m" se ve chueca, y una
    tabla chueca resta confianza en un giro donde el número es el producto. */
 
-.tabla-envoltura { overflow-x: auto; margin: 0 0 var(--e5); }
+.tabla-envoltura { overflow-x: auto; min-width: 0; margin: 0 0 var(--e5); }
 table { width: 100%; border-collapse: collapse; font-size: var(--cuerpo-chico); }
 caption { text-align: left; font-size: var(--pie-foto); color: var(--acero); padding-bottom: var(--e3); }
 th, td { padding: var(--e3) var(--e4); text-align: left; border-bottom: 1px solid var(--riel); vertical-align: top; }

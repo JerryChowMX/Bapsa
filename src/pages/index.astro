@@ -44,7 +44,7 @@ const schema = [
         <p class="lede">
           BAPSA renta y vende brazos articulados eléctricos, plataformas de tijera, elevadores
           personales y maquinaria en Ramos Arizpe, Saltillo y Arteaga. Todo el equipo es
-          eléctrico: entra a una nave en operación sin gases y sin marcar el piso. Más de
+          eléctrico: entra a una nave en operación sin gases y sin marcar el piso. Más de{" "}
           {SITE.aniosOperacion} años entregando con flete propio, pólizas de servicio y
           refacciones multimarca.
         </p>
@@ -286,6 +286,7 @@ const schema = [
 <style>
   .heroe { padding-block: clamp(var(--e7), 6vw, var(--e9)); }
   .heroe__interior { display: grid; gap: var(--e7); align-items: start; }
+  .heroe__interior > * { min-width: 0; } /* la placa no estira la columna del titular */
   @media (min-width: 980px) { .heroe__interior { grid-template-columns: 1.6fr 1fr; gap: var(--e8); } }
   .heroe__texto h1 { margin-bottom: var(--e5); }
   .heroe__tel { margin: var(--e5) 0 0; color: var(--acero); }

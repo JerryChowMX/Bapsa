@@ -18,6 +18,21 @@ export interface Props {
   titulo?: string;
 }
 const { banda, registro, renglones, titulo } = Astro.props;
+
+/**
+ * Qué se puede partir y qué no.
+ *
+ * La regla del sistema es que el dato de máquina va de una pieza: partir
+ * «15.94 M» entre el número y la unidad lo vuelve ilegible, y partir
+ * «L-V 8:30-18:00» convierte un horario en dos horarios. Pero esa regla
+ * protege CIFRAS, no frases: «NUEVO Y SEMINUEVO» y «ELEVADORES PERSONALES»
+ * son tres y dos palabras que sí pueden doblar de renglón, y en un celular
+ * de 320px la diferencia es que la placa quepa o que empuje la página entera
+ * fuera de la pantalla.
+ *
+ * El criterio es tener un dígito: si el fragmento trae número, no se parte.
+ */
+const esCifra = (fragmento: string) => /\d/.test(fragmento);
 ---
 
 <div class="placa">
@@ -31,6 +46,7 @@ const { banda, registro, renglones, titulo } = Astro.props;
     {registro && <span class="placa__registro dato">{registro}</span>}
   </div>
 
+  <div class="placa__rodillo">
   <table class="placa__tabla">
     {titulo && <caption class="solo-lectores">{titulo}</caption>}
     <tbody>
@@ -38,18 +54,40 @@ const { banda, registro, renglones, titulo } = Astro.props;
         renglones.map((r) => (
           <tr>
             <th scope="row">{r.etiqueta}</th>
-            <td class="dato">{r.valor}</td>
+            {/* El valor se parte en sus piezas separadas por «·» para que el
+                renglón pueda doblar AHÍ y solo ahí. Cada pieza va en `nowrap`:
+                «15.94 M» y «TALLER PROPIO» siguen siendo indivisibles, pero
+                «SALTILLO · RAMOS · ARTEAGA» ya no obliga a la placa a medir
+                267px en un celular de 360. El texto que sale es idéntico. */}
+            <td class="dato">
+              {r.valor.split(" · ").map((parte, i, todas) => (
+                <>
+                  {i > 0 && " "}
+                  <span class:list={["placa__parte", esCifra(parte) && "placa__parte--cifra"]}>
+                    {parte}
+                    {i < todas.length - 1 && " ·"}
+                  </span>
+                </>
+              ))}
+            </td>
           </tr>
         ))
       }
     </tbody>
   </table>
+  </div>
 </div>
 
 <style>
   .placa {
     position: relative; background: var(--placa); border: 2px solid var(--azul);
     border-radius: var(--radio); padding: var(--e2);
+    /* La placa se defiende sola. Va dentro de rejillas de cuatro páginas
+       distintas y como elemento de rejilla traería `min-width: auto`: la
+       columna crecería hasta el renglón más ancho que lleve dentro y de ahí
+       empujaría la hoja entera. Con esto la placa se adapta a la columna que
+       le toque, en vez de que cada página se acuerde de contenerla. */
+    min-width: 0;
   }
 
   /* Los cuatro remaches. El punto cuadrado del estado repite esta forma. */
@@ -60,7 +98,8 @@ const { banda, registro, renglones, titulo } = Astro.props;
   .remache--id { bottom: 5px; right: 5px; }
 
   .placa__banda {
-    display: flex; align-items: baseline; justify-content: space-between; gap: var(--e4);
+    display: flex; align-items: baseline; justify-content: space-between;
+    flex-wrap: wrap; gap: var(--e1) var(--e4);
     background: var(--azul); color: var(--aire);
     padding: var(--e3) var(--e5); margin-bottom: var(--e1);
   }
@@ -70,19 +109,40 @@ const { banda, registro, renglones, titulo } = Astro.props;
   }
   .placa__registro { font-size: 0.6875rem; color: var(--canastilla); letter-spacing: 0.08em; }
 
+  /* Red de seguridad. Los renglones los escribe quien edite el contenido, y
+     un valor largo que nadie previó no puede volver a sacar la página de la
+     pantalla: en el peor caso rueda aquí dentro, no en la hoja. Con los
+     valores de hoy no llega a rodar en ningún ancho. */
+  .placa__rodillo { overflow-x: auto; }
+
   .placa__tabla { width: 100%; border-collapse: collapse; }
   .placa__tabla th,
   .placa__tabla td {
     padding: var(--e3) var(--e5); border-bottom: 1px solid var(--riel); vertical-align: baseline;
+  }
+  /* Por debajo de 480px los 24px de cada costado son 96px de la placa
+     gastados en aire: se recortan para que el dato conserve su renglón. */
+  @media (max-width: 480px) {
+    .placa__tabla th,
+    .placa__tabla td { padding-inline: var(--e3); }
+    .placa__banda { padding-inline: var(--e3); }
   }
   .placa__tabla tr:last-child th,
   .placa__tabla tr:last-child td { border-bottom: 0; }
   .placa__tabla th {
     font-family: var(--rotulo); font-weight: 700; font-size: var(--etiqueta);
     letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
-    text-align: left; white-space: nowrap;
+    text-align: left;
+    /* Sin `nowrap`: la etiqueta es rótulo, no dato, y en un celular angosto
+       vale más que «Equipos en catálogo» baje a dos renglones a que la placa
+       entera se salga de la pantalla. El dato de la derecha sí va de una
+       pieza: partir «15.94 m» en dos renglones lo vuelve ilegible. */
+    hyphens: auto;
   }
   /* Cifras a la derecha y con ancho fijo: así se comparan de un vistazo
      entre dos placas sin tener que leer renglón por renglón. */
-  .placa__tabla td { text-align: right; color: var(--azul); font-weight: 700; white-space: nowrap; }
+  .placa__tabla td { text-align: right; color: var(--azul); font-weight: 700; }
+  /* Solo la cifra es indivisible. Una frase dobla de renglón como cualquier
+     otro texto: es lo que deja caber la placa en un celular angosto. */
+  .placa__parte--cifra { white-space: nowrap; }
 </style>
