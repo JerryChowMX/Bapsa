@@ -1,5 +1,5 @@
 ---
-import { Picture } from "astro:assets";
+import { Picture, getImage } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import Icono from "../components/Icono.astro";
 import PlacaDatos from "../components/PlacaDatos.astro";
@@ -12,9 +12,22 @@ import { nodoServicio, nodoListaMaquinas } from "../lib/schema";
 
 const masAlta = MAQUINAS_POR_ALTURA[0];
 
-/** La foto del héroe. Astro la recorta a cuatro anchos y la sirve en AVIF y
- *  WebP en el build; el JPEG de src/fotos es solo el original. */
+/** Las dos fotos del héroe: la apaisada para escritorio y una vertical de
+ *  1080×1920 para celular, donde una apaisada estirada a lo alto se veía
+ *  borrosa. Astro genera los anchos en AVIF y WebP en el build; los JPEG de
+ *  src/fotos son solo los originales. */
 import fotoHeroe from "../fotos/13_jlg_brazo_articulado_atardecer_nave_industrial.jpg";
+import fotoHeroeMovil from "../fotos/09v_genie_z30_brazo_articulado_patio_9x16.jpg";
+const heroeEscritorio = {
+  avif: await getImage({ src: fotoHeroe, widths: [960, 1440, 1672], format: "avif" }),
+  webp: await getImage({ src: fotoHeroe, widths: [960, 1440, 1672], format: "webp" }),
+  jpg: await getImage({ src: fotoHeroe, widths: [960, 1440, 1672], format: "jpg" }),
+};
+const heroeMovil = {
+  avif: await getImage({ src: fotoHeroeMovil, widths: [540, 810, 1080], format: "avif" }),
+  webp: await getImage({ src: fotoHeroeMovil, widths: [540, 810, 1080], format: "webp" }),
+};
+const MOVIL = "(max-width: 719px)";
 
 /** Una foto por familia, elegida a mano del material del cliente. Se
  *  recortan a 16:10 con object-fit; el punto de interés queda al centro. */
@@ -22,6 +35,23 @@ import fotoBrazos from "../fotos/32_genie_z30_brazo_articulado_patio.jpg";
 import fotoTijeras from "../fotos/14_jlg_2632es_plataforma_tijera_camion_transporte.jpg";
 import fotoElevadores from "../fotos/09_jlg_plataformas_compactas_dobles.jpg";
 import fotoPesada from "../fotos/36_jlg_1200sjp_sobre_lowboy_planta.jpg";
+/** Foto ilustrativa por máquina del catálogo. El material no trae los siete
+ *  modelos exactos, así que cada ficha lleva una foto de su familia y marca,
+ *  rotulada como ilustrativa; nunca se presenta otra máquina como la ficha. */
+import fotoBrazosJlg from "../fotos/10_jlg_flota_brazos_articulados.jpg";
+import fotoBrazosAngosto from "../fotos/25_jlg_brazos_articulados_andenes_carga.jpg";
+import fotoTijeraElevada from "../fotos/20_jlg_plataforma_tijera_vista_lateral_elevada.jpg";
+import fotoTijeraDetalle from "../fotos/17_jlg_plataforma_tijera_detalle_mecanismo.jpg";
+import fotoNosotros from "../fotos/15_flota_brazos_articulados_patio_bapsa.jpg";
+const FOTO_MAQUINA: Record<string, ImageMetadata> = {
+  "genie-z-45-25j-dc": fotoBrazos,
+  "jlg-e450a": fotoBrazosJlg,
+  "jlg-n40e": fotoBrazosAngosto,
+  "genie-gs-3246": fotoTijeraElevada,
+  "genie-gs-2646": fotoTijeraDetalle,
+  "genie-gs-2632": fotoTijeras,
+  "genie-gs-2046": fotoTijeraElevada,
+};
 const FOTO_FAMILIA: Record<string, ImageMetadata> = {
   "brazos-articulados-electricos": fotoBrazos,
   "plataformas-de-tijera": fotoTijeras,
@@ -58,18 +88,24 @@ const schema = [
       argumento; el texto va a la izquierda porque la máquina ocupa la
       derecha. */}
   <section class="heroe banda--azul" aria-labelledby="heroe-titulo">
-    <Picture
-      src={fotoHeroe}
-      formats={["avif", "webp"]}
-      widths={[640, 960, 1440, 1920]}
-      sizes="(max-width: 719px) 1500px, 100vw"
-      alt="Brazo articulado JLG de BAPSA con la canastilla elevada frente a una nave industrial, al atardecer."
-      loading="eager"
-      fetchpriority="high"
-      decoding="async"
-      class="heroe__img"
-      pictureAttributes={{ class: "heroe__foto" }}
-    />
+    <picture class="heroe__foto">
+      <source media={MOVIL} type="image/avif" srcset={heroeMovil.avif.srcSet.attribute} sizes="100vw" />
+      <source media={MOVIL} type="image/webp" srcset={heroeMovil.webp.srcSet.attribute} sizes="100vw" />
+      <source type="image/avif" srcset={heroeEscritorio.avif.srcSet.attribute} sizes="100vw" />
+      <source type="image/webp" srcset={heroeEscritorio.webp.srcSet.attribute} sizes="100vw" />
+      <img
+        src={heroeEscritorio.jpg.src}
+        srcset={heroeEscritorio.jpg.srcSet.attribute}
+        sizes="100vw"
+        width={heroeEscritorio.jpg.attributes.width}
+        height={heroeEscritorio.jpg.attributes.height}
+        alt="Brazo articulado de BAPSA con la canastilla elevada, con la flota del patio detrás."
+        loading="eager"
+        fetchpriority="high"
+        decoding="async"
+        class="heroe__img"
+      />
+    </picture>
     <div class="heroe__velo" aria-hidden="true"></div>
 
     <div class="hoja heroe__contenido">
@@ -175,6 +211,7 @@ const schema = [
           </caption>
           <thead>
             <tr>
+              <th scope="col"><span class="solo-lectores">Foto</span></th>
               <th scope="col">Modelo</th>
               <th scope="col">Tipo</th>
               <th scope="col" class="catalogo__col-altura">Altura de trabajo</th>
@@ -191,6 +228,22 @@ const schema = [
                 const proporcion = Math.round((m.alturaTrabajoM / masAlta.alturaTrabajoM) * 100);
                 return (
                   <tr class="catalogo__fila" style={`--i: ${i}; --p: ${proporcion}%`}>
+                    <td class="catalogo__foto">
+                      {FOTO_MAQUINA[m.slug] && (
+                        <Picture
+                          src={FOTO_MAQUINA[m.slug]}
+                          formats={["avif", "webp"]}
+                          widths={[160, 400, 720]}
+                          sizes="(max-width: 719px) 82vw, 72px"
+                          alt={`Foto ilustrativa: ${m.tipo.toLowerCase()}.`}
+                          loading="lazy"
+                          decoding="async"
+                          class="catalogo__img"
+                          pictureAttributes={{ class: "catalogo__marco" }}
+                        />
+                      )}
+                      <span class="catalogo__ilustrativa">Foto ilustrativa</span>
+                    </td>
                     <th scope="row" class="catalogo__modelo">
                       <span class="catalogo__marca">{m.marca}</span>
                       <a href={`/equipo/${m.slug}`} class="catalogo__enlace">{m.modelo}</a>
@@ -222,8 +275,9 @@ const schema = [
         </table>
       </div>
 
+      <p class="catalogo__desliza chico" aria-hidden="true">Desliza para ver las {MAQUINAS.length} máquinas</p>
       <div class="catalogo__pie">
-        <p class="pie-foto">Cifras de las fichas técnicas de {MARCAS_CATALOGO.join(" y ")}. Todo el catálogo es eléctrico.</p>
+        <p class="pie-foto">Cifras de las fichas técnicas de {MARCAS_CATALOGO.join(" y ")}. Fotos ilustrativas de cada familia. Todo el catálogo es eléctrico.</p>
         <a class="btn btn--azul" href="/equipo">
           Ver el catálogo completo
           <Icono nombre="flecha" tam={16} />
@@ -232,44 +286,47 @@ const schema = [
     </div>
   </section>
 
-  <section class="seccion">
-    <div class="hoja rejilla rejilla--2 pareja">
-      <div>
-        <p class="etiqueta">Por qué BAPSA</p>
-        <h2 class="titulo-2">Lo que cambia cuando el proveedor tiene taller</h2>
+  {/* Por qué BAPSA. Patrón «About» de 21st.dev: foto grande a un lado con
+      una placa de cifra encima; al otro, titular, una frase, cuatro hechos
+      con icono y un botón. Nada de párrafos largos: eso vive en /nosotros. */}
+  <section class="seccion" aria-labelledby="porque-titulo">
+    <div class="hoja nosotros">
+      <figure class="nosotros__foto">
+        <Picture
+          src={fotoNosotros}
+          formats={["avif", "webp"]}
+          widths={[640, 960, 1280]}
+          sizes="(min-width: 900px) 46vw, 100vw"
+          alt="Flota de brazos articulados de BAPSA con la canastilla elevada frente a sus oficinas en Ramos Arizpe."
+          loading="lazy"
+          decoding="async"
+          class="nosotros__img"
+          pictureAttributes={{ class: "nosotros__marco" }}
+        />
+        <figcaption class="nosotros__placa">
+          <span class="dato nosotros__cifra">+{SITE.aniosOperacion}</span>
+          <span class="nosotros__rotulo">años rentando equipo de elevación en Coahuila</span>
+        </figcaption>
+      </figure>
+
+      <div class="nosotros__texto">
+        <h2 class="titulo-2" id="porque-titulo">Lo que cambia cuando el proveedor tiene taller</h2>
         <div class="filete"></div>
-        <p>
-          BAPSA opera desde Ramos Arizpe, sobre el corredor industrial entre Saltillo y
-          Monterrey, con flete propio y taller propio. Las dos cosas resuelven el mismo problema:
-          que la fecha de entrega y la reparación de una falla no dependan de la agenda de un
-          tercero.
+        <p class="nosotros__frase">
+          BAPSA opera desde Ramos Arizpe con flete y taller propios: la fecha de entrega y la
+          reparación de una falla no dependen de un tercero.
         </p>
-        <ul class="lista-marcada">
-          <li>
-            <strong>Más de {SITE.aniosOperacion} años</strong> rentando equipo de elevación en
-            Coahuila, no un catálogo recién abierto.
-          </li>
-          <li>
-            <strong>Flete propio.</strong> La entrega en obra la programa BAPSA, no un
-            transportista externo.
-          </li>
-          <li>
-            <strong>Taller y refacciones multimarca</strong> para {SITE.marcas.join(", ")}: la
-            falla se atiende sin esperar a un centro de servicio de otra ciudad.
-          </li>
-          <li>
-            <strong>Pólizas de servicio</strong> para flotas propias, con mantenimiento
-            preventivo programado.
-          </li>
+        <ul class="nosotros__hechos">
+          <li><span class="nosotros__icono"><Icono nombre="dias" tam={20} /></span><span>Más de {SITE.aniosOperacion} años en Coahuila</span></li>
+          <li><span class="nosotros__icono"><Icono nombre="flete" tam={20} /></span><span>Flete propio, entrega programada por BAPSA</span></li>
+          <li><span class="nosotros__icono"><Icono nombre="mantenimiento" tam={20} /></span><span>Taller y refacciones multimarca</span></li>
+          <li><span class="nosotros__icono"><Icono nombre="seguridad" tam={20} /></span><span>Pólizas de mantenimiento preventivo</span></li>
         </ul>
-        <a class="btn btn--azul" href="/nosotros">Conocer la empresa</a>
+        <a class="btn btn--azul" href="/nosotros">
+          Conocer la empresa
+          <Icono nombre="flecha" tam={16} />
+        </a>
       </div>
-      <Foto
-        alt="Taller de servicio de BAPSA en Ramos Arizpe, con un técnico dando mantenimiento a un brazo articulado."
-        clave="FOTO-06"
-        ancho={800}
-        alto={600}
-      />
     </div>
   </section>
 
@@ -356,16 +413,16 @@ const schema = [
     min-height: 100svh;
     padding-top: calc(var(--barra) + clamp(var(--e7), 8vw, var(--e9)));
   }
-  /* En celular el héroe es más corto: la foto original mide 941px de alto y
-     cada pixel de pantalla que se le pida de más es un pixel inventado. */
-  @media (max-width: 719px) { .heroe { min-height: 84svh; } }
+  /* En celular la foto es la vertical de 1080×1920, así que el héroe puede
+     ocupar casi toda la pantalla sin inventar píxeles. */
+  @media (max-width: 719px) { .heroe { min-height: 94svh; } }
 
   .heroe__foto { position: absolute; inset: 0; z-index: -2; display: block; }
   .heroe__img {
     width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%;
     background: none; border: 0;
   }
-  @media (max-width: 719px) { .heroe__img { object-position: 74% 50%; } }
+  @media (max-width: 719px) { .heroe__img { object-position: 50% 42%; } }
   /* La foto llega un 6% más cerca y se asienta en 14 s. Un solo movimiento
      lento, que es lo que hace cinematográfica a la referencia. */
   @media (prefers-reduced-motion: no-preference) and (min-width: 720px) {
@@ -483,7 +540,7 @@ const schema = [
     display: flex; flex-direction: column; align-items: center; text-align: center;
     height: 100%; padding: var(--e3) var(--e3) var(--e6);
     background: var(--placa); border: 1px solid var(--riel); text-decoration: none; color: inherit;
-    transition: border-color var(--rapido) ease, background-color var(--rapido) ease;
+    transition: border-color var(--suave), background-color var(--suave);
   }
   /* Levantar sin sombra: el borde pasa a Azul BAPSA y la foto se acerca un
      4 %. Es lo que dicta el sistema. */
@@ -496,7 +553,7 @@ const schema = [
   .celda__foto { position: absolute; inset: 0; display: block; }
   .celda__img {
     width: 100%; height: 100%; object-fit: cover; object-position: center; border: 0; background: none;
-    transition: scale 600ms var(--salida);
+    transition: scale var(--suave);
   }
   .celda__enlace:hover .celda__img { scale: 1.04; }
   .celda__cifra {
@@ -512,13 +569,13 @@ const schema = [
 
   .celda__titulo { margin: 0 0 var(--e2); color: var(--azul); }
   .celda__texto { margin: 0 0 var(--e4); max-width: 38ch; color: var(--chasis); }
-  .celda__ver :global(.icono) { transition: translate var(--rapido) ease; }
+  .celda__ver :global(.icono) { transition: translate var(--suave); }
   .celda__enlace:hover .celda__ver :global(.icono) { translate: 4px 0; }
   .celda__ver {
     display: inline-flex; align-items: center; gap: var(--e2); margin-top: auto;
     font-family: var(--rotulo); font-size: var(--boton); font-weight: 700; line-height: 1;
     letter-spacing: 0.08em; text-transform: uppercase; color: var(--senal);
-    transition: color var(--rapido) ease;
+    transition: color var(--suave);
   }
 
   /* Las celdas entran al llegar al viewport, una tras otra. Solo CSS: en el
@@ -554,13 +611,23 @@ const schema = [
     text-align: left; background: transparent;
   }
   .catalogo__tabla tbody tr:last-child td, .catalogo__tabla tbody tr:last-child th { border-bottom: 0; }
-  .catalogo__tabla tbody tr { transition: background-color var(--rapido) ease; }
+  .catalogo__tabla tbody tr { transition: background-color var(--suave); }
   .catalogo__tabla tbody tr:hover { background: var(--cielo-bajo); }
   /* Esta tabla no alterna filas: la barra ya da ritmo, y un fondo alterno
      detrás de una barra confunde la lectura de la barra. */
   .catalogo__tabla tbody tr:nth-child(even) { background: transparent; }
   .catalogo__tabla tbody tr:nth-child(even):hover { background: var(--cielo-bajo); }
 
+  .catalogo__foto { width: 72px; padding-right: 0 !important; position: relative; }
+  .catalogo__marco { display: block; width: 72px; aspect-ratio: 1; overflow: hidden; background: var(--neblina); }
+  .catalogo__img { width: 100%; height: 100%; object-fit: cover; border: 0; background: none; transition: scale var(--suave); }
+  .catalogo__fila:hover .catalogo__img { scale: 1.06; }
+  .catalogo__ilustrativa {
+    display: none; position: absolute; left: var(--e2); bottom: var(--e2);
+    padding: 2px var(--e2); background: color-mix(in srgb, var(--azul) 78%, transparent); color: var(--aire);
+    font-family: var(--rotulo); font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+  }
+  .catalogo__desliza { display: none; }
   .catalogo__modelo { display: grid; gap: 2px; white-space: nowrap; }
   .catalogo__marca {
     font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
@@ -622,23 +689,39 @@ const schema = [
      extiende con un ::after a toda la tarjeta: un solo toque, sin JS. */
   @media (max-width: 719px) {
     .catalogo { overflow: visible; background: transparent; border: 0; }
-    .catalogo__tabla, .catalogo__tabla tbody { display: block; }
+    .catalogo__tabla { display: block; }
     .catalogo__tabla thead { display: none; }
+    /* El carrusel: las siete fichas en una fila que se desliza con el dedo
+       y se detiene ficha por ficha (scroll-snap). Sangra hasta el borde de
+       la pantalla para que se asome la siguiente, que es la señal de que hay
+       más. Sin JavaScript y sin barra de scroll visible. */
+    .catalogo__tabla tbody {
+      display: flex; gap: var(--e3); overflow-x: auto; overscroll-behavior-x: contain;
+      scroll-snap-type: x mandatory; scroll-padding-inline: var(--e5);
+      margin-inline: calc(-1 * var(--e5)); padding: var(--e1) var(--e5) var(--e4);
+      scrollbar-width: none; -webkit-overflow-scrolling: touch;
+    }
+    .catalogo__tabla tbody::-webkit-scrollbar { display: none; }
     .catalogo__fila {
-      position: relative;
+      position: relative; flex: 0 0 min(82vw, 340px); scroll-snap-align: start;
       display: grid; grid-template-columns: 1fr 1fr auto;
       grid-template-areas:
+        "foto   foto   foto"
         "modelo modelo ir"
         "tipo   tipo   ir"
         "altura altura altura"
         "cap    ancho  ancho";
-      gap: var(--e2) var(--e4); align-items: start;
-      padding: var(--e4) var(--e4) var(--e5); margin-bottom: var(--e3);
+      gap: var(--e2) var(--e4); align-items: start; align-content: start;
+      padding: 0 var(--e4) var(--e5); margin: 0;
       background: var(--placa); border: 1px solid var(--riel);
-      transition: border-color var(--rapido) ease;
+      transition: border-color var(--suave);
     }
     .catalogo__fila:hover, .catalogo__fila:active { background: var(--placa); border-color: var(--azul); }
     .catalogo__tabla tbody td, .catalogo__tabla tbody th { padding: 0; border: 0; }
+
+    .catalogo__foto { grid-area: foto; width: auto; margin-inline: calc(-1 * var(--e4)); margin-bottom: var(--e2); }
+    .catalogo__marco { width: 100%; aspect-ratio: 16 / 10; }
+    .catalogo__ilustrativa { display: inline-block; }
 
     .catalogo__modelo { grid-area: modelo; gap: 0; }
     .catalogo__tabla th a.catalogo__enlace { font-size: 1.25rem; }
@@ -665,7 +748,70 @@ const schema = [
     .catalogo__ir { grid-area: ir; align-self: start; width: auto; }
     .catalogo__ir a { width: 32px; height: 32px; border-color: var(--riel); color: var(--acero); }
     .catalogo__fila:active .catalogo__ir a { border-color: var(--azul); color: var(--azul); }
+
+    .catalogo__desliza {
+      display: flex; align-items: center; gap: var(--e2); margin: 0 0 var(--e4); color: var(--acero);
+    }
+    .catalogo__desliza::after { content: ""; width: 28px; height: 2px; background: var(--canastilla); }
   }
+
+  /* ── Por qué BAPSA ──────────────────────────────────────────────────── */
+  .nosotros { display: grid; gap: var(--e6); align-items: center; }
+  @media (min-width: 900px) { .nosotros { grid-template-columns: 1fr 1.05fr; gap: var(--e8); } }
+  .nosotros__foto { position: relative; margin: 0; }
+  .nosotros__marco { display: block; aspect-ratio: 4 / 3; overflow: hidden; background: var(--neblina); }
+  @media (min-width: 900px) { .nosotros__marco { aspect-ratio: 4 / 5; } }
+  .nosotros__img { width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; border: 0; background: none; }
+  /* La placa de cifra pisa la esquina de la foto: papel Placa con borde
+     Azul BAPSA y los cuatro remaches del sistema. */
+  .nosotros__placa {
+    position: absolute; left: var(--e4); bottom: calc(-1 * var(--e4));
+    display: grid; gap: 2px; max-width: 15rem;
+    padding: var(--e4) var(--e5); background: var(--placa); border: 2px solid var(--azul);
+  }
+  @media (min-width: 900px) { .nosotros__placa { left: auto; right: calc(-1 * var(--e5)); bottom: var(--e6); } }
+  .nosotros__cifra { font-size: 2.5rem; font-weight: 700; line-height: 1; color: var(--azul); }
+  .nosotros__rotulo {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700; line-height: 1.3;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--acero);
+  }
+  .nosotros__texto { padding-top: var(--e4); }
+  .nosotros__frase { font-size: var(--lede); line-height: 1.55; max-width: 40ch; margin: 0 0 var(--e5); }
+  .nosotros__hechos {
+    list-style: none; padding: 0; margin: 0 0 var(--e6);
+    display: grid; gap: var(--e3); grid-template-columns: 1fr;
+  }
+  @media (min-width: 560px) { .nosotros__hechos { grid-template-columns: 1fr 1fr; gap: var(--e4); } }
+  .nosotros__hechos li {
+    display: flex; align-items: center; gap: var(--e3);
+    font-family: var(--rotulo); font-weight: 600; font-size: 0.9375rem; line-height: 1.3; color: var(--chasis);
+  }
+  .nosotros__icono {
+    display: grid; place-items: center; flex: none; width: 40px; height: 40px;
+    background: var(--placa); border: 1px solid var(--riel); color: var(--azul);
+    transition: background-color var(--suave), color var(--suave), border-color var(--suave);
+  }
+  .nosotros__hechos li:hover .nosotros__icono { background: var(--azul); color: var(--canastilla); border-color: var(--azul); }
+
+  /* ── Entrada de secciones ───────────────────────────────────────────────
+     Cada sección del home sube y aparece al entrar en pantalla, y su filete
+     naranja crece de izquierda a derecha. Solo CSS con animation-timeline:
+     donde no exista, todo se ve quieto y completo. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .seccion > .hoja {
+        animation: seccion-entra linear both;
+        animation-timeline: view(); animation-range: entry 0% entry 32%;
+      }
+      .seccion .filete {
+        transform-origin: left;
+        animation: filete-crece linear both;
+        animation-timeline: view(); animation-range: entry 10% entry 60%;
+      }
+    }
+  }
+  @keyframes seccion-entra { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  @keyframes filete-crece { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
   .pareja { align-items: center; }
   table a { color: var(--senal); font-weight: 600; }

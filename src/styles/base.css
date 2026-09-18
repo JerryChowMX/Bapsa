@@ -89,7 +89,7 @@ p { margin: 0 0 var(--e4); max-width: var(--ancho-lectura); }
 }
 .dato--fuerte { font-weight: 700; }
 
-a { color: var(--senal); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+a { color: var(--senal); text-underline-offset: 3px; text-decoration-thickness: 1px; transition: color var(--suave); }
 a:hover { color: var(--azul); }
 /* Señal sobre Neblina se queda en 4.08:1 y no llega al mínimo de lectura:
    dentro de una banda gris-azul los enlaces se pintan de azul, no de naranja. */
@@ -165,7 +165,7 @@ tbody tr:nth-child(even) { --senal: var(--senal-honda); }
   line-height: 1; letter-spacing: 0.08em; text-transform: uppercase;
   border-radius: var(--radio); border: 2px solid transparent;
   text-decoration: none; cursor: pointer;
-  transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+  transition: background-color var(--suave), color var(--suave), border-color var(--suave);
 }
 
 /* Actuar. Una por pantalla. El texto encima siempre es Azul BAPSA (7.08:1),

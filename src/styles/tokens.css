@@ -66,6 +66,8 @@
   --rapido: 160ms;
   --medio:  320ms;
   --lento:  720ms;
+  /* Hover y estados: 400 ms con entrada y salida suaves, en todo el sitio. */
+  --suave:  400ms ease-in-out;
 
   --ancho-hoja: 1160px;
   --ancho-lectura: 68ch;
