@@ -7,3 +7,6 @@ dist/
 .env.production
 .vercel
 .netlify
+
+# Claude Code local config
+.claude/
