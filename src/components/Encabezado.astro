@@ -12,11 +12,11 @@ import { SITE } from "../config/seo";
 import { NAV_PRINCIPAL } from "../config/navegacion";
 import Icono from "./Icono.astro";
 
-const { rutaActual } = Astro.props as { rutaActual: string };
+const { rutaActual, sobreFoto = false } = Astro.props as { rutaActual: string; sobreFoto?: boolean };
 const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ruta + "/");
 ---
 
-<header class="barra">
+<header class:list={["barra", sobreFoto && "barra--sobre-foto"]} data-sobre-foto={sobreFoto ? "" : undefined}>
   <div class="barra__interior hoja">
     <a href="/" class="marca" aria-label={`${SITE.name} — inicio`}>
       <span class="marca__bloque" aria-hidden="true">
@@ -60,15 +60,25 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
           ))
         }
         <a href="/contacto">Contacto y cotización</a>
-        <p class="dato">
-          <a href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a> ·{" "}
-          <a href={`tel:${SITE.telephoneAlt}`}>{SITE.telephoneAltDisplay}</a>
+        <p class="menu-movil__tels">
+          <a class="dato menu-movil__tel" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>
+          <a class="dato menu-movil__tel" href={`tel:${SITE.telephoneAlt}`}>{SITE.telephoneAltDisplay}</a>
         </p>
         <p class="menu-movil__horario">{SITE.openingHoursDisplay}</p>
       </div>
     </details>
   </div>
 </header>
+
+{/* Solo en el modo sobre foto: al bajar 24px la barra se vuelve sólida. */}
+<script>
+  const barra = document.querySelector<HTMLElement>(".barra[data-sobre-foto]");
+  if (barra) {
+    const pintar = () => barra.classList.toggle("barra--solida", window.scrollY > 24);
+    pintar();
+    window.addEventListener("scroll", pintar, { passive: true });
+  }
+</script>
 
 <style>
   .barra {
@@ -79,6 +89,38 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
     display: flex; align-items: center; justify-content: space-between;
     gap: var(--e5); min-height: var(--barra);
   }
+
+  /* ── Sobre foto ──────────────────────────────────────────────────────
+     La barra va fija y transparente encima del héroe, con todo el texto en
+     papel para que se lea sobre la foto. En cuanto el visitante baja 24px
+     recupera el fondo Aire y el filete, y con ello sus colores de siempre.
+     El menú de celular abierto también la vuelve sólida: un panel claro
+     sobre una barra transparente se veía flotando. */
+  .barra--sobre-foto {
+    position: fixed; left: 0; right: 0;
+    background: transparent; border-bottom-color: transparent;
+    transition: background-color var(--medio) ease, border-color var(--medio) ease;
+  }
+  .barra--sobre-foto.barra--solida,
+  .barra--sobre-foto:has(.menu-movil[open]) {
+    background: var(--aire); border-bottom-color: var(--riel);
+  }
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__palabra,
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .nav-escritorio a,
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .hamburguesa,
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .hamburguesa::before,
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .hamburguesa::after {
+    color: var(--aire); background-color: var(--aire);
+  }
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__palabra,
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .nav-escritorio a { background-color: transparent; }
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__lema { color: var(--cielo-bajo); }
+  /* El cuadro del logotipo se invierte: sobre azul, un cuadro azul no existe. */
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__bloque { background: var(--aire); color: var(--azul); }
+  .marca__bloque { transition: background-color var(--medio) ease, color var(--medio) ease; }
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .nav-escritorio a:hover { color: var(--reflejante); }
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .barra__tel { color: var(--reflejante); }
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .menu-movil summary { border-color: var(--aire); }
 
   /* ── Marca ── */
   .marca { display: flex; align-items: center; gap: var(--e3); text-decoration: none; flex: none; }
@@ -141,6 +183,15 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
   }
   .menu-movil__panel a[aria-current="page"] { color: var(--senal); }
   .menu-movil__panel p { margin: var(--e4) 0 0; font-size: 0.8125rem; }
+  /* Los dos teléfonos van en un renglón, en la voz de dato, y no heredan el
+     bloque con filete que llevan las entradas de navegación. */
+  .menu-movil__tels { display: flex; flex-wrap: wrap; gap: var(--e2) var(--e5); }
+  .menu-movil__panel .menu-movil__tel {
+    display: inline; padding: 0; border: 0;
+    font-family: var(--dato); font-size: var(--dato-tam); font-weight: 700;
+    letter-spacing: 0.02em; text-transform: none; color: var(--senal);
+  }
+  .menu-movil__panel .menu-movil__tel:hover { color: var(--azul); }
   .menu-movil__horario { color: var(--acero); font-family: var(--texto); }
 
   /* Con seis entradas, la barra completa no cabe por debajo de 1040px:

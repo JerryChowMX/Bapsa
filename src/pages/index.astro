@@ -1,4 +1,5 @@
 ---
+import { Picture } from "astro:assets";
 import Base from "../layouts/Base.astro";
 import Icono from "../components/Icono.astro";
 import PlacaDatos from "../components/PlacaDatos.astro";
@@ -10,6 +11,23 @@ import { MAQUINAS, MAQUINAS_POR_ALTURA, MARCAS_CATALOGO } from "../datos/maquina
 import { nodoServicio, nodoListaMaquinas } from "../lib/schema";
 
 const masAlta = MAQUINAS_POR_ALTURA[0];
+
+/** La foto del héroe. Astro la recorta a cuatro anchos y la sirve en AVIF y
+ *  WebP en el build; el JPEG de src/fotos es solo el original. */
+import fotoHeroe from "../fotos/13_jlg_brazo_articulado_atardecer_nave_industrial.jpg";
+
+/** Una foto por familia, elegida a mano del material del cliente. Se
+ *  recortan a 16:10 con object-fit; el punto de interés queda al centro. */
+import fotoBrazos from "../fotos/32_genie_z30_brazo_articulado_patio.jpg";
+import fotoTijeras from "../fotos/14_jlg_2632es_plataforma_tijera_camion_transporte.jpg";
+import fotoElevadores from "../fotos/09_jlg_plataformas_compactas_dobles.jpg";
+import fotoPesada from "../fotos/36_jlg_1200sjp_sobre_lowboy_planta.jpg";
+const FOTO_FAMILIA: Record<string, ImageMetadata> = {
+  "brazos-articulados-electricos": fotoBrazos,
+  "plataformas-de-tijera": fotoTijeras,
+  "elevadores-personales": fotoElevadores,
+  "maquinaria-pesada": fotoPesada,
+};
 
 const schema = [
   nodoServicio({
@@ -32,86 +50,104 @@ const schema = [
   descripcion={SITE.description}
   ruta="/"
   schema={schema}
+  barraSobreFoto
 >
-  <section class="heroe">
-    <div class="hoja heroe__interior">
-      <div class="heroe__texto">
-        <p class="etiqueta">Ramos Arizpe · Saltillo · Arteaga</p>
-        <h1 class="display">
-          Renta de plataformas y brazos articulados en Coahuila
-        </h1>
-        <div class="filete"></div>
-        <p class="lede">
-          BAPSA renta y vende brazos articulados eléctricos, plataformas de tijera, elevadores
-          personales y maquinaria en Ramos Arizpe, Saltillo y Arteaga. Todo el equipo es
-          eléctrico: entra a una nave en operación sin gases y sin marcar el piso. Más de{" "}
-          {SITE.aniosOperacion} años entregando con flete propio, pólizas de servicio y
-          refacciones multimarca.
-        </p>
-        <div class="apilado">
-          <a class="btn btn--relleno btn--grande" href="/contacto">Pedir cotización</a>
-          <a class="btn btn--azul btn--grande" href="/equipo">Ver las {MAQUINAS.length} máquinas</a>
-        </div>
-        <p class="heroe__tel chico">
-          O marque al <a class="dato" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>.{" "}
-          {SITE.openingHoursDisplay}.
-        </p>
-      </div>
+  {/* Héroe. Estructura tomada de la referencia «Responsive Hero Banner» de
+      21st.dev: una foto de pantalla completa con velo oscuro, titular grande,
+      una frase, dos botones y la fila de marcas al pie. La foto es el
+      argumento; el texto va a la izquierda porque la máquina ocupa la
+      derecha. */}
+  <section class="heroe banda--azul" aria-labelledby="heroe-titulo">
+    <Picture
+      src={fotoHeroe}
+      formats={["avif", "webp"]}
+      widths={[640, 960, 1440, 1920]}
+      sizes="(max-width: 719px) 1500px, 100vw"
+      alt="Brazo articulado JLG de BAPSA con la canastilla elevada frente a una nave industrial, al atardecer."
+      loading="eager"
+      fetchpriority="high"
+      decoding="async"
+      class="heroe__img"
+      pictureAttributes={{ class: "heroe__foto" }}
+    />
+    <div class="heroe__velo" aria-hidden="true"></div>
 
-      <div class="heroe__placa">
-        <PlacaDatos
-          banda="BAPSA"
-          registro="RAMOS ARIZPE, COAH."
-          titulo="Datos de la empresa"
-          renglones={[
-            { etiqueta: "Experiencia", valor: `+${SITE.aniosOperacion} AÑOS` },
-            { etiqueta: "Equipos en catálogo", valor: String(MAQUINAS.length) },
-            { etiqueta: "Altura máxima", valor: masAlta.alturaTrabajo.toUpperCase() },
-            { etiqueta: "Marcas", valor: MARCAS_CATALOGO.join(" · ").toUpperCase() },
-            { etiqueta: "Flete", valor: "PROPIO" },
-            { etiqueta: "Servicio", valor: "TALLER PROPIO" },
-          ]}
-        />
-        <p class="heroe__estado chico">
-          <Icono nombre="cotizacion" tam={16} />
-          Cotización y disponibilidad el mismo día hábil.
-        </p>
+    <div class="hoja heroe__contenido">
+      <h1 class="heroe__titulo heroe__paso" id="heroe-titulo" style="--paso: 0">
+        Renta de plataformas y&nbsp;brazos articulados
+      </h1>
+      <p class="heroe__frase heroe__paso" style="--paso: 1">
+        Equipo eléctrico con flete propio en Ramos Arizpe, Saltillo y Arteaga.
+      </p>
+      <div class="heroe__acciones heroe__paso" style="--paso: 2">
+        <a class="btn btn--sobre-azul btn--grande" href="/contacto">
+          Pedir cotización
+          <Icono nombre="flecha" tam={16} />
+        </a>
+        <a class="btn btn--contorno-claro btn--grande" href="/equipo">Ver las {MAQUINAS.length} máquinas</a>
+      </div>
+    </div>
+
+    {/* Las marcas que atiende el taller, en marquesina al pie del héroe. La
+        primera lista es la que leen lectores de pantalla y crawlers; la copia
+        hace continuo el rodado y va oculta para ellos. */}
+    <div class="hoja heroe__marcas heroe__paso" style="--paso: 5">
+      <p class="heroe__marcas-rotulo">Taller y refacciones para</p>
+      <div class="marquesina">
+        <ul class="marquesina__pista">
+          {SITE.marcas.map((m) => <li>{m}</li>)}
+        </ul>
+        <ul class="marquesina__pista" aria-hidden="true">
+          {SITE.marcas.map((m) => <li>{m}</li>)}
+        </ul>
       </div>
     </div>
   </section>
 
-  <section class="seccion banda--neblina">
+  {/* Equipo en renta. Estructura tomada de la referencia «Features 8» de
+      Tailark en 21st.dev: una bento de celdas con un área visual grande
+      arriba, título y una sola línea centrados, sin botones. El visual es
+      la foto de cada familia, con su cifra clave encima. */}
+  <section class="seccion banda--neblina" aria-labelledby="familias-titulo">
     <div class="hoja">
-      <p class="etiqueta">Equipo en renta</p>
-      <h2 class="titulo-2">Cuatro familias, un criterio para elegir</h2>
-      <div class="filete"></div>
-      <p class="medida">
-        La tijera sube en vertical y le da superficie; el brazo articulado alcanza en diagonal y
-        libra obstáculos. Con esa sola diferencia se resuelve la mayoría de las decisiones de
-        equipo. Si su punto de trabajo está tapado por una máquina, un rack o una banda, necesita
-        un brazo.
-      </p>
+      <h2 class="titulo-2 familias__titulo" id="familias-titulo">
+        Cuatro familias, un criterio para elegir
+      </h2>
+      <div class="filete filete--centrado"></div>
 
-      <ul class="familias rejilla rejilla--3">
+      <ul class="bento">
         {
-          FAMILIAS_DATOS.map((f) => (
-            <li class="tarjeta">
-              <Icono nombre={f.icono} tam={28} />
-              <h3 class="titulo-3">
-                <a href={`/renta/${f.slug}`}>{f.nombre}</a>
-              </h3>
-              <p class="chico">{f.resumen}</p>
-              {f.medidas.length > 0 && (
-                <p class="dato familias__medida">
-                  {f.medidas[0].concepto}: {f.medidas[0].valor}
-                </p>
-              )}
-              <p class="tarjeta__pie">
-                <a class="btn btn--azul btn--chico" href={`/renta/${f.slug}`}>
+          FAMILIAS_DATOS.map((f, i) => (
+            <li class="celda" style={`--i: ${i}`}>
+              <a class="celda__enlace" href={`/renta/${f.slug}`}>
+                <div class="celda__visual">
+                  {FOTO_FAMILIA[f.slug] && (
+                    <Picture
+                      src={FOTO_FAMILIA[f.slug]}
+                      formats={["avif", "webp"]}
+                      widths={[480, 800, 1200]}
+                      sizes="(min-width: 980px) 640px, (min-width: 720px) 50vw, 100vw"
+                      alt={f.fotoAlt}
+                      loading="lazy"
+                      decoding="async"
+                      class="celda__img"
+                      pictureAttributes={{ class: "celda__foto" }}
+                    />
+                  )}
+                  {f.medidas.length > 0 && (
+                    <span class="celda__cifra">
+                      <span class="dato celda__valor">{f.medidas[0].valor}</span>
+                      <span class="celda__concepto">{f.medidas[0].concepto}</span>
+                    </span>
+                  )}
+                </div>
+                <h3 class="titulo-3 celda__titulo">{f.nombre}</h3>
+                <p class="chico celda__texto">{f.resumen}</p>
+                <span class="celda__ver">
                   Ver detalle
                   <Icono nombre="flecha" tam={16} />
-                </a>
-              </p>
+                </span>
+              </a>
             </li>
           ))
         }
@@ -283,20 +319,199 @@ const schema = [
   <LlamadoAccion />
 </Base>
 
-<style>
-  .heroe { padding-block: clamp(var(--e7), 6vw, var(--e9)); }
-  .heroe__interior { display: grid; gap: var(--e7); align-items: start; }
-  .heroe__interior > * { min-width: 0; } /* la placa no estira la columna del titular */
-  @media (min-width: 980px) { .heroe__interior { grid-template-columns: 1.6fr 1fr; gap: var(--e8); } }
-  .heroe__texto h1 { margin-bottom: var(--e5); }
-  .heroe__tel { margin: var(--e5) 0 0; color: var(--acero); }
-  .heroe__placa { display: grid; gap: var(--e4); }
-  .heroe__estado { display: flex; align-items: center; gap: var(--e2); margin: 0; color: var(--acero); }
 
-  .familias, .servicios { list-style: none; padding: 0; margin: var(--e6) 0 0; }
-  .familias h3 a, .servicios h3 a { color: var(--azul); text-decoration: none; }
-  .familias h3 a:hover, .servicios h3 a:hover { color: var(--senal); text-decoration: underline; }
-  .familias__medida { color: var(--acero); font-size: 0.8125rem; margin: 0; }
+<style>
+  /* ── Héroe ─────────────────────────────────────────────────────────────
+     La foto llena la pantalla menos la barra. Encima, un velo en Azul BAPSA
+     que sube desde abajo y desde la izquierda, donde va el texto, y deja
+     limpia la máquina a la derecha. Sin sombras: el velo es la única capa. */
+  .heroe {
+    position: relative; overflow: hidden; isolation: isolate;
+    display: grid; grid-template-rows: 1fr auto; align-items: end;
+    min-height: 100svh;
+    padding-top: calc(var(--barra) + clamp(var(--e7), 8vw, var(--e9)));
+  }
+  /* En celular el héroe es más corto: la foto original mide 941px de alto y
+     cada pixel de pantalla que se le pida de más es un pixel inventado. */
+  @media (max-width: 719px) { .heroe { min-height: 84svh; } }
+
+  .heroe__foto { position: absolute; inset: 0; z-index: -2; display: block; }
+  .heroe__img {
+    width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%;
+    background: none; border: 0;
+  }
+  @media (max-width: 719px) { .heroe__img { object-position: 74% 50%; } }
+  /* La foto llega un 6% más cerca y se asienta en 14 s. Un solo movimiento
+     lento, que es lo que hace cinematográfica a la referencia. */
+  @media (prefers-reduced-motion: no-preference) and (min-width: 720px) {
+    .heroe__img { scale: 1.06; animation: heroe-asienta 14s var(--salida) forwards; }
+  }
+  @keyframes heroe-asienta { to { scale: 1; } }
+
+  .heroe__velo {
+    position: absolute; inset: 0; z-index: -1;
+    background:
+      linear-gradient(180deg, color-mix(in srgb, var(--azul) 22%, transparent) 0%, transparent 30%, color-mix(in srgb, var(--azul) 72%, transparent) 78%, var(--azul) 100%),
+      linear-gradient(90deg, color-mix(in srgb, var(--azul) 78%, transparent) 0%, color-mix(in srgb, var(--azul) 45%, transparent) 42%, transparent 70%);
+  }
+  @media (max-width: 719px) {
+    .heroe__velo {
+      background:
+        linear-gradient(180deg, color-mix(in srgb, var(--azul) 30%, transparent) 0%, color-mix(in srgb, var(--azul) 20%, transparent) 35%, color-mix(in srgb, var(--azul) 84%, transparent) 70%, var(--azul) 100%);
+    }
+  }
+
+  .heroe__contenido {
+    position: relative; display: grid; justify-items: start;
+    padding-block: var(--e6) clamp(var(--e7), 8vw, var(--e9));
+  }
+  @media (max-width: 719px) {
+    .heroe__contenido { padding-block: var(--e6) var(--e6); }
+    .heroe__titulo { margin-bottom: var(--e4); }
+    .heroe__frase { margin-bottom: var(--e5); }
+  }
+  .heroe__titulo {
+    font-size: clamp(2.5rem, 1.1rem + 5.4vw, 4.75rem); font-weight: 800; line-height: 0.96;
+    letter-spacing: -0.03em; text-transform: uppercase; color: var(--aire);
+    margin: 0 0 var(--e5); max-width: 14ch; text-wrap: balance;
+  }
+  .heroe__frase {
+    font-size: clamp(1.0625rem, 0.9rem + 0.7vw, 1.3125rem); line-height: 1.55;
+    color: var(--cielo-bajo); /* 13.9:1 sobre azul; sobre el velo nunca baja de 7:1 */
+    max-width: 36ch; margin: 0 0 var(--e6); text-wrap: balance;
+  }
+  .heroe__acciones { display: flex; flex-wrap: wrap; gap: var(--e3); }
+  @media (max-width: 479px) {
+    .heroe__acciones { width: 100%; }
+    .heroe__acciones .btn { flex: 1 1 100%; }
+  }
+
+  /* Entrada: titular, frase, botones y marcas suben una tras otra. */
+  @media (prefers-reduced-motion: no-preference) {
+    .heroe__paso {
+      opacity: 0; transform: translateY(12px);
+      animation: heroe-sube var(--lento) var(--salida) forwards;
+      animation-delay: calc(120ms + var(--paso) * 110ms);
+    }
+  }
+  @keyframes heroe-sube { to { opacity: 1; transform: none; } }
+
+  /* ── Marquesina de marcas, al pie del héroe ──────────────────────────
+     Dos listas idénticas, cada una con el mismo hueco a la derecha que el
+     espacio entre nombres: al desplazarse el 100% de su ancho, la segunda cae
+     exactamente donde estaba la primera y el rodado no tiene costura. Se
+     detiene bajo el cursor o el foco, para poder leerla. */
+  .heroe__marcas {
+    position: relative; padding-block: var(--e4) var(--e4);
+    border-top: 1px solid color-mix(in srgb, var(--aire) 22%, transparent);
+    display: grid; gap: var(--e3); align-items: center;
+  }
+  @media (min-width: 720px) { .heroe__marcas { grid-template-columns: auto 1fr; gap: var(--e6); } }
+  .heroe__marcas-rotulo {
+    margin: 0; font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    line-height: 1.2; letter-spacing: 0.16em; text-transform: uppercase; color: var(--cielo-bajo);
+    white-space: nowrap;
+  }
+  .marquesina {
+    display: flex; overflow: hidden; min-width: 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  }
+  .marquesina__pista {
+    display: flex; flex: none; align-items: center; gap: var(--e7);
+    margin: 0; padding: 0 var(--e7) 0 0; list-style: none;
+    animation: marquesina-rueda 34s linear infinite;
+  }
+  .marquesina:hover .marquesina__pista,
+  .marquesina:focus-within .marquesina__pista { animation-play-state: paused; }
+  .marquesina__pista li {
+    display: flex; align-items: center; gap: var(--e7);
+    font-family: var(--rotulo); font-weight: 800; font-size: 1.0625rem; line-height: 1;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--cielo-bajo); white-space: nowrap;
+  }
+  .marquesina__pista li::after { content: ""; width: 6px; height: 6px; background: var(--cielo); flex: none; }
+  @keyframes marquesina-rueda { to { transform: translateX(-100%); } }
+  @media (prefers-reduced-motion: reduce) {
+    .marquesina { -webkit-mask-image: none; mask-image: none; }
+    .marquesina__pista { animation: none; flex: 1 1 auto; flex-wrap: wrap; row-gap: var(--e2); padding: 0; }
+    .marquesina__pista[aria-hidden="true"] { display: none; }
+    .marquesina__pista li:last-child::after { display: none; }
+  }
+
+  /* ── Bento de familias ──────────────────────────────────────────────── */
+  .familias__titulo { text-align: center; margin-inline: auto; max-width: 22ch; }
+  .filete--centrado { margin-inline: auto; margin-bottom: var(--e7); }
+
+  .bento { list-style: none; padding: 0; margin: 0; display: grid; gap: var(--e4); }
+  @media (min-width: 720px) { .bento { grid-template-columns: repeat(2, 1fr); } }
+  /* En escritorio las celdas no son iguales: la familia principal y la
+     última son más anchas, como en la referencia. 7/5 y 5/7 sobre 12. */
+  @media (min-width: 980px) {
+    .bento { grid-template-columns: repeat(12, 1fr); gap: var(--e5); }
+    .celda:nth-child(1) { grid-column: span 7; }
+    .celda:nth-child(2) { grid-column: span 5; }
+    .celda:nth-child(3) { grid-column: span 5; }
+    .celda:nth-child(4) { grid-column: span 7; }
+  }
+  .celda { min-width: 0; }
+  .celda__enlace {
+    display: flex; flex-direction: column; align-items: center; text-align: center;
+    height: 100%; padding: var(--e3) var(--e3) var(--e6);
+    background: var(--placa); border: 1px solid var(--riel); text-decoration: none; color: inherit;
+    transition: border-color var(--rapido) ease, background-color var(--rapido) ease;
+  }
+  /* Levantar sin sombra: el borde pasa a Azul BAPSA y la foto se acerca un
+     4 %. Es lo que dicta el sistema. */
+  .celda__enlace:hover { border-color: var(--azul); }
+  .celda__enlace:hover .celda__ver { color: var(--azul); }
+
+  /* El área visual es la foto, a 16:10. La cifra clave va encima como una
+     placa en la esquina inferior izquierda: papel Placa, borde Azul BAPSA. */
+  .celda__visual { position: relative; width: 100%; aspect-ratio: 16 / 10; margin-bottom: var(--e5); overflow: hidden; background: var(--neblina); }
+  .celda__foto { position: absolute; inset: 0; display: block; }
+  .celda__img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center; border: 0; background: none;
+    transition: scale 600ms var(--salida);
+  }
+  .celda__enlace:hover .celda__img { scale: 1.04; }
+  .celda__cifra {
+    position: absolute; left: var(--e3); bottom: var(--e3); display: grid; gap: 2px;
+    padding: var(--e2) var(--e3); background: var(--placa); border: 1px solid var(--azul);
+    text-align: left;
+  }
+  .celda__valor { font-size: 1.0625rem; font-weight: 700; color: var(--azul); white-space: nowrap; line-height: 1.2; }
+  .celda__concepto {
+    font-family: var(--rotulo); font-size: 0.625rem; font-weight: 700; line-height: 1.2;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+  }
+
+  .celda__titulo { margin: 0 0 var(--e2); color: var(--azul); }
+  .celda__texto { margin: 0 0 var(--e4); max-width: 38ch; color: var(--chasis); }
+  .celda__ver :global(.icono) { transition: translate var(--rapido) ease; }
+  .celda__enlace:hover .celda__ver :global(.icono) { translate: 4px 0; }
+  .celda__ver {
+    display: inline-flex; align-items: center; gap: var(--e2); margin-top: auto;
+    font-family: var(--rotulo); font-size: var(--boton); font-weight: 700; line-height: 1;
+    letter-spacing: 0.08em; text-transform: uppercase; color: var(--senal);
+    transition: color var(--rapido) ease;
+  }
+
+  /* Las celdas entran al llegar al viewport, una tras otra. Solo CSS: en el
+     navegador que no sepa de animation-timeline se ven quietas y completas. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .celda {
+        animation: celda-entra linear both;
+        animation-timeline: view();
+        animation-range: entry 0% entry calc(30% + var(--i) * 6%);
+      }
+    }
+  }
+  @keyframes celda-entra { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+
+  .servicios { list-style: none; padding: 0; margin: var(--e6) 0 0; }
+  .servicios h3 a { color: var(--azul); text-decoration: none; }
+  .servicios h3 a:hover { color: var(--senal); text-decoration: underline; }
 
   .pareja { align-items: center; }
   table a { color: var(--senal); font-weight: 600; }

@@ -31,6 +31,9 @@ export interface Props {
   schema?: Record<string, unknown>[];
   /** Migas visibles. Si van, se emite también el BreadcrumbList. */
   migas?: Miga[];
+  /** La barra empieza transparente sobre una foto a pantalla completa y se
+   *  vuelve sólida al hacer scroll. Solo para rutas cuyo héroe es una foto. */
+  barraSobreFoto?: boolean;
 }
 
 const {
@@ -43,6 +46,7 @@ const {
   tipoOg = "website",
   schema = [],
   migas = [],
+  barraSobreFoto = false,
 } = Astro.props;
 
 const canonica = urlAbsoluta(ruta);
@@ -106,7 +110,7 @@ const grafo = construirGrafo(...nodos);
 
   <body>
     <a class="salto-contenido" href="#contenido">Saltar al contenido</a>
-    <Encabezado rutaActual={ruta} />
+    <Encabezado rutaActual={ruta} sobreFoto={barraSobreFoto} />
     <main id="contenido">
       {migas.length > 1 && <Migas migas={migas} />}
       <slot />

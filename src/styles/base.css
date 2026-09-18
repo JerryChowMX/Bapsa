@@ -36,6 +36,10 @@ body {
 }
 
 img, svg, video { max-width: 100%; height: auto; display: block; }
+
+/* La selección de texto también es de BAPSA: azul con papel encima, no el
+   azul del navegador, que es el único color ajeno que podía colarse. */
+::selection { background: var(--azul); color: var(--aire); }
 img { background: var(--neblina); }
 
 :where(a):focus-visible,
