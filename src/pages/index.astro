@@ -155,20 +155,21 @@ const schema = [
     </div>
   </section>
 
-  <section class="seccion">
+  {/* Catálogo. Patrón de tabla de datos de 21st.dev: filas con filete,
+      etiqueta cuadrada de tipo, cifras a la derecha en voz de dato y una
+      barra proporcional para comparar la altura de trabajo de un vistazo.
+      Sigue siendo una <table> real: un crawler la extrae columna por
+      columna. En celular cada fila se vuelve una ficha. */}
+  <section class="seccion" aria-labelledby="catalogo-titulo">
     <div class="hoja">
-      <p class="etiqueta">Catálogo</p>
-      <h2 class="titulo-2">Las {MAQUINAS.length} máquinas, con su ficha de fabricante</h2>
-      <div class="filete"></div>
-      <p class="medida">
-        BAPSA renta {MAQUINAS.length} modelos de {MARCAS_CATALOGO.join(" y ")}, con altura de
-        trabajo entre {MAQUINAS_POR_ALTURA[MAQUINAS_POR_ALTURA.length - 1].alturaTrabajo} y{" "}
-        {masAlta.alturaTrabajo}. Todo el catálogo es eléctrico y con neumáticos que no dejan
-        marcas, así que puede entrar a una nave en operación.
-      </p>
-      <div class="tabla-envoltura">
-        <table>
-          <caption>
+      <h2 class="titulo-2 catalogo__titulo" id="catalogo-titulo">
+        Las {MAQUINAS.length} máquinas, con su ficha de fabricante
+      </h2>
+      <div class="filete filete--centrado"></div>
+
+      <div class="catalogo">
+        <table class="catalogo__tabla">
+          <caption class="solo-lectores">
             Equipo en renta de BAPSA, de mayor a menor altura de trabajo. Cifras de las fichas
             técnicas de Genie y JLG.
           </caption>
@@ -176,34 +177,58 @@ const schema = [
             <tr>
               <th scope="col">Modelo</th>
               <th scope="col">Tipo</th>
-              <th scope="col" class="cifra">Altura de trabajo</th>
+              <th scope="col" class="catalogo__col-altura">Altura de trabajo</th>
               <th scope="col" class="cifra">Capacidad</th>
               <th scope="col" class="cifra">Ancho</th>
+              <th scope="col"><span class="solo-lectores">Ficha</span></th>
             </tr>
           </thead>
           <tbody>
             {
-              MAQUINAS_POR_ALTURA.map((m) => (
-                <tr>
-                  <th scope="row">
-                    <a href={`/equipo/${m.slug}`}>
-                      {m.marca} {m.modelo}
-                    </a>
-                  </th>
-                  <td>{m.tipo}</td>
-                  <td class="cifra">{m.alturaTrabajo}</td>
-                  <td class="cifra">{m.capacidad}</td>
-                  <td class="cifra">{m.ancho}</td>
-                </tr>
-              ))
+              MAQUINAS_POR_ALTURA.map((m, i) => {
+                const esTijera = m.familia === "plataformas-de-tijera";
+                const angosta = /angost/i.test(m.tipo);
+                const proporcion = Math.round((m.alturaTrabajoM / masAlta.alturaTrabajoM) * 100);
+                return (
+                  <tr class="catalogo__fila" style={`--i: ${i}; --p: ${proporcion}%`}>
+                    <th scope="row" class="catalogo__modelo">
+                      <span class="catalogo__marca">{m.marca}</span>
+                      <a href={`/equipo/${m.slug}`} class="catalogo__enlace">{m.modelo}</a>
+                    </th>
+                    <td class="catalogo__tipo" data-etiqueta="Tipo">
+                      <span class:list={["tag", esTijera ? "tag--tijera" : "tag--brazo"]}>
+                        {esTijera ? "Tijera" : "Brazo"}
+                      </span>
+                      {angosta && <span class="tag tag--nota">Angosta</span>}
+                    </td>
+                    <td class="catalogo__altura" data-etiqueta="Altura de trabajo">
+                      <span class="barra-altura" aria-hidden="true">
+                        <span class:list={["barra-altura__relleno", i === 0 && "barra-altura__relleno--max"]}></span>
+                      </span>
+                      <span class="dato catalogo__cifra">{m.alturaTrabajo}</span>
+                    </td>
+                    <td class="cifra dato catalogo__cap" data-etiqueta="Capacidad">{m.capacidad}</td>
+                    <td class="cifra dato catalogo__ancho" data-etiqueta="Ancho">{m.ancho}</td>
+                    <td class="catalogo__ir">
+                      <a href={`/equipo/${m.slug}`} aria-label={`Ver la ficha del ${m.marca} ${m.modelo}`}>
+                        <Icono nombre="flecha" tam={16} />
+                      </a>
+                    </td>
+                  </tr>
+                );
+              })
             }
           </tbody>
         </table>
       </div>
-      <a class="btn btn--azul" href="/equipo">
-        Ver el catálogo completo
-        <Icono nombre="flecha" tam={16} />
-      </a>
+
+      <div class="catalogo__pie">
+        <p class="pie-foto">Cifras de las fichas técnicas de {MARCAS_CATALOGO.join(" y ")}. Todo el catálogo es eléctrico.</p>
+        <a class="btn btn--azul" href="/equipo">
+          Ver el catálogo completo
+          <Icono nombre="flecha" tam={16} />
+        </a>
+      </div>
     </div>
   </section>
 
@@ -512,6 +537,135 @@ const schema = [
   .servicios { list-style: none; padding: 0; margin: var(--e6) 0 0; }
   .servicios h3 a { color: var(--azul); text-decoration: none; }
   .servicios h3 a:hover { color: var(--senal); text-decoration: underline; }
+
+  /* ── Catálogo ───────────────────────────────────────────────────────── */
+  .catalogo__titulo { text-align: center; margin-inline: auto; max-width: 24ch; }
+  .catalogo { background: var(--placa); border: 1px solid var(--riel); overflow-x: auto; }
+  .catalogo__tabla { width: 100%; border-collapse: collapse; font-size: var(--cuerpo-chico); }
+  .catalogo__tabla thead th {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+    padding: var(--e4) var(--e4); border-bottom: 1px solid var(--riel); white-space: nowrap;
+    text-align: left; background: var(--placa);
+  }
+  .catalogo__tabla thead th.cifra { text-align: right; }
+  .catalogo__tabla tbody td, .catalogo__tabla tbody th {
+    padding: var(--e4); border-bottom: 1px solid var(--riel); vertical-align: middle;
+    text-align: left; background: transparent;
+  }
+  .catalogo__tabla tbody tr:last-child td, .catalogo__tabla tbody tr:last-child th { border-bottom: 0; }
+  .catalogo__tabla tbody tr { transition: background-color var(--rapido) ease; }
+  .catalogo__tabla tbody tr:hover { background: var(--cielo-bajo); }
+  /* Esta tabla no alterna filas: la barra ya da ritmo, y un fondo alterno
+     detrás de una barra confunde la lectura de la barra. */
+  .catalogo__tabla tbody tr:nth-child(even) { background: transparent; }
+  .catalogo__tabla tbody tr:nth-child(even):hover { background: var(--cielo-bajo); }
+
+  .catalogo__modelo { display: grid; gap: 2px; white-space: nowrap; }
+  .catalogo__marca {
+    font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+  }
+  /* Con la especificidad completa: la regla `table a` de más abajo, que es
+     para las tablas de ficha, le ganaba a esta y pintaba el modelo en naranja. */
+  .catalogo__tabla th a.catalogo__enlace {
+    font-family: var(--rotulo); font-size: 1.125rem; font-weight: 700; line-height: 1.2;
+    color: var(--azul); text-decoration: none;
+  }
+  .catalogo__tabla th a.catalogo__enlace:hover { color: var(--senal); text-decoration: underline; }
+
+  /* Etiqueta cuadrada de tipo: contorno, nunca relleno; el relleno es del botón. */
+  .tag {
+    display: inline-block; padding: 3px var(--e2); margin-right: var(--e1);
+    font-family: var(--rotulo); font-size: 0.6875rem; font-weight: 700; line-height: 1.2;
+    letter-spacing: 0.1em; text-transform: uppercase; border: 1px solid currentColor; white-space: nowrap;
+  }
+  .tag--brazo { color: var(--azul); }
+  .tag--tijera { color: var(--acero); }
+  .tag--nota { color: var(--senal); }
+
+  /* La barra de altura: pista en Neblina, relleno en Azul BAPSA; la más alta
+     va en Canastilla, que es el único acento de la tabla. */
+  .catalogo__col-altura { min-width: 220px; }
+  .catalogo__altura { display: flex; align-items: center; gap: var(--e3); min-width: 220px; }
+  .barra-altura { flex: 1 1 auto; height: 8px; background: var(--neblina); overflow: hidden; }
+  .barra-altura__relleno { display: block; height: 100%; width: var(--p); background: var(--azul); transform-origin: left; }
+  .barra-altura__relleno--max { background: var(--canastilla); }
+  .catalogo__cifra { flex: none; width: 5.2em; text-align: right; font-weight: 700; color: var(--azul); }
+  .catalogo__tabla td.cifra { font-weight: 700; color: var(--azul); white-space: nowrap; }
+  .catalogo__ir { width: 1%; }
+  .catalogo__ir a { display: inline-grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--riel); color: var(--azul); }
+  .catalogo__ir a:hover { border-color: var(--azul); background: var(--azul); color: var(--canastilla); }
+
+  .catalogo__pie {
+    display: flex; flex-wrap: wrap; gap: var(--e4) var(--e6); align-items: center; justify-content: space-between;
+    margin-top: var(--e5);
+  }
+  .catalogo__pie p { margin: 0; }
+
+  /* Las barras crecen cuando la tabla entra en pantalla, una tras otra. */
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      .barra-altura__relleno {
+        animation: barra-crece linear both; animation-timeline: view();
+        animation-range: entry 10% entry calc(45% + var(--i) * 5%);
+      }
+    }
+  }
+  @keyframes barra-crece { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+
+  /* En celular cada fila es una ficha, y la ficha entera se toca.
+     Jerarquía: 1) el modelo, con su tipo pegado debajo; 2) la altura de
+     trabajo en grande, con su rótulo arriba y su barra abajo, como un solo
+     grupo; 3) capacidad y ancho como dos pares rotulados en una fila. El
+     chevrón a la derecha dice que hay ficha, y el enlace del modelo se
+     extiende con un ::after a toda la tarjeta: un solo toque, sin JS. */
+  @media (max-width: 719px) {
+    .catalogo { overflow: visible; background: transparent; border: 0; }
+    .catalogo__tabla, .catalogo__tabla tbody { display: block; }
+    .catalogo__tabla thead { display: none; }
+    .catalogo__fila {
+      position: relative;
+      display: grid; grid-template-columns: 1fr 1fr auto;
+      grid-template-areas:
+        "modelo modelo ir"
+        "tipo   tipo   ir"
+        "altura altura altura"
+        "cap    ancho  ancho";
+      gap: var(--e2) var(--e4); align-items: start;
+      padding: var(--e4) var(--e4) var(--e5); margin-bottom: var(--e3);
+      background: var(--placa); border: 1px solid var(--riel);
+      transition: border-color var(--rapido) ease;
+    }
+    .catalogo__fila:hover, .catalogo__fila:active { background: var(--placa); border-color: var(--azul); }
+    .catalogo__tabla tbody td, .catalogo__tabla tbody th { padding: 0; border: 0; }
+
+    .catalogo__modelo { grid-area: modelo; gap: 0; }
+    .catalogo__tabla th a.catalogo__enlace { font-size: 1.25rem; }
+    .catalogo__tabla th a.catalogo__enlace::after { content: ""; position: absolute; inset: 0; }
+    .catalogo__tipo { grid-area: tipo; margin-top: 2px; }
+
+    .catalogo__altura {
+      grid-area: altura; display: flex; flex-direction: column; align-items: stretch; gap: var(--e1);
+      min-width: 0; margin-top: var(--e3); padding-top: var(--e3); border-top: 1px solid var(--riel);
+    }
+    .catalogo__altura::before,
+    .catalogo__tabla td.cifra::before {
+      content: attr(data-etiqueta); display: block;
+      font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700; line-height: 1.2;
+      letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
+    }
+    .catalogo__cifra { order: 0; width: auto; text-align: left; font-size: 1.625rem; line-height: 1.1; }
+    .barra-altura { order: 1; flex: none; width: 100%; height: 6px; margin-top: var(--e1); }
+
+    .catalogo__cap { grid-area: cap; }
+    .catalogo__ancho { grid-area: ancho; }
+    .catalogo__tabla td.cifra { text-align: left; margin-top: var(--e2); font-size: 1.0625rem; }
+
+    .catalogo__ir { grid-area: ir; align-self: start; width: auto; }
+    .catalogo__ir a { width: 32px; height: 32px; border-color: var(--riel); color: var(--acero); }
+    .catalogo__fila:active .catalogo__ir a { border-color: var(--azul); color: var(--azul); }
+  }
 
   .pareja { align-items: center; }
   table a { color: var(--senal); font-weight: 600; }
