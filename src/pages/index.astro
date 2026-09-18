@@ -52,6 +52,27 @@ const FOTO_MAQUINA: Record<string, ImageMetadata> = {
   "genie-gs-2632": fotoTijeras,
   "genie-gs-2046": fotoTijeraElevada,
 };
+/** Las tres líneas además de la renta, con su foto. */
+import fotoVenta from "../fotos/02_jlg_600aj_articulacion_hidraulica.jpg";
+import fotoServicio from "../fotos/21_jlg_brazo_articulado_inspeccion_tecnico_bapsa.jpg";
+import fotoRefacciones from "../fotos/06_jlg_canastilla_y_controles.jpg";
+const LINEAS = [
+  {
+    ruta: "/venta", nombre: "Venta de equipo", foto: fotoVenta,
+    alt: "Brazo telescópico JLG con la calca de BAPSA Renta y Venta en el chasís, dentro de una planta industrial.",
+    texto: "Equipo nuevo y seminuevo con respaldo de servicio, para cuando rentarlo todo el año sale más caro.",
+  },
+  {
+    ruta: "/servicio", nombre: "Servicio y pólizas", foto: fotoServicio,
+    alt: "Técnico de BAPSA revisando el compartimento de un brazo articulado JLG en el patio, frente al taller.",
+    texto: "Mantenimiento preventivo y correctivo, con póliza programada y bitácora por máquina.",
+  },
+  {
+    ruta: "/refacciones", nombre: "Refacciones multimarca", foto: fotoRefacciones,
+    alt: "Canastilla de un brazo articulado JLG vista de frente, con su panel de controles.",
+    texto: `Para ${SITE.marcas.join(", ")}. Cotización con número de parte o de serie.`,
+  },
+];
 const FOTO_FAMILIA: Record<string, ImageMetadata> = {
   "brazos-articulados-electricos": fotoBrazos,
   "plataformas-de-tijera": fotoTijeras,
@@ -330,36 +351,41 @@ const schema = [
     </div>
   </section>
 
-  <section class="seccion banda--neblina">
+  {/* Venta, servicio y refacciones: las mismas celdas que las familias,
+      tres a lo ancho, cada una con su foto, título y una sola línea. */}
+  <section class="seccion banda--neblina" aria-labelledby="lineas-titulo">
     <div class="hoja">
-      <p class="etiqueta">Además de la renta</p>
-      <h2 class="titulo-2">Venta, servicio y refacciones</h2>
-      <div class="filete"></div>
-      <ul class="rejilla rejilla--3 servicios">
-        <li class="tarjeta">
-          <Icono nombre="cotizacion" tam={28} />
-          <h3 class="titulo-3"><a href="/venta">Venta de equipo</a></h3>
-          <p class="chico">
-            Cuando la máquina se va a usar todo el año, comprarla sale más barato que rentarla.
-            BAPSA vende equipo nuevo y seminuevo con respaldo de servicio.
-          </p>
-        </li>
-        <li class="tarjeta">
-          <Icono nombre="mantenimiento" tam={28} />
-          <h3 class="titulo-3"><a href="/servicio">Servicio y pólizas</a></h3>
-          <p class="chico">
-            Mantenimiento preventivo y correctivo para equipo propio o rentado a otro proveedor,
-            con póliza programada y bitácora por máquina.
-          </p>
-        </li>
-        <li class="tarjeta">
-          <Icono nombre="refacciones" tam={28} />
-          <h3 class="titulo-3"><a href="/refacciones">Refacciones multimarca</a></h3>
-          <p class="chico">
-            Refacciones para {SITE.marcas.join(", ")}. Cotización con número de parte o con el
-            número de serie de la máquina.
-          </p>
-        </li>
+      <h2 class="titulo-2 familias__titulo" id="lineas-titulo">Venta, servicio y refacciones</h2>
+      <div class="filete filete--centrado"></div>
+
+      <ul class="bento bento--3">
+        {
+          LINEAS.map((l, i) => (
+            <li class="celda" style={`--i: ${i}`}>
+              <a class="celda__enlace" href={l.ruta}>
+                <div class="celda__visual">
+                  <Picture
+                    src={l.foto}
+                    formats={["avif", "webp"]}
+                    widths={[480, 800, 1200]}
+                    sizes="(min-width: 980px) 380px, (min-width: 720px) 50vw, 100vw"
+                    alt={l.alt}
+                    loading="lazy"
+                    decoding="async"
+                    class="celda__img"
+                    pictureAttributes={{ class: "celda__foto" }}
+                  />
+                </div>
+                <h3 class="titulo-3 celda__titulo">{l.nombre}</h3>
+                <p class="chico celda__texto">{l.texto}</p>
+                <span class="celda__ver">
+                  Ver detalle
+                  <Icono nombre="flecha" tam={16} />
+                </span>
+              </a>
+            </li>
+          ))
+        }
       </ul>
     </div>
   </section>
@@ -535,6 +561,10 @@ const schema = [
     .celda:nth-child(3) { grid-column: span 5; }
     .celda:nth-child(4) { grid-column: span 7; }
   }
+  @media (min-width: 980px) {
+    .bento--3 { grid-template-columns: repeat(3, 1fr); }
+    .bento--3 .celda { grid-column: auto; }
+  }
   .celda { min-width: 0; }
   .celda__enlace {
     display: flex; flex-direction: column; align-items: center; text-align: center;
@@ -591,9 +621,6 @@ const schema = [
   }
   @keyframes celda-entra { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 
-  .servicios { list-style: none; padding: 0; margin: var(--e6) 0 0; }
-  .servicios h3 a { color: var(--azul); text-decoration: none; }
-  .servicios h3 a:hover { color: var(--senal); text-decoration: underline; }
 
   /* ── Catálogo ───────────────────────────────────────────────────────── */
   .catalogo__titulo { text-align: center; margin-inline: auto; max-width: 24ch; }
