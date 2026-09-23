@@ -20,11 +20,13 @@ respuestas de IA que la ausencia del campo.
 - **Por qué importa:** un formulario que traga solicitudes en silencio cuesta
   ventas y no deja rastro de que se perdieron.
 
-### 1.2 Razón social exacta
+### 1.2 Razón social exacta — confirmada
 - **Archivo:** `src/config/seo.ts` → `SITE.legalName`
-- **Valor actual:** `Brazos Articulados para Servicios en Alturas, S.A. de C.V.`
-- **Origen:** directorios de terceros, no un documento de BAPSA.
-- **Qué hace falta:** confirmarlo contra el acta constitutiva o el RFC.
+- **Valor:** `Brazos Articulados para Servicios en Alturas, S.A. de C.V.`
+- **Origen:** confirmada por Sarape el 23 de septiembre de 2026, junto con la
+  sede en Ramos Arizpe y el giro (renta y venta de equipo de elevación).
+- **Pendiente menor:** que la puntuación («S.A. de C.V.») coincida con la del
+  RFC y con Google Business Profile.
 - **Por qué importa:** `legalName` va en el JSON-LD y en el pie. Si no coincide
   con lo que BAPSA declara en otros lados, debilita la resolución de entidad,
   que es justo lo que hace que un modelo cite a BAPSA con confianza.

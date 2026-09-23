@@ -13,7 +13,7 @@
 export const SITE = {
   name: "BAPSA Equipo de Elevación",
   shortName: "BAPSA",
-  legalName: "Brazos Articulados para Servicios en Alturas, S.A. de C.V.", // POR CONFIRMAR
+  legalName: "Brazos Articulados para Servicios en Alturas, S.A. de C.V.",
   url: "https://www.bapsa.com.mx",
   locale: "es_MX",
   lang: "es-MX",

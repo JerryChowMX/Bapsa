@@ -1,8 +1,8 @@
 ---
 /**
- * Barra. El bloque de marca va en azul sólido con el brazo en naranja: es la
- * única parte de la barra donde el logotipo manda. La pestaña activa se marca
- * con un filete naranja abajo Y con el texto en azul, nunca solo con color.
+ * Barra. El logotipo a color sale de la silueta blanca que mandó el cliente;
+ * sobre la foto se usa esa silueta blanca tal cual.
+ * La pestaña activa se marca con un filete naranja abajo Y con el texto en azul, nunca solo con color.
  * "Cotizar" es el único relleno de toda la barra.
  *
  * El menú de celular es un <details>: sin una línea de JavaScript, así que
@@ -19,13 +19,8 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
 <header class:list={["barra", sobreFoto && "barra--sobre-foto"]} data-sobre-foto={sobreFoto ? "" : undefined}>
   <div class="barra__interior hoja">
     <a href="/" class="marca" aria-label={`${SITE.name} — inicio`}>
-      <span class="marca__bloque" aria-hidden="true">
-        <Icono nombre="brazo-articulado" tam={20} />
-      </span>
-      <span class="marca__texto">
-        <span class="marca__palabra">BAPSA</span>
-        <span class="marca__lema">Equipo de elevación</span>
-      </span>
+      <img class="marca__logo" src="/brand/bapsa-logo.png" width="720" height="311" alt="" />
+      <img class="marca__logo marca__logo--claro" src="/brand/bapsa-logo-claro.png" width="720" height="311" alt="" />
     </a>
 
     <nav class="nav-escritorio" aria-label="Principal">
@@ -105,38 +100,24 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
   .barra--sobre-foto:has(.menu-movil[open]) {
     background: var(--aire); border-bottom-color: var(--riel);
   }
-  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__palabra,
   .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .nav-escritorio a,
   .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .hamburguesa,
   .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .hamburguesa::before,
   .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .hamburguesa::after {
     color: var(--aire); background-color: var(--aire);
   }
-  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__palabra,
   .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .nav-escritorio a { background-color: transparent; }
-  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__lema { color: var(--cielo-bajo); }
-  /* El cuadro del logotipo se invierte: sobre azul, un cuadro azul no existe. */
-  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__bloque { background: var(--aire); color: var(--azul); }
-  .marca__bloque { transition: background-color var(--medio) ease, color var(--medio) ease; }
+  /* Sobre la foto, el logotipo azul se pierde: entra la versión clara. */
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__logo { display: none; }
+  .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .marca__logo--claro { display: block; }
   .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .nav-escritorio a:hover { color: var(--reflejante); }
   .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .barra__tel { color: var(--reflejante); }
   .barra--sobre-foto:not(.barra--solida):not(:has(.menu-movil[open])) .menu-movil summary { border-color: var(--aire); }
 
   /* ── Marca ── */
-  .marca { display: flex; align-items: center; gap: var(--e3); text-decoration: none; flex: none; }
-  .marca__bloque {
-    display: grid; place-items: center; width: 38px; height: 38px; flex: none;
-    background: var(--azul); color: var(--canastilla); /* 7.08:1 */
-  }
-  .marca__texto { display: flex; flex-direction: column; gap: 1px; }
-  .marca__palabra {
-    font-family: var(--rotulo); font-weight: 800; font-size: 1.25rem; line-height: 1;
-    letter-spacing: -0.01em; color: var(--azul);
-  }
-  .marca__lema {
-    font-family: var(--rotulo); font-weight: 600; font-size: 0.5625rem; line-height: 1;
-    letter-spacing: 0.17em; text-transform: uppercase; color: var(--acero);
-  }
+  .marca { display: flex; align-items: center; text-decoration: none; flex: none; }
+  .marca__logo { display: block; height: 48px; width: auto; background: none; }
+  .marca__logo--claro { display: none; }
 
   /* ── Navegación ── */
   .nav-escritorio { display: none; gap: var(--e5); }
