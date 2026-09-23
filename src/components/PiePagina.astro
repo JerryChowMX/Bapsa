@@ -4,9 +4,10 @@
  * lo que un motor generativo lee para resolver quién es esta entidad, y tiene
  * que coincidir letra por letra con el JSON-LD y con Google Business Profile.
  */
-import { SITE, direccionUnaLinea } from "../config/seo";
+import { SITE, direccionUnaLinea, urlWhatsapp } from "../config/seo";
 import { NAV_PIE } from "../config/navegacion";
 import Icono from "./Icono.astro";
+import LogoWhatsApp from "./LogoWhatsApp.astro";
 const anio = new Date().getFullYear();
 ---
 
@@ -38,12 +39,17 @@ const anio = new Date().getFullYear();
         <p class="etiqueta">Contacto</p>
         <ul>
           <li>
-            <Icono nombre="contacto" tam={16} />
-            <a class="dato" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>
+            <LogoWhatsApp tam={16} />
+            <a class="dato" href={urlWhatsapp} rel="noopener" target="_blank" aria-label={`WhatsApp ${SITE.telephoneDisplay}`}>{SITE.telephoneDisplay}</a>
           </li>
           <li>
             <Icono nombre="telefono" tam={16} />
-            <a href={`https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`} rel="noopener" target="_blank">WhatsApp</a>
+            <span class="pie__oficina">
+              Oficina:{" "}
+              {SITE.oficinas.map((o, i) => (
+                <>{i > 0 && " · "}<a class="dato" href={`tel:${o.telephone}`}>{o.display}</a></>
+              ))}
+            </span>
           </li>
           <li>
             <Icono nombre="correo" tam={16} />
@@ -62,7 +68,7 @@ const anio = new Date().getFullYear();
     </div>
 
     <div class="pie__base">
-      <p>© {anio} {SITE.legalName}. Todos los derechos reservados.</p>
+      <p>© {anio} {SITE.legalName} Todos los derechos reservados.</p>
       <p>
         Sitio por <a href="https://sarapeweb.com" rel="noopener">Sarape Estudio Web</a>
       </p>

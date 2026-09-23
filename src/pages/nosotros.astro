@@ -53,7 +53,7 @@ const schema = [
       </div>
       <Foto
         imagen={FOTO_SECCION.nosotros}
-        alt="Oficinas de BAPSA en el Blvd. Miguel Ramos Arizpe 104, con un brazo articulado JLG elevado frente a la fachada."
+        alt="Fachada de las oficinas de BAPSA en el Blvd. Miguel Ramos Arizpe 104, con el logotipo y el WhatsApp 844 181 9171."
         clave="FOTO-09"
         ancho={800}
         alto={600}
@@ -105,8 +105,8 @@ const schema = [
           banda="CONTACTO"
           titulo="Datos de contacto"
           renglones={[
-            { etiqueta: "Teléfono", valor: SITE.telephoneDisplay },
             { etiqueta: "WhatsApp", valor: SITE.telephoneDisplay },
+            ...SITE.oficinas.map((o) => ({ etiqueta: "Oficina", valor: o.display })),
             { etiqueta: "C.P.", valor: SITE.address.postalCode },
             { etiqueta: "Horario", valor: "L-V 8:30-18:00" },
             { etiqueta: "Sábado", valor: "8:30-13:00" },

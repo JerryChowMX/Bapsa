@@ -150,7 +150,7 @@ export const FAMILIAS_DATOS: Familia[] = [
     ],
     icono: "plataforma-tijera",
     fotoAlt:
-      "Elevador personal de BAPSA en el pasillo de un almacén, con un operador trabajando sobre el nivel alto de un rack.",
+      "Elevador personal de mástil Genie AWP-25S con plataforma para un operador.",
     fotoClave: "FOTO-04",
   },
   {
@@ -181,7 +181,7 @@ export const FAMILIAS_DATOS: Familia[] = [
     ],
     icono: "flete",
     fotoAlt:
-      "Camión de BAPSA trasladando un brazo articulado sobre la plataforma.",
+      "Camión plataforma de BAPSA trasladando el montacargas de un cliente dentro de una planta de acero.",
     fotoClave: "FOTO-05",
   },
 ];

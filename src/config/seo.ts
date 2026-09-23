@@ -28,11 +28,16 @@ export const SITE = {
   ogImageAlt:
     "Brazo articulado de BAPSA con la canastilla elevada sobre una nave industrial en Ramos Arizpe.",
 
-  // Un solo número en todo el sitio, y es también el WhatsApp. Confirmado en
-  // la reunión con BAPSA del 23 de septiembre de 2026.
+  // El principal es el WhatsApp y va con su logo; las tres líneas de oficina
+  // se quedan debajo. Confirmado por BAPSA (Ing. Elsa) el 23 sep 2026.
   telephone: "+528441819171",
   telephoneDisplay: "844 181 9171",
   whatsapp: "+528441819171" as string,
+  oficinas: [
+    { telephone: "+528444308845", display: "844 430 8845" },
+    { telephone: "+528444880408", display: "844 488 0408" },
+    { telephone: "+528444885943", display: "844 488 5943" },
+  ],
   email: "bapsa@prodigy.net.mx",
 
   address: {
@@ -84,6 +89,9 @@ export const SITE = {
 
 /** Rutas que salen con `noindex, follow` y quedan fuera del sitemap. */
 export const NOINDEX_ROUTES = ["/gracias"] as const;
+
+/** Enlace de WhatsApp al número principal. */
+export const urlWhatsapp = `https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`;
 
 /** "Ramos Arizpe, Saltillo, Derramadero, Arteaga y Santa Catarina, N.L." */
 export const ciudadesTexto = (() => {

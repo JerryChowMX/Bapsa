@@ -8,6 +8,10 @@
  * reunión del 23 de septiembre de 2026 la cliente pidió no usar fotos que se
  * vean hechas con IA.
  *
+ * Tres llegaron aparte, el 23 de septiembre: el camión de BAPSA con un
+ * montacargas de cliente (traslado), el Genie AWP-25S (elevador personal) y
+ * la fachada de la oficina con el número de WhatsApp.
+ *
  * El material no trae cada modelo exacto del catálogo, así que la foto de
  * máquina es de su familia y se rotula como ilustrativa donde se muestra.
  */
@@ -19,9 +23,9 @@ import brazosAndenes from "../fotos/25_jlg_brazos_articulados_andenes_carga.jpg"
 import tijeraAvion from "../fotos/29_jlg_plataforma_tijera_mantenimiento_avion.jpg";
 import tijera3220 from "../fotos/07_jlg_3220_plataforma_tijera.jpg";
 import tijera2632 from "../fotos/01_jlg_2632es_plataforma_tijera.jpg";
-import compactas from "../fotos/09_jlg_plataformas_compactas_dobles.jpg";
-import lowboy from "../fotos/36_jlg_1200sjp_sobre_lowboy_planta.jpg";
-import oficina from "../fotos/38_jlg_brazo_articulado_fachada_oficinas_bapsa.jpg";
+import elevadorAwp from "../fotos/genie_awp_25s_elevador_personal.jpg";
+import camionTraslado from "../fotos/bapsa_camion_traslado_montacargas.jpg";
+import fachada from "../fotos/bapsa_fachada_oficinas.jpg";
 import flotaPatio from "../fotos/35_flota_plataformas_genie_jlg_patio.jpg";
 import articulacion from "../fotos/02_jlg_600aj_articulacion_hidraulica.jpg";
 import canastilla from "../fotos/06_jlg_canastilla_y_controles.jpg";
@@ -31,8 +35,8 @@ export const FOTO_HEROE = brazoCervecera;
 export const FOTO_FAMILIA: Record<string, ImageMetadata> = {
   "brazos-articulados-electricos": brazoZ30Patio,
   "plataformas-de-tijera": tijeraAvion,
-  "elevadores-personales": compactas,
-  "traslado-de-maquinaria": lowboy,
+  "elevadores-personales": elevadorAwp,
+  "traslado-de-maquinaria": camionTraslado,
 };
 
 export const FOTO_MAQUINA: Record<string, ImageMetadata> = {
@@ -44,7 +48,7 @@ export const FOTO_MAQUINA: Record<string, ImageMetadata> = {
 };
 
 export const FOTO_SECCION = {
-  nosotros: oficina,
+  nosotros: fachada,
   venta: flotaPatio,
   servicio: articulacion,
   refacciones: canastilla,

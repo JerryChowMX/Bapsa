@@ -1,9 +1,10 @@
 ---
 import Base from "../layouts/Base.astro";
 import Icono from "../components/Icono.astro";
+import LogoWhatsApp from "../components/LogoWhatsApp.astro";
 import PlacaDatos from "../components/PlacaDatos.astro";
 import FormularioCotizacion from "../components/FormularioCotizacion.astro";
-import { SITE, direccionUnaLinea } from "../config/seo";
+import { SITE, direccionUnaLinea, urlWhatsapp } from "../config/seo";
 import { nodoPaginaContacto } from "../lib/schema";
 
 const migas = [
@@ -39,19 +40,21 @@ const schema = [nodoPaginaContacto("/contacto")];
         <h2 class="titulo-3">Datos directos</h2>
         <ul class="canales">
           <li>
-            <Icono nombre="contacto" tam={20} />
+            <LogoWhatsApp tam={20} />
             <div>
-              <span class="canales__rotulo">Teléfono</span>
-              <a class="dato dato--fuerte" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>
+              <span class="canales__rotulo">WhatsApp · principal</span>
+              <a class="dato dato--fuerte" href={urlWhatsapp} rel="noopener" target="_blank">
+                {SITE.telephoneDisplay}
+              </a>
             </div>
           </li>
           <li>
             <Icono nombre="telefono" tam={20} />
             <div>
-              <span class="canales__rotulo">WhatsApp</span>
-              <a class="dato dato--fuerte" href={`https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`} rel="noopener" target="_blank">
-                {SITE.telephoneDisplay}
-              </a>
+              <span class="canales__rotulo">Oficina</span>
+              {SITE.oficinas.map((o) => (
+                <a class="dato" href={`tel:${o.telephone}`}>{o.display}</a>
+              ))}
             </div>
           </li>
           <li>

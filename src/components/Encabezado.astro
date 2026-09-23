@@ -8,9 +8,10 @@
  * El menú de celular es un <details>: sin una línea de JavaScript, así que
  * funciona igual para un crawler que para alguien con la red de una obra.
  */
-import { SITE } from "../config/seo";
+import { SITE, urlWhatsapp } from "../config/seo";
 import { NAV_PRINCIPAL } from "../config/navegacion";
 import Icono from "./Icono.astro";
+import LogoWhatsApp from "./LogoWhatsApp.astro";
 
 const { rutaActual, sobreFoto = false } = Astro.props as { rutaActual: string; sobreFoto?: boolean };
 const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ruta + "/");
@@ -34,8 +35,8 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
     </nav>
 
     <div class="barra__acciones">
-      <a class="barra__tel dato" href={`tel:${SITE.telephone}`}>
-        <Icono nombre="contacto" tam={16} />
+      <a class="barra__tel dato" href={urlWhatsapp} rel="noopener" target="_blank" aria-label={`WhatsApp ${SITE.telephoneDisplay}`}>
+        <LogoWhatsApp tam={18} />
         {SITE.telephoneDisplay}
       </a>
       <a class="btn btn--relleno btn--chico" href="/contacto">Cotizar</a>
@@ -56,8 +57,15 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
         }
         <a href="/contacto">Contacto y cotización</a>
         <p class="menu-movil__tels">
-          <a class="dato menu-movil__tel" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>
-          <a class="dato menu-movil__tel" href={`https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`} rel="noopener" target="_blank">WhatsApp</a>
+          <a class="dato menu-movil__tel" href={urlWhatsapp} rel="noopener" target="_blank">
+            <LogoWhatsApp tam={16} /> {SITE.telephoneDisplay}
+          </a>
+        </p>
+        <p class="menu-movil__tels menu-movil__oficina">
+          <span>Oficina</span>
+          {SITE.oficinas.map((o) => (
+            <a class="dato menu-movil__tel" href={`tel:${o.telephone}`}>{o.display}</a>
+          ))}
         </p>
         <p class="menu-movil__horario">{SITE.openingHoursDisplay}</p>
       </div>
@@ -184,6 +192,8 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
   }
   .menu-movil__panel .menu-movil__tel:hover { color: var(--azul); }
   .menu-movil__horario { color: var(--acero); font-family: var(--texto); }
+  .menu-movil__oficina { margin-top: var(--e2) !important; align-items: baseline; }
+  .menu-movil__oficina span { font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero); }
 
   /* Con seis entradas, la barra completa no cabe por debajo de 1040px:
      ahí manda el menú de celular. Entre 1040 y 1179px el teléfono cede su

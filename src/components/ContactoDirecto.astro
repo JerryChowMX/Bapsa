@@ -65,7 +65,7 @@ const whatsapp = SITE.whatsapp
 
   <p class="directo__horario chico">
     <Icono nombre="horario" tam={16} />
-    {SITE.openingHoursDisplay} · El mismo número atiende WhatsApp
+    {SITE.openingHoursDisplay} · Oficina {SITE.oficinas.map((o) => o.display).join(" · ")}
   </p>
 </div>
 

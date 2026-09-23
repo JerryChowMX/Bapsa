@@ -68,6 +68,13 @@ export function nodoOrganizacion(): Nodo {
         areaServed: "MX",
         availableLanguage: ["Spanish"],
       },
+      ...SITE.oficinas.map((o) => ({
+        "@type": "ContactPoint",
+        telephone: o.telephone,
+        contactType: "customer service",
+        areaServed: "MX",
+        availableLanguage: ["Spanish"],
+      })),
     ],
     knowsAbout: [
       "Renta de brazos articulados",

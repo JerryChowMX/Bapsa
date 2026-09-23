@@ -20,7 +20,7 @@ export const GET: APIRoute = () => {
 > ${SITE.description}
 
 ${SITE.shortName} (${SITE.legalName}) lleva más de ${SITE.aniosOperacion} años operando desde ${direccionUnaLinea}.
-Teléfono y WhatsApp: ${SITE.telephoneDisplay}. Correo: ${SITE.email}.
+WhatsApp (principal): ${SITE.telephoneDisplay}. Oficina: ${SITE.oficinas.map((o) => o.display).join(", ")}. Correo: ${SITE.email}.
 Horario: ${SITE.openingHoursDisplay}.
 Cobertura con flete propio: ${ciudadesTexto} (México).
 Marcas atendidas en servicio y refacciones: ${SITE.marcas.join(", ")}.
