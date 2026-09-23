@@ -130,12 +130,22 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
   .nav-escritorio a:hover { color: var(--azul); }
   .nav-escritorio a[aria-current="page"] { color: var(--azul); border-bottom-color: var(--canastilla); }
 
-  .barra__acciones { display: none; align-items: center; gap: var(--e4); }
+  /* En celular la barra solo trae el teléfono: nadie busca el número dentro
+     de un menú. "Cotizar" aparece con la navegación completa. */
+  .barra__acciones { display: flex; align-items: center; gap: var(--e4); margin-left: auto; }
+  .barra__acciones .btn { display: none; }
   .barra__tel {
     display: inline-flex; align-items: center; gap: var(--e2);
     color: var(--senal); text-decoration: none; font-size: 0.875rem; white-space: nowrap;
   }
   .barra__tel:hover { color: var(--azul); }
+  @media (max-width: 1039px) {
+    .barra__interior { gap: var(--e3); }
+    .barra__tel { min-height: 42px; font-weight: 700; }
+  }
+  @media (max-width: 359px) {
+    .barra__tel :global(svg) { display: none; }
+  }
 
   /* ── Menú de celular, sin JavaScript ── */
   .menu-movil { position: relative; }
@@ -176,13 +186,15 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
   .menu-movil__horario { color: var(--acero); font-family: var(--texto); }
 
   /* Con seis entradas, la barra completa no cabe por debajo de 1040px:
-     ahí manda el menú de celular. El teléfono aparece más tarde todavía,
-     porque es lo primero que se puede sacrificar sin perder navegación. */
+     ahí manda el menú de celular. Entre 1040 y 1179px el teléfono cede su
+     lugar a la navegación; ahí "Cotizar" queda a la vista. */
   @media (min-width: 1040px) {
-    .nav-escritorio, .barra__acciones { display: flex; }
+    .nav-escritorio { display: flex; }
+    .barra__acciones { margin-left: 0; }
+    .barra__acciones .btn { display: inline-flex; }
     .menu-movil { display: none; }
   }
-  @media (max-width: 1179px) {
+  @media (min-width: 1040px) and (max-width: 1179px) {
     .barra__tel { display: none; }
   }
 </style>

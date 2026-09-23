@@ -186,6 +186,11 @@ tbody tr:nth-child(even) { --senal: var(--senal-honda); }
 .btn--rojo { background: transparent; color: var(--alto); border-color: var(--alto); }
 .btn--rojo:hover { background: var(--alto); color: var(--aire); }
 
+/* En celular todo botón va a lo ancho de la columna: es un blanco de dedo,
+   no un adorno. Los chicos se quedan como están. */
+@media (max-width: 639px) {
+  .btn:not(.btn--chico) { width: 100%; }
+}
 .btn--chico { min-height: 38px; padding: var(--e2) var(--e4); font-size: 0.75rem; }
 .btn--grande { min-height: 54px; padding: var(--e4) var(--e6); font-size: 0.875rem; }
 /* Deshabilitado: opacidad al 38%, no un gris. Este sistema no tiene grises,
