@@ -21,6 +21,7 @@
  * navegación por teclado.
  */
 import Foto from "./Foto.astro";
+import { FOTO_MAQUINA } from "../datos/fotos";
 import Icono from "./Icono.astro";
 import type { Maquina } from "../datos/maquinas";
 
@@ -29,7 +30,7 @@ const { maquina } = Astro.props as { maquina: Maquina };
 
 <article class="mq">
   <div class="mq__foto">
-    <Foto alt={maquina.fotoAlt} clave={maquina.fotoClave} ancho={560} alto={400} cubrir />
+    <Foto imagen={FOTO_MAQUINA[maquina.slug]} rotulo="Foto ilustrativa" alt={`Foto ilustrativa: ${maquina.tipo.toLowerCase()}.`} clave={maquina.fotoClave} ancho={560} alto={400} cubrir />
   </div>
 
   <div class="mq__cuerpo">

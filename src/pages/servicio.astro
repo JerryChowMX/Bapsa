@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import PlacaDatos from "../components/PlacaDatos.astro";
 import Foto from "../components/Foto.astro";
+import { FOTO_SECCION } from "../datos/fotos";
 import LlamadoAccion from "../components/LlamadoAccion.astro";
 import { SITE } from "../config/seo";
 import { nodoServicio } from "../lib/schema";
@@ -46,7 +47,8 @@ const schema = [
         </div>
       </div>
       <Foto
-        alt="Técnico de BAPSA revisando el sistema hidráulico de un brazo articulado dentro del taller de servicio."
+        imagen={FOTO_SECCION.servicio}
+        alt="Articulación hidráulica de un brazo JLG 600AJ de BAPSA, con la calca de Renta y Venta en el chasís."
         clave="FOTO-08"
         ancho={800}
         alto={600}

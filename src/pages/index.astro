@@ -5,7 +5,7 @@ import Icono from "../components/Icono.astro";
 import PlacaDatos from "../components/PlacaDatos.astro";
 import Foto from "../components/Foto.astro";
 import LlamadoAccion from "../components/LlamadoAccion.astro";
-import { SITE } from "../config/seo";
+import { SITE, ciudadesTexto } from "../config/seo";
 import { FAMILIAS_DATOS } from "../datos/familias";
 import { MAQUINAS, MAQUINAS_POR_ALTURA, MARCAS_CATALOGO } from "../datos/maquinas";
 import { nodoServicio, nodoListaMaquinas } from "../lib/schema";
@@ -16,7 +16,7 @@ const masAlta = MAQUINAS_POR_ALTURA[0];
  *  1080×1920 para celular, donde una apaisada estirada a lo alto se veía
  *  borrosa. Astro genera los anchos en AVIF y WebP en el build; los JPEG de
  *  src/fotos son solo los originales. */
-import fotoHeroe from "../fotos/13_jlg_brazo_articulado_atardecer_nave_industrial.jpg";
+import { FOTO_HEROE as fotoHeroe, FOTO_FAMILIA, FOTO_MAQUINA, FOTO_SECCION } from "../datos/fotos";
 import fotoHeroeMovil from "../fotos/09v_genie_z30_brazo_articulado_patio_9x16.jpg";
 const heroeEscritorio = {
   avif: await getImage({ src: fotoHeroe, widths: [960, 1440, 1672], format: "avif" }),
@@ -29,56 +29,24 @@ const heroeMovil = {
 };
 const MOVIL = "(max-width: 719px)";
 
-/** Una foto por familia, elegida a mano del material del cliente. Se
- *  recortan a 16:10 con object-fit; el punto de interés queda al centro. */
-import fotoBrazos from "../fotos/32_genie_z30_brazo_articulado_patio.jpg";
-import fotoTijeras from "../fotos/14_jlg_2632es_plataforma_tijera_camion_transporte.jpg";
-import fotoElevadores from "../fotos/09_jlg_plataformas_compactas_dobles.jpg";
-import fotoPesada from "../fotos/36_jlg_1200sjp_sobre_lowboy_planta.jpg";
-/** Foto ilustrativa por máquina del catálogo. El material no trae los siete
- *  modelos exactos, así que cada ficha lleva una foto de su familia y marca,
- *  rotulada como ilustrativa; nunca se presenta otra máquina como la ficha. */
-import fotoBrazosJlg from "../fotos/10_jlg_flota_brazos_articulados.jpg";
-import fotoBrazosAngosto from "../fotos/25_jlg_brazos_articulados_andenes_carga.jpg";
-import fotoTijeraElevada from "../fotos/20_jlg_plataforma_tijera_vista_lateral_elevada.jpg";
-import fotoTijeraDetalle from "../fotos/17_jlg_plataforma_tijera_detalle_mecanismo.jpg";
-import fotoNosotros from "../fotos/15_flota_brazos_articulados_patio_bapsa.jpg";
-const FOTO_MAQUINA: Record<string, ImageMetadata> = {
-  "genie-z-45-25j-dc": fotoBrazos,
-  "jlg-e450a": fotoBrazosJlg,
-  "jlg-n40e": fotoBrazosAngosto,
-  "genie-gs-3246": fotoTijeraElevada,
-  "genie-gs-2646": fotoTijeraDetalle,
-  "genie-gs-2632": fotoTijeras,
-  "genie-gs-2046": fotoTijeraElevada,
-};
 /** Las tres líneas además de la renta, con su foto. */
-import fotoVenta from "../fotos/02_jlg_600aj_articulacion_hidraulica.jpg";
-import fotoServicio from "../fotos/21_jlg_brazo_articulado_inspeccion_tecnico_bapsa.jpg";
-import fotoRefacciones from "../fotos/06_jlg_canastilla_y_controles.jpg";
 const LINEAS = [
   {
-    ruta: "/venta", nombre: "Venta de equipo", foto: fotoVenta,
-    alt: "Brazo telescópico JLG con la calca de BAPSA Renta y Venta en el chasís, dentro de una planta industrial.",
-    texto: "Equipo nuevo y seminuevo con respaldo de servicio, para cuando rentarlo todo el año sale más caro.",
-  },
-  {
-    ruta: "/servicio", nombre: "Servicio y pólizas", foto: fotoServicio,
-    alt: "Técnico de BAPSA revisando el compartimento de un brazo articulado JLG en el patio, frente al taller.",
+    ruta: "/servicio", nombre: "Servicio y pólizas", foto: FOTO_SECCION.servicio,
+    alt: "Articulación hidráulica de un brazo JLG 600AJ de BAPSA, con la calca de Renta y Venta en el chasís.",
     texto: "Mantenimiento preventivo y correctivo, con póliza programada y bitácora por máquina.",
   },
   {
-    ruta: "/refacciones", nombre: "Refacciones multimarca", foto: fotoRefacciones,
+    ruta: "/refacciones", nombre: "Refacciones multimarca", foto: FOTO_SECCION.refacciones,
     alt: "Canastilla de un brazo articulado JLG vista de frente, con su panel de controles.",
     texto: `Para ${SITE.marcas.join(", ")}. Cotización con número de parte o de serie.`,
   },
+  {
+    ruta: "/venta", nombre: "Venta de equipo", foto: FOTO_SECCION.venta,
+    alt: "Brazos articulados Genie y JLG de la flota de BAPSA elevados en el patio de Ramos Arizpe.",
+    texto: "Venta bajo pedido. Y si la máquina se va a usar todo el año, renta anual con tarifa especial.",
+  },
 ];
-const FOTO_FAMILIA: Record<string, ImageMetadata> = {
-  "brazos-articulados-electricos": fotoBrazos,
-  "plataformas-de-tijera": fotoTijeras,
-  "elevadores-personales": fotoElevadores,
-  "maquinaria-pesada": fotoPesada,
-};
 
 const schema = [
   nodoServicio({
@@ -120,7 +88,7 @@ const schema = [
         sizes="100vw"
         width={heroeEscritorio.jpg.attributes.width}
         height={heroeEscritorio.jpg.attributes.height}
-        alt="Brazo articulado de BAPSA con la canastilla elevada, con la flota del patio detrás."
+        alt="Brazo articulado JLG de BAPSA trabajando junto a la estructura de una planta industrial, con un técnico al pie."
         loading="eager"
         fetchpriority="high"
         decoding="async"
@@ -134,7 +102,7 @@ const schema = [
         Renta de plataformas y&nbsp;brazos articulados
       </h1>
       <p class="heroe__frase heroe__paso" style="--paso: 1">
-        Equipo eléctrico con flete propio en Ramos Arizpe, Saltillo y Arteaga.
+        Equipo eléctrico con flete propio en {ciudadesTexto}.
       </p>
       <div class="heroe__acciones heroe__paso" style="--paso: 2">
         <a class="btn btn--sobre-azul btn--grande" href="/contacto">
@@ -168,7 +136,7 @@ const schema = [
   <section class="seccion banda--neblina" aria-labelledby="familias-titulo">
     <div class="hoja">
       <h2 class="titulo-2 familias__titulo" id="familias-titulo">
-        Cuatro familias, un criterio para elegir
+        Equipo en renta y traslado
       </h2>
       <div class="filete filete--centrado"></div>
 
@@ -276,10 +244,12 @@ const schema = [
                       {angosta && <span class="tag tag--nota">Angosta</span>}
                     </td>
                     <td class="catalogo__altura" data-etiqueta="Altura de trabajo">
-                      <span class="barra-altura" aria-hidden="true">
-                        <span class:list={["barra-altura__relleno", i === 0 && "barra-altura__relleno--max"]}></span>
+                      <span class="catalogo__medidor">
+                        <span class="barra-altura" aria-hidden="true">
+                          <span class:list={["barra-altura__relleno", i === 0 && "barra-altura__relleno--max"]}></span>
+                        </span>
+                        <span class="dato catalogo__cifra">{m.alturaTrabajo}</span>
                       </span>
-                      <span class="dato catalogo__cifra">{m.alturaTrabajo}</span>
                     </td>
                     <td class="cifra dato catalogo__cap" data-etiqueta="Capacidad">{m.capacidad}</td>
                     <td class="cifra dato catalogo__ancho" data-etiqueta="Ancho">{m.ancho}</td>
@@ -314,11 +284,11 @@ const schema = [
     <div class="hoja nosotros">
       <figure class="nosotros__foto">
         <Picture
-          src={fotoNosotros}
+          src={FOTO_SECCION.nosotros}
           formats={["avif", "webp"]}
           widths={[640, 960, 1280]}
           sizes="(min-width: 900px) 46vw, 100vw"
-          alt="Flota de brazos articulados de BAPSA con la canastilla elevada frente a sus oficinas en Ramos Arizpe."
+          alt="Oficinas de BAPSA en Ramos Arizpe con un brazo articulado JLG elevado frente a la fachada."
           loading="lazy"
           decoding="async"
           class="nosotros__img"
@@ -355,7 +325,7 @@ const schema = [
       tres a lo ancho, cada una con su foto, título y una sola línea. */}
   <section class="seccion banda--neblina" aria-labelledby="lineas-titulo">
     <div class="hoja">
-      <h2 class="titulo-2 familias__titulo" id="lineas-titulo">Venta, servicio y refacciones</h2>
+      <h2 class="titulo-2 familias__titulo" id="lineas-titulo">Servicio, refacciones y venta</h2>
       <div class="filete filete--centrado"></div>
 
       <ul class="bento bento--3">
@@ -397,10 +367,10 @@ const schema = [
         <h2 class="titulo-2">Dónde entrega BAPSA</h2>
         <div class="filete"></div>
         <p>
-          BAPSA entrega con flete propio en <strong>Ramos Arizpe</strong>,
-          <strong>Saltillo</strong> y <strong>Arteaga</strong>, que es el corredor donde está
-          concentrada la industria de la región: los parques industriales de Ramos Arizpe, la
-          zona automotriz y la obra civil de la zona metropolitana de Saltillo. Para obras fuera
+          BAPSA entrega con flete propio en <strong>Ramos Arizpe</strong>, <strong>Saltillo</strong>,
+          <strong>Derramadero</strong>, <strong>Arteaga</strong> y <strong>Santa Catarina,
+          N.L.</strong>: los parques industriales de Ramos Arizpe y Derramadero, la zona
+          automotriz, la obra civil de Saltillo y el corredor hacia Monterrey. Para obras fuera
           de esa zona se cotiza el traslado.
         </p>
         <p>
@@ -415,7 +385,9 @@ const schema = [
           renglones={[
             { etiqueta: "Ramos Arizpe", valor: "MISMO DÍA" },
             { etiqueta: "Saltillo", valor: "MISMO DÍA" },
+            { etiqueta: "Derramadero", valor: "FLETE PROPIO" },
             { etiqueta: "Arteaga", valor: "MISMO DÍA" },
+            { etiqueta: "Santa Catarina", valor: "FLETE PROPIO" },
             { etiqueta: "Fuera de zona", valor: "SE COTIZA" },
             { etiqueta: "Horario", valor: "L-V 8:30-18:00" },
           ]}
@@ -445,7 +417,7 @@ const schema = [
 
   .heroe__foto { position: absolute; inset: 0; z-index: -2; display: block; }
   .heroe__img {
-    width: 100%; height: 100%; object-fit: cover; object-position: 62% 50%;
+    width: 100%; height: 100%; object-fit: cover; object-position: 82% 50%;
     background: none; border: 0;
   }
   @media (max-width: 719px) { .heroe__img { object-position: 50% 42%; } }
@@ -655,8 +627,11 @@ const schema = [
     font-family: var(--rotulo); font-size: 0.5625rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
   }
   .catalogo__desliza { display: none; }
-  .catalogo__modelo { display: grid; gap: 2px; white-space: nowrap; }
-  .catalogo__marca {
+  /* Las celdas se quedan como celdas de tabla (nada de grid o flex en el
+     <td>): si una deja de serlo, su filete inferior se dibuja a su propia
+     altura y las líneas de la fila quedan chuecas. El acomodo va por dentro. */
+  .catalogo__modelo { white-space: nowrap; }
+  .catalogo__marca { display: block; margin-bottom: 2px;
     font-family: var(--rotulo); font-size: var(--etiqueta); font-weight: 700;
     letter-spacing: 0.14em; text-transform: uppercase; color: var(--acero);
   }
@@ -664,7 +639,7 @@ const schema = [
      para las tablas de ficha, le ganaba a esta y pintaba el modelo en naranja. */
   .catalogo__tabla th a.catalogo__enlace {
     font-family: var(--rotulo); font-size: 1.125rem; font-weight: 700; line-height: 1.2;
-    color: var(--azul); text-decoration: none;
+    color: var(--azul); text-decoration: none; display: block;
   }
   .catalogo__tabla th a.catalogo__enlace:hover { color: var(--senal); text-decoration: underline; }
 
@@ -681,7 +656,8 @@ const schema = [
   /* La barra de altura: pista en Neblina, relleno en Azul BAPSA; la más alta
      va en Canastilla, que es el único acento de la tabla. */
   .catalogo__col-altura { min-width: 220px; }
-  .catalogo__altura { display: flex; align-items: center; gap: var(--e3); min-width: 220px; }
+  .catalogo__altura { min-width: 220px; }
+  .catalogo__medidor { display: flex; align-items: center; gap: var(--e3); }
   .barra-altura { flex: 1 1 auto; height: 8px; background: var(--neblina); overflow: hidden; }
   .barra-altura__relleno { display: block; height: 100%; width: var(--p); background: var(--azul); transform-origin: left; }
   .barra-altura__relleno--max { background: var(--canastilla); }
@@ -718,7 +694,7 @@ const schema = [
     .catalogo { overflow: visible; background: transparent; border: 0; }
     .catalogo__tabla { display: block; }
     .catalogo__tabla thead { display: none; }
-    /* El carrusel: las siete fichas en una fila que se desliza con el dedo
+    /* El carrusel: las fichas en una fila que se desliza con el dedo
        y se detiene ficha por ficha (scroll-snap). Sangra hasta el borde de
        la pantalla para que se asome la siguiente, que es la señal de que hay
        más. Sin JavaScript y sin barra de scroll visible. */
@@ -756,9 +732,10 @@ const schema = [
     .catalogo__tipo { grid-area: tipo; margin-top: 2px; }
 
     .catalogo__altura {
-      grid-area: altura; display: flex; flex-direction: column; align-items: stretch; gap: var(--e1);
+      grid-area: altura; display: block;
       min-width: 0; margin-top: var(--e3); padding-top: var(--e3); border-top: 1px solid var(--riel);
     }
+    .catalogo__medidor { flex-direction: column; align-items: stretch; gap: var(--e1); margin-top: var(--e1); }
     .catalogo__altura::before,
     .catalogo__tabla td.cifra::before {
       content: attr(data-etiqueta); display: block;

@@ -18,21 +18,21 @@ export const SITE = {
   locale: "es_MX",
   lang: "es-MX",
 
-  // 149 caracteres. Idéntica en meta description del home, JSON-LD,
+  // 146 caracteres. Idéntica en meta description del home, JSON-LD,
   // Google Business Profile y directorios. No se edita en un solo lugar.
   description:
-    "Renta y venta de brazos articulados, plataformas de tijera y elevadores personales en Ramos Arizpe, Saltillo y Arteaga. Más de 20 años y flete propio.",
+    "Renta de brazos articulados, plataformas de tijera y elevadores personales en Ramos Arizpe, Saltillo, Arteaga y Santa Catarina, N.L. Flete propio.",
 
   logo: "/brand/bapsa-logo-512.png",
   ogImage: "/og/default.jpg",
   ogImageAlt:
     "Brazo articulado de BAPSA con la canastilla elevada sobre una nave industrial en Ramos Arizpe.",
 
-  telephone: "+528444880408",
-  telephoneDisplay: "844 488 0408",
-  telephoneAlt: "+528444308845",
-  telephoneAltDisplay: "844 430 8845",
-  whatsapp: "" as string, // POR CONFIRMAR — sin número no se pinta el botón de WhatsApp
+  // Un solo número en todo el sitio, y es también el WhatsApp. Confirmado en
+  // la reunión con BAPSA del 23 de septiembre de 2026.
+  telephone: "+528441819171",
+  telephoneDisplay: "844 181 9171",
+  whatsapp: "+528441819171" as string,
   email: "bapsa@prodigy.net.mx",
 
   address: {
@@ -67,8 +67,15 @@ export const SITE = {
   /** Años de operación. El material nuevo dice más de 20; el sitio viejo decía 15. */
   aniosOperacion: 20,
 
-  /** Ciudades donde BAPSA entrega con flete propio, en orden de cercanía. */
-  ciudades: ["Ramos Arizpe", "Saltillo", "Arteaga"] as const,
+  /** Donde BAPSA entrega con flete propio, en orden de cercanía. Derramadero
+   *  es de Saltillo, pero se nombra aparte porque así lo busca la gente. */
+  ciudades: [
+    { nombre: "Ramos Arizpe", estado: "Coahuila" },
+    { nombre: "Saltillo", estado: "Coahuila" },
+    { nombre: "Derramadero", estado: "Coahuila" },
+    { nombre: "Arteaga", estado: "Coahuila" },
+    { nombre: "Santa Catarina", estado: "Nuevo León" },
+  ] as const,
   estado: "Coahuila",
 
   /** Marcas que atiende el área de servicio y refacciones. */
@@ -77,6 +84,12 @@ export const SITE = {
 
 /** Rutas que salen con `noindex, follow` y quedan fuera del sitemap. */
 export const NOINDEX_ROUTES = ["/gracias"] as const;
+
+/** "Ramos Arizpe, Saltillo, Derramadero, Arteaga y Santa Catarina, N.L." */
+export const ciudadesTexto = (() => {
+  const n = SITE.ciudades.map((c) => (c.estado === "Nuevo León" ? `${c.nombre}, N.L.` : c.nombre));
+  return `${n.slice(0, -1).join(", ")} y ${n[n.length - 1]}`;
+})();
 
 /** Dirección en una línea, para el pie y para los directorios. */
 export const direccionUnaLinea =

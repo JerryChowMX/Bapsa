@@ -16,14 +16,18 @@ import { FAMILIAS } from "../config/navegacion";
 import Icono from "./Icono.astro";
 
 const { equipoPreseleccionado = "" } = Astro.props as { equipoPreseleccionado?: string };
-const activo = FORMULARIO.ACCION !== "";
+const porServidor = FORMULARIO.ACCION !== "";
+const porWhatsapp = !porServidor && SITE.whatsapp !== "";
+const activo = porServidor || porWhatsapp;
 ---
 
 <div class="cotizador">
   <h2 class="titulo-2" id="cotizar">Pida su cotización</h2>
   <div class="filete"></div>
   <p class="medida">
-    Conteste cuatro datos y le regresamos precio y disponibilidad el mismo día hábil. Si
+    {porWhatsapp
+      ? "Conteste cuatro datos y se abre WhatsApp con su solicitud lista para enviar. Le regresamos precio y disponibilidad el mismo día hábil."
+      : "Conteste cuatro datos y le regresamos precio y disponibilidad el mismo día hábil."} Si
     prefiere resolverlo por teléfono, marque al{" "}
     <a class="dato" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a> en horario de{" "}
     {SITE.openingHoursDisplay.toLowerCase()}.
@@ -45,8 +49,9 @@ const activo = FORMULARIO.ACCION !== "";
   <form
     class="formulario"
     method="post"
-    action={activo ? FORMULARIO.ACCION : undefined}
+    action={porServidor ? FORMULARIO.ACCION : undefined}
     name="cotizacion"
+    data-whatsapp={porWhatsapp ? SITE.whatsapp.replace(/\D/g, "") : undefined}
     data-netlify={FORMULARIO.METODO_NETLIFY ? "true" : undefined}
   >
     {FORMULARIO.METODO_NETLIFY && <input type="hidden" name="form-name" value="cotizacion" />}
@@ -100,8 +105,8 @@ const activo = FORMULARIO.ACCION !== "";
     </div>
 
     <div class="campo">
-      <label for="correo">Correo</label>
-      <input id="correo" name="correo" type="email" autocomplete="email" required />
+      <label for="correo">Correo {porWhatsapp && <span class="opcional">(opcional)</span>}</label>
+      <input id="correo" name="correo" type="email" autocomplete="email" required={porServidor} />
     </div>
 
     <div class="campo">
@@ -111,7 +116,9 @@ const activo = FORMULARIO.ACCION !== "";
     </div>
 
     <div class="apilado formulario__acciones">
-      <button class="btn btn--relleno" type="submit" disabled={!activo}>Enviar solicitud</button>
+      <button class="btn btn--relleno" type="submit" disabled={!activo}>
+        {porWhatsapp ? "Enviar por WhatsApp" : "Enviar solicitud"}
+      </button>
       <a class="btn btn--azul" href={`tel:${SITE.telephone}`}>Prefiero que me llamen</a>
     </div>
     <p class="chico formulario__nota">
@@ -120,6 +127,29 @@ const activo = FORMULARIO.ACCION !== "";
     </p>
   </form>
 </div>
+
+{/* Sin servicio de formularios: la solicitud se vuelve un mensaje de
+    WhatsApp. El navegador valida los campos obligatorios antes de llegar aquí. */}
+<script>
+  const form = document.querySelector<HTMLFormElement>("form[data-whatsapp]");
+  form?.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const v = (k: string) => String(d.get(k) ?? "").trim();
+    const datos = [
+      `Equipo: ${v("equipo")}`,
+      v("altura") && `Altura de trabajo: ${v("altura")} m`,
+      v("dias") && `Días de renta: ${v("dias")}`,
+      v("lugar") && `Lugar: ${v("lugar")}`,
+      `Nombre y empresa: ${v("nombre")}`,
+      `Teléfono: ${v("telefono")}`,
+      v("correo") && `Correo: ${v("correo")}`,
+      v("detalle") && `Trabajo: ${v("detalle")}`,
+    ].filter(Boolean);
+    const texto = encodeURIComponent(["Hola, quiero cotizar con BAPSA.", "", ...datos].join("\n"));
+    window.open(`https://wa.me/${form.dataset.whatsapp}?text=${texto}`, "_blank", "noopener");
+  });
+</script>
 
 <style>
   .cotizador { background: var(--placa); border: 1px solid var(--riel); padding: clamp(var(--e5), 4vw, var(--e7)); }

@@ -11,14 +11,13 @@ respuestas de IA que la ausencia del campo.
 
 ## 1. Bloqueantes — el sitio no debe publicarse sin esto
 
-### 1.1 A dónde llegan las solicitudes del formulario
-- **Archivo:** `src/config/formulario.ts` → `FORMULARIO.ACCION`
-- **Estado:** vacío. El formulario se pinta pero el botón sale deshabilitado y
-  la página muestra un aviso, para que nadie crea que envió algo que no salió.
-- **Qué hace falta:** decidir el destino (Netlify Forms, Formspree o un
-  endpoint propio) y un buzón que alguien de BAPSA revise a diario.
-- **Por qué importa:** un formulario que traga solicitudes en silencio cuesta
-  ventas y no deja rastro de que se perdieron.
+### 1.1 A dónde llegan las solicitudes del formulario — resuelto por WhatsApp
+- **Archivo:** `src/config/formulario.ts` y `src/components/FormularioCotizacion.astro`
+- **Estado (23 sep 2026):** BAPSA pidió que los formularios lleguen al WhatsApp
+  844 181 9171. Con `ACCION` vacío, el botón «Enviar por WhatsApp» arma el
+  mensaje con los datos del formulario y abre la conversación con ese número.
+- **Límite:** el visitante tiene que darle enviar dentro de WhatsApp. Si algún
+  día se quiere un registro propio de solicitudes, basta con llenar `ACCION`.
 
 ### 1.2 Razón social exacta — confirmada
 - **Archivo:** `src/config/seo.ts` → `SITE.legalName`
@@ -31,9 +30,10 @@ respuestas de IA que la ausencia del campo.
   con lo que BAPSA declara en otros lados, debilita la resolución de entidad,
   que es justo lo que hace que un modelo cite a BAPSA con confianza.
 
-### 1.3 Fotografías
-- Ver `FOTOS-PENDIENTES.md`. Hay **dieciséis** huecos rotulados en el sitio:
-  nueve de secciones y siete de máquina, uno por modelo del catálogo.
+### 1.3 Fotografías — resuelto
+- Desde el 23 de septiembre de 2026 no queda ningún hueco «Foto pendiente». La
+  tabla de qué foto va en cada lugar vive en `src/datos/fotos.ts`. Ver
+  `FOTOS-PENDIENTES.md`.
 
 ---
 
@@ -63,15 +63,12 @@ respuestas de IA que la ausencia del campo.
   material nuevo va **más de 20 años**, que es el dato correcto y el que
   sostiene el argumento de la marca. Está en `SITE.aniosOperacion`.
 
-### 2.4 WhatsApp — subió de prioridad
-- **Archivo:** `src/config/seo.ts` → `SITE.whatsapp` (hoy `""`)
-- **Por qué importa ahora:** BAPSA pidió que el cliente reciba precio y
-  disponibilidad **directo**, sin intermediarios. El bloque de contacto directo
-  ya está en cada ficha de máquina y en el catálogo, con el teléfono en grande;
-  el botón de WhatsApp está programado y **aparece solo** en cuanto haya número,
-  con el mensaje ya redactado y el modelo de la máquina precargado.
-- Es el canal de mayor conversión en este giro y hoy es lo único que le falta
-  al circuito que el cliente pidió.
+### 2.4 Teléfono y WhatsApp — resuelto
+- **Archivo:** `src/config/seo.ts` → `SITE.telephone` y `SITE.whatsapp`
+- **Valor (23 sep 2026):** un solo número en todo el sitio, 844 181 9171, que
+  es también el WhatsApp. El 844 488 0408 y el 844 430 8845 se retiraron.
+- **Pendiente menor:** que Google Business Profile y los directorios muestren
+  el mismo número.
 
 ### 2.5 Condiciones comerciales de renta
 - **Dónde aparece hoy:** las páginas dicen "se confirma al cotizar".
@@ -81,10 +78,10 @@ respuestas de IA que la ausencia del campo.
   sitio no las responde con un dato. Cada una que se pueda responder con una
   cifra concreta es un fragmento citable más.
 
-### 2.6 El inventario — resuelto a medias
-**Resuelto (septiembre 2026).** BAPSA entregó las fichas técnicas de siete
-máquinas y el sitio ya las publica con la cifra exacta del fabricante, cada
-una con su página, su tabla completa y su `Product` en el JSON-LD:
+### 2.6 El inventario — cambió en la reunión del 23 de septiembre de 2026
+El catálogo quedó en cinco máquinas. En tijeras, BAPSA solo maneja la GS-3246 y
+la 2630; la GS-2646, la GS-2632 y la GS-2046 se retiraron (con redirección 301
+en `public/_redirects`).
 
 | Modelo | Familia | Altura de trabajo | Fuente |
 |---|---|---|---|
@@ -92,21 +89,39 @@ una con su página, su tabla completa y su `Product` en el JSON-LD:
 | JLG E450A | Brazo articulado eléctrico | 15.72 m | Ficha JLG E450A |
 | JLG n40E | Brazo articulado eléctrico angosto | 14.19 m | Ficha JLG n40E |
 | Genie GS-3246 | Plataforma de tijera | 11.75 m | Folleto Genie GS-2046/2646/3246 |
-| Genie GS-2646 | Plataforma de tijera | 9.96 m | Ficha Genie GS-2632 y GS-2646 E-Drive |
-| Genie GS-2632 | Plataforma de tijera angosta | 9.96 m | Ficha Genie GS-2632 y GS-2646 E-Drive |
-| Genie GS-2046 | Plataforma de tijera | 8.10 m | Folleto Genie GS-2046/2646/3246 |
+| JLG 2630ES | Plataforma de tijera angosta | 9.77 m | RitchieSpecs (tercero) |
 
-**Lo que sigue abierto de esas siete:**
+**Reglas que dictó BAPSA y que el sitio ya aplica:**
 
+- **Carga: 220 kg en todas las máquinas**, brazo o tijera, y una o dos personas
+  con su material. Sustituye a la capacidad del fabricante en fichas, tarjetas,
+  JSON-LD y preguntas frecuentes.
+- **Llantas:** no todas las unidades traen llanta no marcante. El sitio ya no
+  lo promete; dice que se asigna la unidad adecuada al cotizar.
+
+**Lo que sigue abierto:**
+
+- **«2630» = JLG 2630ES.** La cliente dijo «2630»; Genie no tiene ese modelo y
+  las fotos de BAPSA muestran tijeras JLG, así que se publicó como JLG 2630ES.
+  Sus cifras vienen de RitchieSpecs, no de una ficha de BAPSA: pedir la ficha
+  de JLG y confirmar el modelo exacto.
+- **Qué unidades traen llanta no marcante.** Con esa lista se puede volver a
+  decir en cada ficha.
+- **Elevadores personales.** La regla de 220 kg se dio para brazos y tijeras;
+  la familia de elevadores sigue con rangos típicos (110–160 kg) y sin modelos.
 - **Cuántas unidades hay de cada modelo.** El sitio dice qué modelos renta
-  BAPSA, no cuántos. Con el número económico de cada unidad se puede llegar a
-  una ficha por máquina, que es el siguiente escalón.
-- **GS-2046, GS-2646 y GS-3246 vienen de un folleto de familia**, no de una
-  ficha por modelo. Hay que confirmar cuáles de los tres están de verdad en la
-  flota; los tres están publicados asumiendo que sí.
-- **Variante del GS-2646.** El folleto de familia declara 9.92 m y la ficha del
-  GS-2646 E-Drive declara 9.96 m en interior. El sitio usa la ficha, que es la
-  más detallada. Conviene confirmar cuál variante tiene BAPSA.
+  BAPSA, no cuántos.
+
+### 2.6b Cobertura, traslado y renta anual (23 sep 2026)
+- **Derramadero y Santa Catarina, N.L.** entran a la zona de cobertura. Falta
+  el tiempo de entrega de cada una: hoy la tabla de `/cobertura` dice «Se
+  programa al cotizar».
+- **Traslado de maquinaria y equipo** sustituye a «Maquinaria pesada» en
+  `/renta/traslado-de-maquinaria`. Falta saber qué equipo mueve BAPSA (peso
+  máximo, tipo de camión) y si traslada fuera de Coahuila y Nuevo León.
+- **Renta anual con tarifa especial** es ahora el mensaje principal de
+  `/venta`. Falta confirmar las condiciones del contrato anual (plazo mínimo,
+  qué incluye además del respaldo por falla mecánica).
 
 ### 2.7 Las familias que siguen sin ficha
 **Combustión: resuelto y retirado (10 sep 2026).** BAPSA confirmó por escrito

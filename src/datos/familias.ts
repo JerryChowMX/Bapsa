@@ -1,11 +1,9 @@
 /**
- * Las cuatro familias de equipo.
+ * Las tres familias de equipo en renta y el traslado de maquinaria.
  *
- * Regla de honestidad de este archivo: las tablas son RANGOS TÍPICOS DE LA
- * CATEGORÍA, no el inventario de BAPSA, y así se rotulan en la página. El
- * inventario exacto (modelos, números económicos, alturas y tarifas) todavía
- * no está en el repositorio; en cuanto llegue, sustituye a los rangos.
- * Ver DATOS-POR-CONFIRMAR.md.
+ * Brazos y tijeras ya salen del inventario real (ver maquinas.ts). Los
+ * elevadores personales siguen como RANGOS TÍPICOS DE LA CATEGORÍA hasta que
+ * BAPSA entregue los modelos. Ver DATOS-POR-CONFIRMAR.md.
  *
  * Cada `definicion` está escrita como "X es Y que hace Z" y va de primer
  * párrafo bajo el h1: es la frase que un motor generativo extrae y cita.
@@ -40,14 +38,14 @@ export const FAMILIAS_DATOS: Familia[] = [
     h1: "Renta de brazos articulados eléctricos en Ramos Arizpe y Saltillo",
     titulo: "Renta de brazos articulados eléctricos",
     descripcion:
-      "Brazos articulados eléctricos en renta para interior: sin gases, sin marcar el piso y con alcance sobre obstáculos. Entrega en Ramos Arizpe y Saltillo.",
+      "Brazos articulados eléctricos en renta para interior: sin gases, con alcance sobre obstáculos y 220 kg de carga. Entrega en Ramos Arizpe y Saltillo.",
     definicion:
       "Un brazo articulado eléctrico es una plataforma de elevación con pluma de varias secciones y motor de baterías, que levanta a uno o dos operadores y les permite librar un obstáculo por encima o por un costado en lugar de rodearlo.",
     resumen:
-      "Es el equipo para trabajo en interior sobre piso terminado: no emite gases de escape y su llanta no marca el concreto.",
+      "Es el equipo para trabajo en interior: no emite gases de escape y libra obstáculos por encima o por un costado.",
     cuandoSi: [
       "Mantenimiento de luminarias, ductos o rociadores dentro de una nave en operación.",
-      "Trabajo sobre piso terminado, epóxico o pulido, donde una llanta neumática dejaría marca.",
+      "Trabajo sobre piso terminado, epóxico o pulido: se asigna una unidad con llanta no marcante.",
       "Espacios cerrados o con poca ventilación: no emite gases y opera por debajo de 70 dBA.",
       "Alcanzar un punto que está arriba de una máquina, un rack o una banda que no se puede mover.",
     ],
@@ -57,11 +55,11 @@ export const FAMILIAS_DATOS: Familia[] = [
       "Alturas por encima de 16 m: el catálogo llega hasta 15.94 m con el Genie Z-45/25J DC.",
     ],
     medidas: [
-      { concepto: "Altura de trabajo", valor: "11 – 20 m", nota: "36 – 66 pies" },
-      { concepto: "Alcance horizontal", valor: "5 – 11 m" },
-      { concepto: "Capacidad de canastilla", valor: "200 – 230 kg", nota: "dos operadores con herramienta" },
-      { concepto: "Ancho de la máquina", valor: "1.2 – 1.5 m" },
-      { concepto: "Tracción", valor: "Eléctrica", nota: "llanta no marcante" },
+      { concepto: "Altura de trabajo", valor: "14.19 – 15.94 m" },
+      { concepto: "Alcance horizontal", valor: "6.25 – 7.69 m" },
+      { concepto: "Carga de trabajo", valor: "220 kg", nota: "una o dos personas con su material" },
+      { concepto: "Ancho de la máquina", valor: "1.50 – 1.79 m" },
+      { concepto: "Tracción", valor: "Eléctrica", nota: "llanta según la unidad" },
       { concepto: "Autonomía", valor: "Un turno de trabajo", nota: "con carga completa" },
     ],
     incluye: [
@@ -78,32 +76,32 @@ export const FAMILIAS_DATOS: Familia[] = [
     slug: "plataformas-de-tijera",
     etiquetaFiltro: "Tijeras",
     nombre: "Plataformas de tijera",
-    h1: "Renta de plataformas de tijera en Ramos Arizpe, Saltillo y Arteaga",
+    h1: "Renta de plataformas de tijera en Ramos Arizpe, Saltillo y Santa Catarina",
     titulo: "Renta de plataformas de tijera",
     descripcion:
-      "Plataformas de tijera eléctricas y de terreno irregular en renta, con área de trabajo amplia para instalación y mantenimiento en nave. Entrega el mismo día.",
+      "Plataformas de tijera eléctricas en renta: Genie GS-3246 de 11.75 m y JLG 2630ES angosta de 9.77 m, con 220 kg de carga. Entrega el mismo día.",
     definicion:
-      "Una plataforma de tijera es un equipo de elevación que sube en vertical sobre un mecanismo de aspas cruzadas y ofrece una superficie de trabajo amplia, pensada para cuando hay que subir a dos o tres personas con material y trabajar a lo largo de un tramo.",
+      "Una plataforma de tijera es un equipo de elevación que sube en vertical sobre un mecanismo de aspas cruzadas y ofrece una superficie de trabajo amplia, pensada para cuando hay que subir a una o dos personas con su material y trabajar a lo largo de un tramo.",
     resumen:
       "Elevación vertical con la mayor área de trabajo por metro de altura. Para instalación y mantenimiento en nave.",
     cuandoSi: [
       "Instalación de ductos, tubería o charolas a lo largo de un tramo recto.",
-      "Trabajo que requiere subir material y dos o tres personas al mismo tiempo.",
+      "Trabajo que requiere subir material y una o dos personas al mismo tiempo.",
       "Puntos de trabajo directamente arriba, sin obstáculos que librar.",
       "Piso firme y nivelado, dentro de nave o sobre losa.",
     ],
     cuandoNo: [
       "Cuando hay que pasar por encima o alrededor de un obstáculo: para eso está el brazo articulado.",
-      "Terreno con desnivel mayor al que tolera el modelo sin estabilizadores.",
+      "Terreno sin compactar o con desnivel: estas tijeras son eléctricas, para piso firme.",
+      "Más de dos personas arriba, o más de 220 kg entre personas y material.",
       "Espacios con menos de un metro de ancho libre de paso.",
     ],
     medidas: [
-      { concepto: "Altura de trabajo · eléctrica", valor: "6 – 14 m", nota: "20 – 46 pies" },
-      { concepto: "Altura de trabajo · terreno irregular", valor: "10 – 18 m" },
-      { concepto: "Capacidad · eléctrica", valor: "230 – 450 kg" },
-      { concepto: "Capacidad · terreno irregular", valor: "450 – 680 kg" },
-      { concepto: "Ancho de la máquina", valor: "0.8 – 1.8 m", nota: "las angostas pasan por pasillo de rack" },
-      { concepto: "Extensión de plataforma", valor: "0.9 – 1.5 m", nota: "corredera al frente" },
+      { concepto: "Altura de trabajo", valor: "9.77 – 11.75 m" },
+      { concepto: "Carga de trabajo", valor: "220 kg", nota: "una o dos personas con su material" },
+      { concepto: "Ancho de la máquina", valor: "0.76 – 1.15 m", nota: "la 2630ES pasa por pasillo de rack" },
+      { concepto: "Extensión de plataforma", valor: "0.90 – 0.91 m", nota: "corredera al frente" },
+      { concepto: "Tracción", valor: "Eléctrica", nota: "llanta según la unidad" },
     ],
     incluye: [
       "Entrega y recolección con flete propio dentro de la zona de cobertura.",
@@ -156,34 +154,34 @@ export const FAMILIAS_DATOS: Familia[] = [
     fotoClave: "FOTO-04",
   },
   {
-    slug: "maquinaria-pesada",
-    etiquetaFiltro: "Maquinaria pesada",
-    nombre: "Maquinaria pesada",
-    h1: "Renta de maquinaria ligera y pesada en Coahuila",
-    titulo: "Renta de maquinaria ligera y pesada",
+    slug: "traslado-de-maquinaria",
+    etiquetaFiltro: "Traslado",
+    nombre: "Traslado de maquinaria y equipo",
+    h1: "Traslado de maquinaria y equipo en Coahuila y Nuevo León",
+    titulo: "Traslado de maquinaria y equipo",
     descripcion:
-      "Maquinaria ligera y pesada en renta para obra civil e industrial en Ramos Arizpe, Saltillo y Arteaga. Disponibilidad confirmada por teléfono el mismo día.",
+      "Traslado de maquinaria y equipo con camión propio en Ramos Arizpe, Saltillo, Derramadero, Arteaga y Santa Catarina, N.L. Cotización el mismo día hábil.",
     definicion:
-      "Además del equipo de elevación, BAPSA renta maquinaria ligera y pesada para obra civil e industrial. Esta línea se cotiza y se confirma caso por caso, porque la disponibilidad depende del equipo que esté libre en la fecha que usted necesita.",
+      "Además de rentar equipo de elevación, BAPSA traslada maquinaria y equipo con camión propio: plataformas, brazos y otra maquinaria del cliente o de otro proveedor, de un patio a una obra o entre plantas.",
     resumen:
-      "Equipo para obra civil e industrial, cotizado y confirmado caso por caso.",
+      "Camión propio para mover maquinaria y equipo, cotizado caso por caso.",
     cuandoSi: [
-      "Movimiento de tierra, nivelación y preparación de terreno.",
-      "Manejo de materiales dentro de planta o patio de maniobras.",
-      "Obra donde conviene un solo proveedor para elevación y para el resto del equipo.",
+      "Mover un brazo articulado o una plataforma de tijera propia entre plantas u obras.",
+      "Llevar a obra equipo rentado con otro proveedor que no incluye el flete.",
+      "Mover maquinaria dentro del corredor Saltillo–Ramos Arizpe–Monterrey con fecha programada.",
     ],
     cuandoNo: [
-      "Cuando necesita la confirmación en firme sin hablar con nadie: esta línea siempre pasa por una llamada.",
+      "Cuando necesita la confirmación en firme sin hablar con nadie: el traslado siempre pasa por una llamada, porque depende del equipo, el peso y la ruta.",
     ],
     medidas: [],
     incluye: [
-      "Cotización el mismo día hábil con disponibilidad confirmada.",
-      "Flete propio dentro de la zona de cobertura.",
-      "Respaldo de servicio durante el periodo de renta.",
+      "Cotización el mismo día hábil con fecha confirmada.",
+      "Carga y descarga con personal de BAPSA.",
+      "Camión propio: la fecha no depende de un transportista externo.",
     ],
-    icono: "refacciones",
+    icono: "flete",
     fotoAlt:
-      "Patio de maniobras de BAPSA en Ramos Arizpe con maquinaria lista para entrega.",
+      "Camión de BAPSA trasladando un brazo articulado sobre la plataforma.",
     fotoClave: "FOTO-05",
   },
 ];

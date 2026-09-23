@@ -11,6 +11,13 @@
 
 import { SITE, urlAbsoluta } from "../config/seo";
 
+const areaServed = () =>
+  SITE.ciudades.map((c) => ({
+    "@type": "Place",
+    name: c.nombre,
+    containedInPlace: { "@type": "State", name: c.estado },
+  }));
+
 export const ID_ORG = `${SITE.url}/#organization`;
 export const ID_WEB = `${SITE.url}/#website`;
 
@@ -52,23 +59,12 @@ export function nodoOrganizacion(): Nodo {
       opens: h.opens,
       closes: h.closes,
     })),
-    areaServed: SITE.ciudades.map((c) => ({
-      "@type": "City",
-      name: c,
-      containedInPlace: { "@type": "State", name: SITE.estado },
-    })),
+    areaServed: areaServed(),
     contactPoint: [
       {
         "@type": "ContactPoint",
         telephone: SITE.telephone,
         contactType: "sales",
-        areaServed: "MX",
-        availableLanguage: ["Spanish"],
-      },
-      {
-        "@type": "ContactPoint",
-        telephone: SITE.telephoneAlt,
-        contactType: "customer service",
         areaServed: "MX",
         availableLanguage: ["Spanish"],
       },
@@ -133,7 +129,7 @@ export function nodoServicio(s: {
     description: s.descripcion,
     serviceType: s.tipo,
     provider: { "@id": ID_ORG },
-    areaServed: SITE.ciudades.map((c) => ({ "@type": "City", name: c })),
+    areaServed: areaServed(),
     url: urlAbsoluta(s.ruta),
     availableChannel: {
       "@type": "ServiceChannel",
@@ -196,7 +192,7 @@ export function nodoMaquina(m: {
       businessFunction: "http://purl.org/goodrelations/v1#LeaseOut",
       seller: { "@id": ID_ORG },
       url: urlAbsoluta("/contacto"),
-      areaServed: SITE.ciudades.map((c) => ({ "@type": "City", name: c })),
+      areaServed: areaServed(),
     },
   };
   if (m.marca) nodo.brand = { "@type": "Brand", name: m.marca };

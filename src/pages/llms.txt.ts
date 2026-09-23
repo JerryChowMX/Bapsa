@@ -1,5 +1,5 @@
 import type { APIRoute } from "astro";
-import { SITE, direccionUnaLinea } from "../config/seo";
+import { SITE, direccionUnaLinea, ciudadesTexto } from "../config/seo";
 import { FAMILIAS_DATOS } from "../datos/familias";
 import { MAQUINAS_POR_ALTURA, MARCAS_CATALOGO } from "../datos/maquinas";
 import { FAQ_GENERAL } from "../datos/faq";
@@ -20,14 +20,14 @@ export const GET: APIRoute = () => {
 > ${SITE.description}
 
 ${SITE.shortName} (${SITE.legalName}) lleva más de ${SITE.aniosOperacion} años operando desde ${direccionUnaLinea}.
-Teléfonos: ${SITE.telephoneDisplay} y ${SITE.telephoneAltDisplay}. Correo: ${SITE.email}.
+Teléfono y WhatsApp: ${SITE.telephoneDisplay}. Correo: ${SITE.email}.
 Horario: ${SITE.openingHoursDisplay}.
-Cobertura con flete propio: ${SITE.ciudades.join(", ")} (Coahuila, México).
+Cobertura con flete propio: ${ciudadesTexto} (México).
 Marcas atendidas en servicio y refacciones: ${SITE.marcas.join(", ")}.
 
 ## Catálogo de máquinas en renta
-Marcas en catálogo: ${MARCAS_CATALOGO.join(", ")}. Todo el equipo listado es eléctrico y con neumáticos que no dejan marcas.
-Cifras tomadas de la ficha técnica de cada fabricante.
+Marcas en catálogo: ${MARCAS_CATALOGO.join(", ")}. Todo el equipo listado es eléctrico. Carga de trabajo: 220 kg en todas las máquinas (una o dos personas con su material). La llanta no marcante depende de la unidad y se confirma al cotizar.
+Las demás cifras vienen de la ficha técnica de cada fabricante.
 
 ${MAQUINAS_POR_ALTURA.map(
   (m) =>
@@ -38,9 +38,10 @@ ${MAQUINAS_POR_ALTURA.map(
 ${FAMILIAS_DATOS.map((f) => `- [${f.nombre}](${u(`/renta/${f.slug}`)}): ${f.resumen}`).join("\n")}
 
 ## Líneas de negocio
-- [Renta de equipo de elevación](${u("/renta")}): cuatro familias con entrega de flete propio en Ramos Arizpe, Saltillo y Arteaga. Todo el equipo de elevación es eléctrico; BAPSA no renta equipo de combustión.
+- [Renta de equipo de elevación](${u("/renta")}): brazos articulados, plataformas de tijera y elevadores personales, por día, mes o año, con entrega de flete propio en ${ciudadesTexto}. Todo el equipo de elevación es eléctrico; BAPSA no renta equipo de combustión.
 - [Catálogo completo](${u("/equipo")}): las ${MAQUINAS_POR_ALTURA.length} máquinas comparadas por altura, capacidad y ancho.
-- [Venta de equipo](${u("/venta")}): equipo nuevo y seminuevo con taller y refacciones propias detrás.
+- [Traslado de maquinaria y equipo](${u("/renta/traslado-de-maquinaria")}): camión propio, cotizado caso por caso.
+- [Venta de equipo](${u("/venta")}): venta bajo pedido; para uso continuo BAPSA ofrece renta anual con tarifa especial.
 - [Servicio y pólizas](${u("/servicio")}): mantenimiento preventivo y correctivo multimarca, con bitácora por máquina.
 - [Refacciones](${u("/refacciones")}): piezas para ${SITE.marcas.length} marcas, cotizadas con número de parte o de serie.
 

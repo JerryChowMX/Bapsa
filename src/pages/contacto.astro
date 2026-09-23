@@ -48,9 +48,9 @@ const schema = [nodoPaginaContacto("/contacto")];
           <li>
             <Icono nombre="telefono" tam={20} />
             <div>
-              <span class="canales__rotulo">Segundo número</span>
-              <a class="dato dato--fuerte" href={`tel:${SITE.telephoneAlt}`}>
-                {SITE.telephoneAltDisplay}
+              <span class="canales__rotulo">WhatsApp</span>
+              <a class="dato dato--fuerte" href={`https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`} rel="noopener" target="_blank">
+                {SITE.telephoneDisplay}
               </a>
             </div>
           </li>
@@ -109,7 +109,7 @@ const schema = [nodoPaginaContacto("/contacto")];
       <ul class="rejilla rejilla--4 atajos">
         <li class="tarjeta">
           <h3 class="titulo-3"><a href="/renta">Renta de equipo</a></h3>
-          <p class="chico">Cuatro familias, todas eléctricas, con flete propio.</p>
+          <p class="chico">Brazos, tijeras y elevadores eléctricos, con flete propio. También traslado de maquinaria.</p>
         </li>
         <li class="tarjeta">
           <h3 class="titulo-3"><a href="/venta">Venta de equipo</a></h3>

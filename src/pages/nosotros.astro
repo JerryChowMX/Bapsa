@@ -2,6 +2,7 @@
 import Base from "../layouts/Base.astro";
 import PlacaDatos from "../components/PlacaDatos.astro";
 import Foto from "../components/Foto.astro";
+import { FOTO_SECCION } from "../datos/fotos";
 import LlamadoAccion from "../components/LlamadoAccion.astro";
 import { SITE, direccionUnaLinea } from "../config/seo";
 import { MAQUINAS, MAQUINAS_POR_ALTURA, MARCAS_CATALOGO } from "../datos/maquinas";
@@ -51,7 +52,8 @@ const schema = [
         </p>
       </div>
       <Foto
-        alt="Instalaciones de BAPSA sobre el Boulevard Miguel Ramos Arizpe, con equipo de elevación en el patio."
+        imagen={FOTO_SECCION.nosotros}
+        alt="Oficinas de BAPSA en el Blvd. Miguel Ramos Arizpe 104, con un brazo articulado JLG elevado frente a la fachada."
         clave="FOTO-09"
         ancho={800}
         alto={600}
@@ -93,7 +95,7 @@ const schema = [
             { etiqueta: "Equipos en catálogo", valor: String(MAQUINAS.length) },
             { etiqueta: "Altura máxima", valor: MAQUINAS_POR_ALTURA[0].alturaTrabajo.toUpperCase() },
             { etiqueta: "Marcas", valor: MARCAS_CATALOGO.join(" · ").toUpperCase() },
-            { etiqueta: "Cobertura", valor: "SALTILLO · RAMOS · ARTEAGA" },
+            { etiqueta: "Cobertura", valor: "RAMOS · SALTILLO · ARTEAGA · STA. CATARINA" },
             { etiqueta: "Flete", valor: "PROPIO" },
             { etiqueta: "Taller", valor: "PROPIO" },
             { etiqueta: "Refacciones", valor: "MULTIMARCA" },
@@ -104,7 +106,7 @@ const schema = [
           titulo="Datos de contacto"
           renglones={[
             { etiqueta: "Teléfono", valor: SITE.telephoneDisplay },
-            { etiqueta: "Segundo", valor: SITE.telephoneAltDisplay },
+            { etiqueta: "WhatsApp", valor: SITE.telephoneDisplay },
             { etiqueta: "C.P.", valor: SITE.address.postalCode },
             { etiqueta: "Horario", valor: "L-V 8:30-18:00" },
             { etiqueta: "Sábado", valor: "8:30-13:00" },
@@ -122,7 +124,7 @@ const schema = [
         <div class="tarjeta">
           <h3 class="titulo-3"><a href="/renta">Renta</a></h3>
           <p class="chico">
-            Cuatro familias de equipo de elevación, todas eléctricas, con flete propio.
+            Brazos articulados, plataformas de tijera y elevadores personales, todos eléctricos, con flete propio, y traslado de maquinaria y equipo.
           </p>
         </div>
         <div class="tarjeta">

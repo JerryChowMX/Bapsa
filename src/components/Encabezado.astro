@@ -57,7 +57,7 @@ const activa = (ruta: string) => rutaActual === ruta || rutaActual.startsWith(ru
         <a href="/contacto">Contacto y cotización</a>
         <p class="menu-movil__tels">
           <a class="dato menu-movil__tel" href={`tel:${SITE.telephone}`}>{SITE.telephoneDisplay}</a>
-          <a class="dato menu-movil__tel" href={`tel:${SITE.telephoneAlt}`}>{SITE.telephoneAltDisplay}</a>
+          <a class="dato menu-movil__tel" href={`https://wa.me/${SITE.whatsapp.replace(/\D/g, "")}`} rel="noopener" target="_blank">WhatsApp</a>
         </p>
         <p class="menu-movil__horario">{SITE.openingHoursDisplay}</p>
       </div>

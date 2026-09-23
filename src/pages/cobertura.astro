@@ -24,18 +24,30 @@ const zonas = [
     puntos: ["Obra civil e industrial", "Comercio y almacén", "Mantenimiento de edificio"],
   },
   {
+    ciudad: "Derramadero",
+    detalle:
+      "Los parques industriales de Derramadero, al sur de Saltillo: naves de manufactura y logística donde el equipo eléctrico entra sin parar la operación.",
+    puntos: ["Parques industriales", "Manufactura y logística", "Nave en operación"],
+  },
+  {
     ciudad: "Arteaga",
     detalle:
       "Arteaga y la zona serrana. Trabajo en altura en nave, comercio y obra con piso firme, que es donde rinde el equipo eléctrico.",
     puntos: ["Nave y comercio", "Obra con piso firme", "Instalación en exterior"],
   },
+  {
+    ciudad: "Santa Catarina, N.L.",
+    detalle:
+      "Santa Catarina, Nuevo León, sobre el corredor Saltillo–Monterrey: planta industrial y obra a la que se llega con el flete propio de BAPSA.",
+    puntos: ["Corredor Saltillo–Monterrey", "Planta industrial", "Obra civil"],
+  },
 ];
 
 const faq = [
   {
-    pregunta: "¿BAPSA entrega fuera de Saltillo, Ramos Arizpe y Arteaga?",
+    pregunta: "¿BAPSA entrega fuera de su zona de cobertura?",
     respuesta:
-      "Sí, cotizando el traslado por separado. Dentro de los tres municipios el flete propio está incluido en las condiciones de renta; fuera de esa zona se calcula según la distancia y el tipo de máquina, porque un brazo articulado de 15 metros no viaja igual que un elevador personal.",
+      "Sí, cotizando el traslado por separado. Dentro de la zona de cobertura el flete es propio; fuera de esa zona se calcula según la distancia y el tipo de máquina, porque un brazo articulado de 15 metros no viaja igual que un elevador personal.",
   },
   {
     pregunta: "¿En cuánto tiempo llega la máquina a la obra?",
@@ -48,7 +60,7 @@ const schema = [
   nodoServicio({
     nombre: "Entrega de equipo de elevación con flete propio",
     descripcion:
-      "Entrega y recolección de plataformas aéreas y brazos articulados con flete propio en Ramos Arizpe, Saltillo y Arteaga, Coahuila.",
+      "Entrega y recolección de plataformas aéreas y brazos articulados con flete propio en Ramos Arizpe, Saltillo, Derramadero, Arteaga y Santa Catarina, N.L.",
     ruta: "/cobertura",
     tipo: "Entrega de maquinaria de elevación",
   }),
@@ -58,7 +70,7 @@ const schema = [
 
 <Base
   titulo="Zona de cobertura y entrega en obra"
-  descripcion="BAPSA entrega equipo de elevación con flete propio en Ramos Arizpe, Saltillo y Arteaga. Fuera de esa zona se cotiza el traslado. Horarios y tiempos de entrega."
+  descripcion="BAPSA entrega equipo de elevación con flete propio en Ramos Arizpe, Saltillo, Derramadero, Arteaga y Santa Catarina, N.L. Fuera de esa zona se cotiza el traslado."
   ruta="/cobertura"
   migas={migas}
   schema={schema}
@@ -70,8 +82,9 @@ const schema = [
       <div class="filete"></div>
       <p class="lede">
         BAPSA entrega y recoge con flete propio en <strong>Ramos Arizpe</strong>,
-        <strong>Saltillo</strong> y <strong>Arteaga</strong>, los tres municipios del corredor
-        industrial de Coahuila. Para obras fuera de esa zona se cotiza el traslado por separado.
+        <strong>Saltillo</strong>, <strong>Derramadero</strong>, <strong>Arteaga</strong> y
+        <strong>Santa Catarina, N.L.</strong>, el corredor industrial de Coahuila hacia
+        Monterrey. Para obras fuera de esa zona se cotiza el traslado por separado.
       </p>
       <p class="medida">
         Que el flete sea propio cambia una cosa concreta: la fecha de entrega la programa BAPSA y
@@ -83,7 +96,7 @@ const schema = [
 
   <section class="seccion banda--neblina">
     <div class="hoja">
-      <h2 class="titulo-2">Los tres municipios</h2>
+      <h2 class="titulo-2">La zona de cobertura</h2>
       <div class="filete"></div>
       <ul class="zonas rejilla rejilla--3">
         {
@@ -130,12 +143,22 @@ const schema = [
               <td>Propio, dentro de las condiciones de renta</td>
             </tr>
             <tr>
+              <th scope="row">Derramadero</th>
+              <td>Se programa al cotizar</td>
+              <td>Propio</td>
+            </tr>
+            <tr>
               <th scope="row">Arteaga</th>
               <td>Mismo día hábil</td>
               <td>Propio, dentro de las condiciones de renta</td>
             </tr>
             <tr>
-              <th scope="row">Resto de Coahuila y otros estados</th>
+              <th scope="row">Santa Catarina, N.L.</th>
+              <td>Se programa al cotizar</td>
+              <td>Propio</td>
+            </tr>
+            <tr>
+              <th scope="row">Resto de Coahuila, Nuevo León y otros estados</th>
               <td>Según distancia</td>
               <td>Se cotiza por separado</td>
             </tr>

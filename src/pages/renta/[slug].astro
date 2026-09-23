@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import Icono from "../../components/Icono.astro";
 import PlacaDatos from "../../components/PlacaDatos.astro";
 import Foto from "../../components/Foto.astro";
+import { FOTO_FAMILIA } from "../../datos/fotos";
 import Faq from "../../components/Faq.astro";
 import FormularioCotizacion from "../../components/FormularioCotizacion.astro";
 import { SITE } from "../../config/seo";
@@ -19,6 +20,7 @@ const { familia } = Astro.props;
 const ruta = `/renta/${familia.slug}`;
 const faq = FAQ_POR_FAMILIA[familia.slug] ?? [];
 const otras = FAMILIAS_DATOS.filter((f) => f.slug !== familia.slug);
+const esTraslado = familia.slug === "traslado-de-maquinaria";
 // Si hay máquinas reales de esta familia, mandan ellas: los rangos de la
 // categoría solo se muestran cuando todavía no hay ficha de fabricante.
 const maquinas = maquinasDeFamilia(familia.slug);
@@ -31,7 +33,7 @@ const migas = [
 
 const schema: Record<string, unknown>[] = [
   nodoServicio({
-    nombre: `Renta de ${familia.nombre.toLowerCase()}`,
+    nombre: esTraslado ? familia.nombre : `Renta de ${familia.nombre.toLowerCase()}`,
     descripcion: familia.descripcion,
     ruta,
     tipo: familia.nombre,
@@ -60,20 +62,20 @@ if (faq.length > 0) schema.push(nodoFaq(faq, ruta));
   <section class="seccion">
     <div class="hoja encabezado">
       <div>
-        <p class="etiqueta">Renta · {SITE.ciudades.join(" · ")}</p>
+        <p class="etiqueta">{esTraslado ? "Traslado" : "Renta"} · {SITE.ciudades.map((c) => c.nombre).join(" · ")}</p>
         <h1 class="titulo-2">{familia.h1}</h1>
         <div class="filete"></div>
         {/* La definición abre la página: es la frase que se extrae y se cita. */}
         <p class="lede">{familia.definicion}</p>
         <div class="apilado">
-          <a class="btn btn--relleno" href="#cotizar">Cotizar este equipo</a>
+          <a class="btn btn--relleno" href="#cotizar">{esTraslado ? "Cotizar el traslado" : "Cotizar este equipo"}</a>
           <a class="btn btn--azul" href={`tel:${SITE.telephone}`}>
             <Icono nombre="contacto" tam={16} />
             {SITE.telephoneDisplay}
           </a>
         </div>
       </div>
-      <Foto alt={familia.fotoAlt} clave={familia.fotoClave} ancho={800} alto={600} prioritaria />
+      <Foto imagen={FOTO_FAMILIA[familia.slug]} alt={familia.fotoAlt} clave={familia.fotoClave} ancho={800} alto={600} prioritaria />
     </div>
   </section>
 

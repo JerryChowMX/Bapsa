@@ -16,7 +16,7 @@ export const FAQ_GENERAL: ParFaq[] = [
   {
     pregunta: "¿Qué equipo de elevación tiene BAPSA en renta?",
     respuesta:
-      "Siete modelos eléctricos de Genie y JLG, con altura de trabajo de 8.10 m a 15.94 m. Tres son brazos articulados —Genie Z-45/25J DC de 15.94 m, JLG E450A de 15.72 m y JLG n40E de 14.19 m— y cuatro son plataformas de tijera: Genie GS-3246 de 11.75 m, GS-2646 y GS-2632 de 9.96 m, y GS-2046 de 8.10 m. Todas son eléctricas y con neumáticos que no dejan marcas.",
+      "Cinco modelos eléctricos de Genie y JLG, con altura de trabajo de 9.77 m a 15.94 m. Tres son brazos articulados —Genie Z-45/25J DC de 15.94 m, JLG E450A de 15.72 m y JLG n40E de 14.19 m— y dos son plataformas de tijera: Genie GS-3246 de 11.75 m y JLG 2630ES de 9.77 m. Todas trabajan con 220 kg de carga, que es una o dos personas con su material.",
   },
   {
     pregunta: "¿Qué altura de máquina necesito para mi trabajo?",
@@ -26,32 +26,32 @@ export const FAQ_GENERAL: ParFaq[] = [
   {
     pregunta: "¿Rento un brazo articulado o una plataforma de tijera?",
     respuesta:
-      "La tijera si el punto de trabajo está directamente arriba y necesita superficie para material y para dos o tres personas; el brazo articulado si tiene que librar un obstáculo por encima o por un costado. Esa es la única diferencia que importa al elegir: la tijera sube en vertical, el brazo alcanza en diagonal.",
+      "La tijera si el punto de trabajo está directamente arriba y necesita superficie para material y para una o dos personas; el brazo articulado si tiene que librar un obstáculo por encima o por un costado. Esa es la única diferencia que importa al elegir: la tijera sube en vertical, el brazo alcanza en diagonal.",
   },
   {
     pregunta: "¿Cuál es la máquina más alta que renta BAPSA?",
     respuesta:
-      "El brazo articulado eléctrico Genie Z-45/25J DC, con 15.94 m de altura de trabajo, 7.65 m de alcance horizontal y 227 kg de capacidad. Le sigue el JLG E450A con 15.72 m. Entre las plataformas de tijera, la más alta es la Genie GS-3246 con 11.75 m.",
+      "El brazo articulado eléctrico Genie Z-45/25J DC, con 15.94 m de altura de trabajo, 7.65 m de alcance horizontal y 220 kg de carga de trabajo. Le sigue el JLG E450A con 15.72 m. Entre las plataformas de tijera, la más alta es la Genie GS-3246 con 11.75 m.",
   },
   {
     pregunta: "¿Cuánto peso puede subir una máquina de BAPSA?",
     respuesta:
-      "Hasta 545 kg con la plataforma de tijera Genie GS-2046, que es la de mayor capacidad del catálogo. Le siguen la GS-2646 con 454 kg y la GS-3246 con 318 kg. Los brazos articulados van de 227 a 230 kg, porque su ventaja es el alcance, no la carga. Ese número incluye a las personas, la herramienta y el material.",
+      "220 kg en todas las máquinas, sea brazo articulado o plataforma de tijera. Ese número incluye a las personas, la herramienta y el material, y en la práctica son una o dos personas con lo que necesitan para trabajar. Algunas fichas de fabricante declaran más, pero 220 kg es la carga con la que BAPSA entrega y recomienda trabajar.",
   },
   {
     pregunta: "¿Se puede meter una plataforma a una nave en operación?",
     respuesta:
-      "Sí. Todo el equipo de BAPSA es eléctrico y con neumáticos que no dejan marcas: no emite gases de escape, opera por debajo de 70 dBA y no marca el concreto pulido ni el piso epóxico. Por eso puede trabajar dentro de una planta sin parar la producción alrededor.",
+      "Sí. Todo el equipo de renta de BAPSA es eléctrico: no emite gases de escape y trabaja con poco ruido, así que puede entrar a una planta sin parar la producción alrededor. Si el piso es epóxico o concreto pulido, dígalo al cotizar: no todas las unidades traen llanta no marcante, y le asignamos la que corresponde.",
   },
   {
     pregunta: "¿BAPSA renta equipo de combustión o diésel?",
     respuesta:
-      "No. Por ahora BAPSA renta únicamente equipo de elevación eléctrico. Si su obra es a la intemperie sobre terreno firme y nivelado, el equipo eléctrico funciona; si el terreno está sin compactar o tiene pendiente fuerte, llame al 844 488 0408 y le decimos con franqueza si le podemos servir.",
+      "No. Por ahora BAPSA renta únicamente equipo de elevación eléctrico. Si su obra es a la intemperie sobre terreno firme y nivelado, el equipo eléctrico funciona; si el terreno está sin compactar o tiene pendiente fuerte, llame al 844 181 9171 y le decimos con franqueza si le podemos servir.",
   },
   {
     pregunta: "¿Entregan el equipo en obra?",
     respuesta:
-      "Sí. BAPSA entrega y recoge con flete propio en Ramos Arizpe, Saltillo y Arteaga, y cotiza el traslado para obras fuera de esa zona. Que el flete sea propio significa que la fecha de entrega no depende de la agenda de un transportista externo.",
+      "Sí. BAPSA entrega y recoge con flete propio en Ramos Arizpe, Saltillo, Derramadero, Arteaga y Santa Catarina, N.L., y cotiza el traslado para obras fuera de esa zona. Que el flete sea propio significa que la fecha de entrega no depende de la agenda de un transportista externo.",
   },
   {
     pregunta: "¿Se necesita capacitación para operar una plataforma de elevación?",
@@ -61,7 +61,7 @@ export const FAQ_GENERAL: ParFaq[] = [
   {
     pregunta: "¿Qué pasa si la máquina falla en medio de la obra?",
     respuesta:
-      "BAPSA tiene taller propio y área de servicio, y respalda la falla mecánica durante el periodo de renta. Reporte la falla al 844 488 0408 en horario de lunes a viernes de 8:30 a 18:00 y sábado de 8:30 a 13:00.",
+      "BAPSA tiene taller propio y área de servicio, y respalda la falla mecánica durante el periodo de renta. Reporte la falla al 844 181 9171 en horario de lunes a viernes de 8:30 a 18:00 y sábado de 8:30 a 13:00.",
   },
   {
     pregunta: "¿BAPSA da servicio a equipo que no rentó ahí?",
@@ -81,7 +81,7 @@ export const FAQ_POR_FAMILIA: Record<string, ParFaq[]> = {
     {
       pregunta: "¿Un brazo eléctrico marca el piso de una nave?",
       respuesta:
-        "No, si trae llanta no marcante, que es como se entregan estos equipos. Por eso es la categoría que entra a nave en operación, piso epóxico y concreto pulido sin dejar huella de tracción.",
+        "Depende de la llanta de la unidad: unas traen llanta no marcante y otras no. Si va a trabajar sobre piso epóxico o concreto pulido, dígalo al cotizar y le asignamos una unidad con llanta no marcante.",
     },
     {
       pregunta: "¿Hasta dónde alcanza de lado un brazo articulado eléctrico?",
@@ -98,12 +98,12 @@ export const FAQ_POR_FAMILIA: Record<string, ParFaq[]> = {
     {
       pregunta: "¿Cuánto peso aguanta una plataforma de tijera?",
       respuesta:
-        "En el catálogo de BAPSA, entre 227 kg y 545 kg según el modelo: la Genie GS-2046 sube 545 kg, la GS-2646 454 kg, la GS-3246 318 kg y la angosta GS-2632 227 kg. Ese número incluye a las personas, la herramienta y el material, y baja a 113 kg cuando se usa la extensión de plataforma.",
+        "220 kg, tanto en la Genie GS-3246 como en la JLG 2630ES. Ese número incluye a las personas, la herramienta y el material: lo recomendado es una o dos personas con su material, no tres.",
     },
     {
       pregunta: "¿Pasa una tijera por el pasillo de un rack?",
       respuesta:
-        "Sí, con la Genie GS-2632, que mide 0.81 m de ancho y pasa por una puerta estándar. Con las barandillas abatidas queda en 1.94 m de alto, así que también pasa bajo un dintel bajo. Mida el paso libre real del pasillo —no el nominal— porque el ancho de la máquina no incluye lo que sobresale al abrir la corredera de 0.91 m.",
+        "Sí, con la JLG 2630ES, que mide 0.76 m de ancho y pasa por una puerta estándar. Mida el paso libre real del pasillo —no el nominal— porque el ancho de la máquina no incluye lo que sobresale al abrir la extensión de 0.90 m.",
     },
   ],
   "elevadores-personales": [
@@ -118,11 +118,16 @@ export const FAQ_POR_FAMILIA: Record<string, ParFaq[]> = {
         "Una. La capacidad va de 110 a 160 kg e incluye al operador, la herramienta y el material. Si el trabajo requiere dos personas arriba, la máquina que corresponde es una plataforma de tijera.",
     },
   ],
-  "maquinaria-pesada": [
+  "traslado-de-maquinaria": [
     {
-      pregunta: "¿Qué maquinaria pesada tiene BAPSA disponible?",
+      pregunta: "¿BAPSA traslada maquinaria que no es suya?",
       respuesta:
-        "La disponibilidad de esta línea se confirma por teléfono para la fecha que usted necesita, porque depende del equipo que esté libre. Llame al 844 488 0408 con la fecha, el trabajo y el lugar, y le confirmamos el mismo día hábil.",
+        "Sí. El traslado se cotiza aparte de la renta, para equipo propio del cliente o de otro proveedor. Llame al 844 181 9171 con el equipo, el peso aproximado, el origen y el destino, y le confirmamos fecha y precio.",
+    },
+    {
+      pregunta: "¿Hasta dónde llega el traslado?",
+      respuesta:
+        "Ramos Arizpe, Saltillo, Derramadero, Arteaga y Santa Catarina, N.L. son la zona de siempre. Fuera de ella se cotiza según la distancia y el tipo de equipo.",
     },
   ],
 };

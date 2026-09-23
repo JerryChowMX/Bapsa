@@ -11,8 +11,14 @@
  * no está en el repositorio— y hace imposible publicar sin darse cuenta.
  * Ver FOTOS-PENDIENTES.md.
  */
+import { Picture } from "astro:assets";
+
 export interface Props {
   src?: string;
+  /** Foto de src/fotos: sale optimizada en AVIF y WebP con varios anchos. */
+  imagen?: ImageMetadata;
+  /** Rótulo chico sobre la foto, p. ej. "Foto ilustrativa". */
+  rotulo?: string;
   alt: string;
   ancho: number;
   alto: number;
@@ -25,12 +31,29 @@ export interface Props {
   class?: string;
 }
 const {
-  src, alt, ancho, alto, prioritaria = false, pie, clave, cubrir = false, class: clase = "",
+  src, imagen, rotulo, alt, ancho, alto, prioritaria = false, pie, clave, cubrir = false, class: clase = "",
 } = Astro.props;
 ---
 
 {
-  src ? (
+  imagen ? (
+    <figure class={`foto ${cubrir ? "foto--cubrir" : ""} ${clase}`}>
+      <Picture
+        src={imagen}
+        formats={["avif", "webp"]}
+        widths={[ancho, Math.min(ancho * 2, imagen.width)]}
+        sizes={`(min-width: 900px) ${ancho}px, 100vw`}
+        alt={alt}
+        width={ancho}
+        height={alto}
+        loading={prioritaria ? "eager" : "lazy"}
+        decoding="async"
+        fetchpriority={prioritaria ? "high" : "auto"}
+      />
+      {rotulo && <span class="foto__rotulo">{rotulo}</span>}
+      {pie && <figcaption class="pie-foto">{pie}</figcaption>}
+    </figure>
+  ) : src ? (
     <figure class={`foto ${cubrir ? "foto--cubrir" : ""} ${clase}`}>
       <img
         src={src}
@@ -62,12 +85,22 @@ const {
 }
 
 <style>
-  .foto { margin: 0; }
-  .foto img { width: 100%; height: auto; border: 1px solid var(--riel); }
+  .foto { margin: 0; position: relative; }
+  /* :global porque el <img> de <Picture> no lleva el atributo de alcance.
+     Las fotos de src/fotos vienen en 16:9; el ancho y alto que se piden
+     fijan la proporción de la caja y object-fit recorta sin deformar. */
+  .foto :global(img) { width: 100%; height: auto; object-fit: cover; border: 1px solid var(--riel); }
+  .foto__rotulo {
+    position: absolute; left: var(--e3); top: var(--e3);
+    font-family: var(--rotulo); font-size: 0.625rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    background: var(--aire); color: var(--azul); padding: var(--e1) var(--e2);
+  }
 
   /* Modo tarjeta: el hueco lo manda el contenedor, no la proporción. */
   .foto--cubrir { height: 100%; }
-  .foto--cubrir img { height: 100%; object-fit: cover; border: 0; }
+  .foto--cubrir :global(picture) { display: block; height: 100%; }
+  .foto--cubrir :global(img) { height: 100%; border: 0; }
   .foto--cubrir .hueco { aspect-ratio: auto; height: 100%; border-width: 0 0 1px 0; }
 
   .hueco {

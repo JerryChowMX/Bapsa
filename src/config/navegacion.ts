@@ -13,13 +13,13 @@ export const NAV_PRINCIPAL: Entrada[] = [
   { nombre: "Nosotros", ruta: "/nosotros" },
 ];
 
-/** Las cuatro familias de equipo. Cada una responde una consulta distinta. */
+/** Las familias de renta y el traslado. Cada una responde una consulta distinta. */
 export const FAMILIAS: Required<Entrada>[] = [
   {
     nombre: "Brazos articulados eléctricos",
     ruta: "/renta/brazos-articulados-electricos",
     resumen:
-      "Para trabajo en interior sobre piso terminado: no emiten gases y no marcan el concreto.",
+      "Para trabajo en interior: eléctricos, sin gases y con alcance sobre obstáculos.",
   },
   {
     nombre: "Plataformas de tijera",
@@ -34,10 +34,10 @@ export const FAMILIAS: Required<Entrada>[] = [
       "Un operador, huella mínima y paso por puerta estándar. Para almacén, oficina y comercio.",
   },
   {
-    nombre: "Maquinaria pesada",
-    ruta: "/renta/maquinaria-pesada",
+    nombre: "Traslado de maquinaria y equipo",
+    ruta: "/renta/traslado-de-maquinaria",
     resumen:
-      "Equipo de movimiento de tierra y manejo de materiales para obra civil e industrial.",
+      "Traslado de maquinaria y equipo con camión propio, dentro y fuera de la zona de cobertura.",
   },
 ];
 

@@ -1,6 +1,6 @@
 ---
 /** Banda de cierre. Un solo relleno, y el teléfono siempre a la vista. */
-import { SITE } from "../config/seo";
+import { SITE, ciudadesTexto } from "../config/seo";
 import Icono from "./Icono.astro";
 const { titulo = "¿Necesita el equipo esta semana?", texto } = Astro.props as {
   titulo?: string;
@@ -14,7 +14,7 @@ const { titulo = "¿Necesita el equipo esta semana?", texto } = Astro.props as {
       <h2 class="titulo-2">{titulo}</h2>
       <p class="cta__texto">
         {texto ??
-          `Cotizamos el mismo día hábil y entregamos con flete propio en ${SITE.ciudades.join(", ")}.`}
+          `Cotizamos el mismo día hábil y entregamos con flete propio en ${ciudadesTexto}.`}
       </p>
     </div>
     <div class="apilado">

@@ -1,11 +1,11 @@
 /**
  * Destino del formulario de cotización.
  *
- * POR CONFIRMAR antes de publicar. Mientras `ACCION` esté vacío, el
- * formulario se pinta pero no envía, y en su lugar se muestran el teléfono y
- * el correo, que es lo que de verdad usa un jefe de obra a las siete de la
- * mañana. Un formulario que traga solicitudes en silencio es peor que no
- * tenerlo.
+ * Mientras `ACCION` esté vacío, la solicitud sale por WhatsApp al número de
+ * BAPSA (SITE.whatsapp): el formulario arma el mensaje con los datos y abre
+ * la conversación, y el visitante solo tiene que darle enviar. Así no hay
+ * servidor que pueda tragarse una solicitud en silencio. Si algún día se
+ * conecta un servicio de formularios, basta con llenar `ACCION`.
  *
  * Opciones habituales, en orden de menor fricción:
  *   · Netlify Forms  → ACCION = "/gracias" y METODO_NETLIFY = true
