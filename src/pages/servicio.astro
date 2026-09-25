@@ -5,6 +5,7 @@ import Foto from "../components/Foto.astro";
 import { FOTO_SECCION } from "../datos/fotos";
 import LlamadoAccion from "../components/LlamadoAccion.astro";
 import { SITE } from "../config/seo";
+import { LOGOS_MARCAS } from "../datos/marcas";
 import { nodoServicio } from "../lib/schema";
 
 const migas = [
@@ -145,7 +146,16 @@ const schema = [
         buena parte de los sistemas hidráulicos y eléctricos son comunes entre fabricantes.
       </p>
       <ul class="marcas">
-        {SITE.marcas.map((m) => <li class="dato">{m}</li>)}
+        {LOGOS_MARCAS.map((m) => (
+          <li>
+            <span
+              class="marcas__logo"
+              role="img"
+              aria-label={m.nombre}
+              style={`--logo: url(${m.src}); --proporcion: ${m.proporcion}; --escala: ${m.escala}`}
+            ></span>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
@@ -167,9 +177,23 @@ const schema = [
   .ejemplo { display: grid; gap: var(--e4); }
   .ejemplo__pie { margin: 0; color: var(--acero); }
 
-  .marcas { list-style: none; padding: 0; margin: var(--e5) 0 0; display: flex; flex-wrap: wrap; gap: var(--e3); }
+  .marcas {
+    list-style: none; padding: 0; margin: var(--e5) 0 0;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(136px, 1fr)); gap: var(--e3);
+  }
   .marcas li {
-    border: 1px solid var(--acero); padding: var(--e2) var(--e4);
-    font-size: 0.8125rem; color: var(--azul); background: var(--placa);
+    display: flex; align-items: center; justify-content: center;
+    min-height: 64px; padding: var(--e3) var(--e5);
+    border: 1px solid var(--riel); background: var(--placa);
+  }
+  /* Los logotipos llegan en blanco; la máscara los pinta del azul de la
+     marca para que se lean sobre la placa clara. */
+  .marcas__logo {
+    display: block;
+    height: calc(24px * var(--escala));
+    aspect-ratio: var(--proporcion);
+    background: var(--azul);
+    -webkit-mask: var(--logo) center / contain no-repeat;
+    mask: var(--logo) center / contain no-repeat;
   }
 </style>

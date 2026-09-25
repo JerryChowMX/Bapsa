@@ -9,6 +9,7 @@ import { SITE, ciudadesTexto } from "../config/seo";
 import { FAMILIAS_DATOS } from "../datos/familias";
 import { MAQUINAS, MAQUINAS_POR_ALTURA, MARCAS_CATALOGO } from "../datos/maquinas";
 import { nodoServicio, nodoListaMaquinas } from "../lib/schema";
+import { LOGOS_MARCAS } from "../datos/marcas";
 
 const masAlta = MAQUINAS_POR_ALTURA[0];
 
@@ -120,10 +121,18 @@ const schema = [
       <p class="heroe__marcas-rotulo">Taller y refacciones para</p>
       <div class="marquesina">
         <ul class="marquesina__pista">
-          {SITE.marcas.map((m) => <li>{m}</li>)}
+          {LOGOS_MARCAS.map((m) => (
+            <li style={`--escala: ${m.escala}`}>
+              <img src={m.src} alt={m.nombre} width={m.ancho} height={m.alto} decoding="async" />
+            </li>
+          ))}
         </ul>
         <ul class="marquesina__pista" aria-hidden="true">
-          {SITE.marcas.map((m) => <li>{m}</li>)}
+          {LOGOS_MARCAS.map((m) => (
+            <li style={`--escala: ${m.escala}`}>
+              <img src={m.src} alt="" width={m.ancho} height={m.alto} decoding="async" />
+            </li>
+          ))}
         </ul>
       </div>
     </div>
@@ -504,10 +513,11 @@ const schema = [
   }
   .marquesina:hover .marquesina__pista,
   .marquesina:focus-within .marquesina__pista { animation-play-state: paused; }
-  .marquesina__pista li {
-    display: flex; align-items: center; gap: var(--e7);
-    font-family: var(--rotulo); font-weight: 800; font-size: 1.0625rem; line-height: 1;
-    letter-spacing: 0.08em; text-transform: uppercase; color: var(--cielo-bajo); white-space: nowrap;
+  .marquesina__pista li { display: flex; align-items: center; gap: var(--e7); }
+  /* Blanco al 88%: presentes sin competir con el titular. */
+  .marquesina__pista img {
+    display: block; width: auto; height: calc(26px * var(--escala)); opacity: 0.88;
+    background: none; /* sin el color de espera de las fotos */
   }
   .marquesina__pista li::after { content: ""; width: 6px; height: 6px; background: var(--cielo); flex: none; }
   @keyframes marquesina-rueda { to { transform: translateX(-100%); } }
