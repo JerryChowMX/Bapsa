@@ -1,11 +1,19 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="BAPSA">
-  <!-- Provisional: el logotipo llegó como mapa de bits y falta redibujarlo en
-       vectorial. Mientras tanto, el bloque azul con el brazo en naranja, que es
-       la misma lectura del logotipo: chasís bajo, pluma diagonal y canastilla. -->
-  <rect width="32" height="32" fill="#05025E"/>
-  <g fill="none" stroke="#F38735" stroke-width="2.6" stroke-linecap="butt" stroke-linejoin="miter">
-    <path d="M5 22h9v4H5z"/>
-    <path d="M9.5 22v-4l7-4"/>
-    <path d="M16 6v8h8V6"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="BAPSA">
+  <!-- El brazo articulado del logotipo, redibujado para leerse a 16 px:
+       canastilla, pluma en un solo trazo (sin costuras en los codos),
+       torreta y dos ruedas. Canastilla sobre Azul, sin radios. -->
+  <rect width="64" height="64" fill="#05025E"/>
+  <path d="M18 14.5 L53 8.5 L41 30 L46 42" fill="none" stroke="#F38735" stroke-width="7" stroke-linejoin="bevel"/>
+  <g fill="#F38735">
+    <rect x="5" y="8" width="16" height="14"/>
+    <path d="M34 38H53L58 50H29Z"/>
+    <circle cx="35" cy="52" r="7"/>
+    <circle cx="52" cy="52" r="7"/>
+  </g>
+  <g fill="#05025E">
+    <rect x="9" y="12" width="3" height="6"/>
+    <rect x="14" y="12" width="3" height="6"/>
+    <circle cx="35" cy="52" r="2.5"/>
+    <circle cx="52" cy="52" r="2.5"/>
   </g>
 </svg>
