@@ -23,4 +23,5 @@ tijera sobre el camión frente a esa fachada estaba en el home y se quitó.
   y JLG 2630ES), se cambian en `src/datos/fotos.ts`.
 - **Servicio no tiene foto del taller.** La única que lo mostraba era generada;
   hoy lleva el detalle de la articulación hidráulica de un JLG 600AJ.
-- **La imagen para redes (`/og/default.jpg`) sigue sin existir.**
+- **Imágenes para redes:** 14 tarjetas en `public/og/`, regenerables con
+  `node scripts/generar-og.mjs` (requiere `npm i --no-save playwright-core`).
