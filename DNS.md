@@ -74,8 +74,8 @@ Pages solo da certificado al dominio si el DNS está en Cloudflare para el apex.
 
 - [ ] Preview en `*.pages.dev` revisado por BAPSA, con `ROBOTS_BLOQUEAR=1`.
 - [ ] Quitar `ROBOTS_BLOQUEAR` y redesplegar.
-- [ ] Generar `public/og/default.jpg` (1200×630, <300 KB). **Hoy no existe** y
-      todas las páginas lo declaran en `og:image`: WhatsApp y redes salen sin imagen.
+- [x] Imágenes para redes: 14 tarjetas en `public/og/` (generadas con
+      `node scripts/generar-og.mjs`), una por sección y familia.
 - [ ] URLs viejas del sitio anterior: `public/_redirects` solo cubre las 4 de
       septiembre. El README menciona `/brazos-articulados-electricos.html`
       → 301, pero **esa regla no existe**. Hay que listar las URLs que Google
