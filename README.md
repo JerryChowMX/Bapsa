@@ -266,3 +266,11 @@ Y después: validar la home y una ficha en
 ## Contacto
 
 Sarape Estudio Web · Gerardo Garza · jerry@sarapeweb.com
+
+## `*.pages.dev` en construcción
+
+`functions/_middleware.js` hace que cualquier host `*.pages.dev` responda una
+página de "Sitio en construcción" (503, `noindex`). Un dominio personalizado pasa
+derecho al sitio. Para revisar el sitio en `pages.dev`, defina `ACCESO_PREVIO` en
+Pages y abra `?previo=<valor>`. Cuando el dominio ya esté conectado y no se quiera
+esa pantalla, borre `functions/`.
